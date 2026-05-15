@@ -1,0 +1,38 @@
+# ---- Raw data (re-downloaded by run_pipeline.R --gee; do not commit ~12 GB) ----
+03_datasets/raw/*
+!03_datasets/raw/.gitkeep
+
+# ---- R session / IDE ----
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# ---- Quarto build artifacts (regenerated on render) ----
+.quarto/
+**/.quarto/
+**/*_cache/
+**/*_files/
+04_presentation/presentation_files/
+04_presentation/presentation_cache/
+
+# ---- OS / editor cruft ----
+.DS_Store
+**/.DS_Store
+*~
+.luarc.json
+
+# ---- Credentials: NEVER commit. The *.enc blobs are decryptable with the
+#      in-repo password, so on a public repo they would expose GEE/Drive access.
+#      Keep them local only. ----
+03_datasets/config/*.enc
+03_datasets/config/*.json
+03_datasets/config/ee_credentials
+
+# ---- Copyrighted reference PDFs: do not redistribute on a public repo ----
+01_literature/*.pdf
+00_notes/*.pdf
+
+# ---- Temp ----
+tmp/
+*.log
