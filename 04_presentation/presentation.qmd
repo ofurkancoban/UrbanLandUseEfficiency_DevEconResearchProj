@@ -1,0 +1,1420 @@
+---
+title: "Urban Land-Use Efficiency:<br>A Stable Metric for SDG 11.3.1 and Its Drivers"
+subtitle: "SDG 11.3.1: The Ratio of Land Consumption Rate to Population Growth Rate"
+author:
+  - name: "Ömer Furkan Çoban"
+    affiliation: "Development Economics · SoSe 2026"
+  - name: "Prof. Dr. Jürgen Bitzer"
+date: "2026-06-13"
+date-format: "DD.MM.YYYY"
+format:
+  revealjs:
+    theme: default
+    css: custom.css
+    html-math-method: katex
+    transition: fade
+    slide-number: true
+    chalkboard: false
+    width: 1920
+    height: 1080
+    footer: "13.06.2026 | Development Economics | Ömer Furkan Çoban<br><span style='font-size:0.85em;opacity:0.6;'>SDG 11.3.1: The Ratio of Land Consumption Rate to Population Growth Rate</span>"
+    logo: "uol_logo.svg"
+    margin: 0.06
+    center: false
+    scrollable: true
+    highlight-style: github
+bibliography: references.bib
+link-citations: true
+citations-hover: true
+resources:
+  - population_counter.html
+title-slide-attributes:
+  data-background-video: "sentinel2-landcover-animation-b5247e.mp4"
+  data-background-video-loop: "true"
+  data-background-video-muted: "true"
+  data-background-color: "#18181b"
+  data-background-opacity: "0.55"
+  data-visibility: "uncounted"
+filters:
+  - ofurkancoban/progress-indicator
+  - laser-pointer
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(fixest)
+library(modelsummary)
+library(gt)
+library(plotly)
+
+panel <- read_csv(
+    here::here("03_datasets/processed/reg_panel_urban.csv"),
+    show_col_types = FALSE
+) |>
+    filter(year <= 2020, !is.na(bpcr), !is.na(lcrpgr_log)) |> # observed epochs (drop 2025/2030 projections)
+    mutate(
+        period_f = factor(year)
+    ) |>
+    arrange(iso3, year) |>
+    group_by(iso3) |>
+    mutate(
+        bpcr_L = lag(bpcr),
+        lcrpgr_L = lag(lcrpgr_log),
+        urb_rate = (urban_pop_share - lag(urban_pop_share)) / 5 # predetermined urbanisation rate (Δurban share / yr)
+    ) |>
+    ungroup() |>
+    filter(!is.na(bpcr_L), !is.na(lcrpgr_L))
+
+# ── Fixed sample: all covariates present (enables valid cross-model comparison)
+panel_fixed <- panel |>
+    filter(
+        !is.na(ln_gdp_pc),
+        !is.na(urban_pop_share),
+        !is.na(ln_urban_density),
+        !is.na(net_migr_pct)
+    ) |>
+    mutate(
+        pop_growth = pgr_log, # urban population log growth (the PGR term inside BpCR)
+        shrinking = as.integer(!is.na(pgr_log) & pgr_log < 0)
+    )
+
+# ── LCRPGR stepwise: variables added by significance order (BpCR benchmark) ──
+l1 <- feols(
+    lcrpgr_log ~ lcrpgr_L | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+l2 <- feols(
+    lcrpgr_log ~ lcrpgr_L + ln_urban_density | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+l3 <- feols(
+    lcrpgr_log ~ lcrpgr_L + ln_urban_density + net_migr_pct | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+l4 <- feols(
+    lcrpgr_log ~ lcrpgr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+l5 <- feols(
+    lcrpgr_log ~ lcrpgr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+l5_int <- feols(
+    lcrpgr_log ~ lcrpgr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+
+# ── BpCR stepwise: variables added by significance order ─────────────────────
+b1 <- feols(bpcr ~ bpcr_L | iso3 + period_f, data = panel_fixed, vcov = ~iso3)
+b2 <- feols(
+    bpcr ~ bpcr_L + ln_urban_density | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+b3 <- feols(
+    bpcr ~ bpcr_L + ln_urban_density + net_migr_pct | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+b4 <- feols(
+    bpcr ~ bpcr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+b5 <- feols(
+    bpcr ~ bpcr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+b5_int <- feols(
+    bpcr ~ bpcr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+
+# ── Static (no lag) stepwise: metric comparison (Models 1 & 2, lag-free) ──────
+ls1 <- feols(
+    lcrpgr_log ~ ln_urban_density | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+ls2 <- feols(
+    lcrpgr_log ~ ln_urban_density + net_migr_pct | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+ls3 <- feols(
+    lcrpgr_log ~ ln_urban_density + net_migr_pct + ln_gdp_pc | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+ls4 <- feols(
+    lcrpgr_log ~ ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+bs1 <- feols(
+    bpcr ~ ln_urban_density | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+bs2 <- feols(
+    bpcr ~ ln_urban_density + net_migr_pct | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+bs3 <- feols(
+    bpcr ~ ln_urban_density + net_migr_pct + ln_gdp_pc | iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+bs4 <- feols(
+    bpcr ~ ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+
+# ── Main finding = preferred dynamic BpCR TWFE (lagged DV + controls) ─────────
+m6 <- feols(
+    bpcr ~ bpcr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+
+# ── 2000–2020 subsample robustness (same preferred spec) ─────────────────────
+panel_2000 <- panel_fixed |> filter(year >= 2000)
+b_2000 <- feols(
+    bpcr ~ bpcr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_2000,
+    vcov = ~iso3
+)
+l_2000 <- feols(
+    lcrpgr_log ~ lcrpgr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share |
+        iso3 + period_f,
+    data = panel_2000,
+    vcov = ~iso3
+)
+
+# ── Shrinking population robustness ──────────────────────────────────────────
+b_shrink <- feols(
+    bpcr ~ bpcr_L +
+        ln_urban_density +
+        net_migr_pct +
+        ln_gdp_pc +
+        urban_pop_share +
+        shrinking |
+        iso3 + period_f,
+    data = panel_fixed,
+    vcov = ~iso3
+)
+
+# ── Active/Passive decomposition (same sample as regression: panel_fixed) ─────
+decomp <- panel_fixed |>
+    filter(!is.na(pop_growth)) |>
+    mutate(
+        dln_B = bpcr + pop_growth,
+        land_type = case_when(
+            bpcr > 0 & dln_B > 0 ~ "Active sprawl",
+            bpcr > 0 & dln_B <= 0 ~ "Passive sprawl",
+            bpcr < 0 & dln_B <= 0 ~ "Active densification",
+            bpcr < 0 & dln_B > 0 ~ "Passive densification",
+            TRUE ~ NA_character_
+        ),
+        active_share = dln_B / bpcr,
+        passive_share = -pop_growth / bpcr
+    )
+
+# ── Within R² helper ─────────────────────────────────────────────────────────
+glance_custom.fixest <- function(x, ...) {
+    wr2 <- tryCatch(unname(fixest::r2(x)["wr2"]), error = function(e) NA_real_)
+    out <- data.frame(within_r2 = wr2, check.names = FALSE)
+    lab <- c(
+        iso3 = "Country FE",
+        period_f = "Period FE",
+        period = "Period FE",
+        Kennziffer = "District FE",
+        il = "Province FE",
+        year = "Year FE"
+    )
+    fes <- tryCatch(x$fixef_vars, error = function(e) character(0))
+    for (fe in fes) {
+        nm <- if (fe %in% names(lab)) lab[[fe]] else paste0(fe, " FE")
+        out[[nm]] <- "Yes"
+    }
+    out
+}
+
+# ── Shared aesthetics ─────────────────────────────────────────────────────────
+# significant vars first, then n.s., interaction last
+cm_lcrpgr <- c(
+    "lcrpgr_L" = "LCRPGR (log)[t−1]",
+    "ln_urban_density" = "ln(Urban Density)",
+    "net_migr_pct" = "Net Migration (% Pop)",
+    "ln_gdp_pc" = "ln(GDP per capita)",
+    "urban_pop_share" = "Urban Pop. Share"
+)
+cm_bpcr <- c(
+    "bpcr_L" = "BpCR[t−1]",
+    "ln_urban_density" = "ln(Urban Density)",
+    "net_migr_pct" = "Net Migration (% Pop)",
+    "ln_gdp_pc" = "ln(GDP per capita)",
+    "urban_pop_share" = "Urban Pop. Share"
+)
+
+gm <- tribble(
+    ~raw, ~clean, ~fmt,
+    "nobs", "Observations", 0,
+    "within_r2", "Within R²", 3,
+    "Country FE", "Country FE", 0,
+    "Province FE", "Province FE", 0,
+    "District FE", "District FE", 0,
+    "Period FE", "Period FE", 0,
+    "Year FE", "Year FE", 0
+)
+
+# ── Inline-stat helpers (keep prose numbers locked to the actual models) ──────
+sig <- function(p) {
+    ifelse(p < .01, "***", ifelse(p < .05, "**", ifelse(p < .1, "*", "")))
+}
+cf <- function(m, v, d = 4) {
+    ct <- fixest::coeftable(m)
+    sprintf(paste0("%+.", d, "f%s"), ct[v, 1], sig(ct[v, 4]))
+}
+wr2 <- function(m) sprintf("%.3f", fixest::r2(m)["wr2"])
+
+tbl_style <- function(gt_tbl, dv = NULL, meta = NULL) {
+    # Put the dependent variable as a spanner at the very top, over all model
+    # columns (i.e. every column except the first "term" column).
+    if (!is.null(dv)) {
+        model_cols <- gt_tbl[["_boxhead"]][["var"]][-1]
+        lab <- if (!is.null(meta)) {
+            gt::html(paste0(
+                dv,
+                "<br><span style='font-weight:400; font-size:0.6em;'>(",
+                meta,
+                ")</span>"
+            ))
+        } else {
+            dv
+        }
+        gt_tbl <- gt::tab_spanner(
+            gt_tbl,
+            label = lab,
+            columns = gt::all_of(model_cols)
+        )
+    }
+    gt_tbl |>
+        gt::tab_options(
+            table.font.size = gt::px(21),
+            column_labels.font.weight = "bold",
+            data_row.padding = gt::px(3),
+            heading.align = "left"
+        ) |>
+        gt::tab_style(
+            style = gt::cell_text(weight = "bold"),
+            locations = gt::cells_column_labels()
+        ) |>
+        gt::tab_style(
+            style = gt::cell_text(weight = "bold", size = gt::px(25)),
+            locations = gt::cells_column_spanners()
+        )
+}
+
+# Dynamic-panel GMM results (computed in 02_analysis/24_dynamic_gmm.R; plm is run
+# there, not here, so dplyr::lag stays unmasked for the panel build above).
+gmm_res <- readRDS(here::here("03_datasets/processed/dynamic_gmm.rds"))
+
+# Auto-fill the Final-Model card chips from the Arellano-Bond column so they never
+# go stale. main_combo rows 1-5 are: 1 BpCR[t-1], 2 ln(Urban Density),
+# 3 Net Migration, 4 ln(GDP pc), 5 Urban Pop. Share. Cell = "+0.6057***<br>(se)".
+ab_coef <- function(row, digits = 4) {
+  cell <- gmm_res$main_combo[["Arellano-Bond"]][row]
+  cs   <- sub("<br>.*$", "", cell)                                   # "+0.6057***"
+  num  <- as.numeric(sub("^([+-]?[0-9.]+).*$", "\\1", cs))
+  star <- sub("^[+-]?[0-9.]+", "", cs)                               # "***" or ""
+  val  <- sub("-", "−", sprintf("%+.*f", digits, num))          # proper minus sign
+  if (nzchar(star)) paste0(val, gsub("*", "\\*", star, fixed = TRUE))# escape * for Pandoc
+  else paste0(val, " (n.s.)")
+}
+gmm_gt <- function(tb, meta = NULL, fontpx = NULL, note = NULL) {
+    n_terms <- 5L # coefficient rows before the diagnostics block
+    est_cols <- setdiff(names(tb), "Term") # 3 cols (FE/AB/BB), 4 (+OLS) or 7 (FE stepwise + AB/BB)
+    # Same look as every other model table: centred numbers, gof separator,
+    # then the shared tbl_style (spanner + meta + fonts + border).
+    g <- tb |>
+        gt::gt() |>
+        gt::cols_label(Term = "") |>
+        gt::fmt_markdown(columns = gt::all_of(est_cols)) |> # render any <br>(p=…) line
+        gt::cols_align(align = "center", columns = gt::all_of(est_cols)) |>
+        gt::tab_style(
+            style = gt::cell_borders(
+                sides = "top",
+                color = "#bbb",
+                weight = gt::px(1.5)
+            ),
+            locations = gt::cells_body(rows = n_terms + 1L)
+        )
+    # combo table: FE/GMM group spanners added BEFORE the DV spanner so the
+    # DV + meta line sits ON TOP and the FE/GMM groups appear directly below it.
+    if ("Base" %in% est_cols) {
+        g <- g |>
+            gt::tab_spanner(
+                label = "Fixed Effects",
+                id = "fe_grp",
+                columns = c(
+                    "Base",
+                    "+ Density",
+                    "+ Net Migr.",
+                    "+ GDP",
+                    "+ Urban %"
+                )
+            ) |>
+            gt::tab_spanner(
+                label = "GMM (Bias-Corrected)",
+                id = "gmm_grp",
+                columns = c("Arellano-Bond", "Blundell-Bond")
+            )
+    }
+    g <- g |>
+        tbl_style(
+            dv = paste0(
+                "Dependent variable: BpCR",
+                "<br><span style='font-weight:400; font-size:0.58em;'>",
+                "&Delta;ln(built-up area &divide; population) / z &nbsp;&equiv;&nbsp; log-LCR &minus; log-PGR",
+                "</span>"
+            ),
+            meta = meta
+        )
+    if (!is.null(fontpx)) {
+        g <- g |> gt::tab_options(table.font.size = gt::px(fontpx))
+    }
+    if (!is.null(note)) {
+        g <- g |>
+            gt::tab_source_note(source_note = gt::html(note)) |>
+            gt::tab_options(source_notes.font.size = gt::px(15))
+    }
+    if ("Base" %in% est_cols) {
+        # FE | GMM vertical divider + notes separator
+        g <- g |>
+            gt::tab_style(
+                style = gt::cell_borders(
+                    sides = "right",
+                    color = "#D3D3D3",
+                    weight = gt::px(2)
+                ),
+                locations = list(
+                    gt::cells_body(columns = "+ Urban %"),
+                    gt::cells_column_labels(columns = "+ Urban %")
+                )
+            ) |>
+            gt::tab_style(
+                style = gt::cell_borders(
+                    sides = "top",
+                    color = "#D3D3D3",
+                    weight = gt::px(1.5)
+                ),
+                locations = gt::cells_source_notes()
+            ) |>
+            gt::tab_style(
+                # FE/GMM group spanners smaller than the DV spanner
+                style = gt::cell_text(size = gt::px(16), weight = "bold"),
+                locations = gt::cells_column_spanners(
+                    spanners = c("fe_grp", "gmm_grp")
+                )
+            )
+    }
+    g
+}
+```
+
+# Introduction {.section-slide visibility="uncounted"}
+
+## SDG 11.3.1: Ratio of Land Consumption Rate to Population Growth Rate {.larger}
+
+::: {.columns}
+
+::: {.column width="50%"}
+### A planet in motion
+
+<iframe src="population_counter.html" title="Live world population counter" scrolling="no" style="width:100%; height:430px; border:none; border-radius:10px; overflow:hidden;"></iframe>
+
+[Source: Live World Population Counter [@worldometers2024].]{style="font-size:0.60em; opacity:0.55; display:block; margin-top:-35px;"}
+
+- Every single year the world's built-up area grows by about the size of **the Netherlands**, as housing, roads and industry keep spreading outward [@seto2012global].
+
+:::
+
+::: {.column width="50%"}
+### Why It Matters?: Sprawl is a development problem
+
+<div style="display:flex; flex-direction:column; gap:16px; margin-top:12px; font-size:0.95em; line-height:1.35;">
+
+<div style="display:flex; align-items:center; gap:13px; background:#fff7ed; border-left:5px solid #d97706; padding:11px 15px; border-radius:11px; box-shadow:0 1px 5px rgba(0,0,0,0.06);">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M3 7a2 2 0 0 1 2-2h12v3"/><path d="M3 7v10a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="13" r="1.3" fill="#d97706" stroke="none"/></svg>
+<div><strong>Public Finance:</strong> <br>More land per person makes roads, water and transit cost far more per resident</div>
+</div>
+
+<div style="display:flex; align-items:center; gap:13px; background:#eff6ff; border-left:5px solid #2563eb; padding:11px 15px; border-radius:11px; box-shadow:0 1px 5px rgba(0,0,0,0.06);">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.3a3 3 0 0 1 0 5.4"/><path d="M21 20a6 6 0 0 0-4-5.6"/></svg>
+<div><strong>Equity &amp; Inclusion:</strong> <br>Sprawl pushes poorer residents to the periphery and fuels informal settlements</div>
+</div>
+
+<div style="display:flex; align-items:center; gap:13px; background:#f0fdf4; border-left:5px solid #16a34a; padding:11px 15px; border-radius:11px; box-shadow:0 1px 5px rgba(0,0,0,0.06);">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M11 20A7 7 0 0 1 4 13C4 7 11 4 20 4c0 9-3 16-9 16z"/><path d="M4 20c4-2 7-5 9-9"/></svg>
+<div><strong>Land &amp; Climate:</strong> <br>Sprawl permanently builds over farmland, locks cities into car dependence, and drives high-emission growth</div>
+</div>
+
+</div>
+
+:::
+
+:::
+
+### But growth itself is not the problem
+
+→ Cities **must** grow to house more people; that is normal.
+<br>→ What matters is **how much land each new resident uses**. 
+<br>→ If land grows **at the same pace as** population, the city stays **compact**. 
+<br>→ If land grows **much faster** than population, it **sprawls**.
+<br>→ So the problem is **sprawl, not growth**.
+
+::: {.notes}
+We are in the largest urban expansion in history – every year the world's built-up area grows by about the size of the Netherlands.
+
+And as you can see from the live counter on the left, the world population is growing fast.
+
+But growth itself is not the problem. Cities must grow
+
+The question is how much land each new resident uses. 
+
+If the land and population grows at the same pace, the city stays compact
+But if the land grows faster than population then cities sprawls
+
+And the Sprawl is a development problem:
+Why? Because 
+
+Sprawl causes higher infrastructure cost per person, 
+Sprawl pushes poorer people to the edge of the cities, 
+and it causes farmland loss and locks cities into car dependence, and drives high emission growth.
+
+
+To track this United Nation created and indicator – SDG 11.3.1. 
+
+This research asks: is that indicator reliable, and what drives it?"
+:::
+
+
+# Measurement {.section-slide visibility="uncounted"}
+
+## SDG Indicator 11.3.1: How Is It Calculated?
+
+::: {.columns}
+
+::: {.column width="58%"}
+### Computing 11.3.1, step by step [@unhabitat2025metadata]
+
+#### Step 0: Define the analysis area: the *urban* area
+
+- Computed **inside cities**, not over whole countries
+- Urban area delineated by the **Degree of Urbanisation (DEGURBA)** → **GHS-SMOD** grid
+- Built-up & population below measured **only within urban cells**
+
+#### Step 1: Measure built-up area and population at two points in time
+
+**Where:**
+
+::: {style="display:flex; gap:1.6em; font-size:0.82em;"}
+::: {style="flex:1;"}
+- $V_{past}$: Urban built-up (m²), start of period
+- $V_{present}$: Urban built-up (m²), end of period
+- $t$: Years in the built-up window (= 5)
+:::
+::: {style="flex:1;"}
+- $Pop_t$: Urban population, start of period
+- $Pop_{t+n}$: Urban population, end of period
+- $y$: Years in the population window (= 5)
+:::
+:::
+
+#### Step 2: Land Consumption Rate (LCR)
+
+$$LCR = \frac{V_{present} - V_{past}}{V_{past}} \times \frac{1}{t}$$
+
+How fast is the city's physical footprint expanding per year? → **Arithmetic (linear) rate**
+
+#### Step 3: Population Growth Rate (PGR)
+
+$$PGR = \frac{\ln\!\left(Pop_{t+n} / Pop_t\right)}{y}$$
+
+How fast is the population growing per year? → **Logarithmic (exponential) rate**
+
+#### Step 4: The Ratio
+
+$$\boxed{LCRPGR = \frac{LCR}{PGR}}$$
+
+:::
+
+::: {.column width="42%"}
+
+### How to read the result
+
+:::: {style="font-size:1.7em;"}
+
+::: {.callout-caution title="LCRPGR < 1: Densification"}
+Population grows faster than built-up area. More people per km² of city over time.
+:::
+
+::: {.callout-tip title="LCRPGR = 1: Balanced [SDG Target]"}
+Land consumption and population grow at equal rates. Sustainable expansion.
+:::
+
+::: {.callout-warning title="LCRPGR > 1: Sprawl"}
+Built-up area expands faster than population. Rising infrastructure costs per resident, farmland loss, transit failure.
+:::
+
+::::
+
+:::
+
+:::
+::: {.notes}
+"So how is 11.3.1 actually computed?
+First, it's measured inside cities only – urban cells are bounded by the EU's Degree of Urbanisation method on the GHS-SMOD grid, not over whole countries.
+
+Then we take built-up area and population at two points in time and compute two rates: the Land Consumption Rate measures how fast the built-up footprint grows – and the Population Growth Rate measures how fast the population grows. 
+
+The indicator is simply their ratio.
+
+Reading it is intuitive, as the right side shows: below 1, population outpaces land – the city densifies; 
+
+at 1, they grow together – this is the SDG target; 
+
+above 1, land outpaces people – sprawl.
+
+But notice one detail: the LCR is an arithmetic rate while the PGR is a logarithmic one. That mismatch is exactly the problem I turn to next."
+:::
+---
+
+## A Flawed Yardstick: Two Structural Problems {.larger}
+
+::: {.columns}
+
+::: {.column width="48%"}
+### Problem 1: Mathematical asymmetry
+
+LCR uses an **arithmetic** (linear) rate; PGR uses a **logarithmic** (exponential) rate.
+
+$$\underbrace{\frac{V_{present} - V_{past}}{V_{past}} \times \frac{1}{t}}_{\text{arithmetic LCR}} \;\div\; \underbrace{\frac{\ln\!\left(Pop_{t+n}/Pop_t\right)}{y}}_{\text{logarithmic PGR}}$$
+
+A city with 5% annual growth in **both** built area and population does **not** produce LCRPGR = 1, the two "5%s" are on different mathematical scales. Taking a ratio of two differently-defined rates is dimensionally inconsistent: cross-country comparisons are distorted by the formula, not by real urbanisation.
+
+
+
+:::
+
+::: {.column width="48%"}
+### Problem 2: Division instability
+
+When $PGR \approx 0$ (shrinking or stable populations), LCRPGR diverges to $\pm\infty$.
+
+::: {style="font-size:1.2em;"}
+| Scenario | LCR | PGR | LCRPGR |
+|:---------|:---:|:---:|:------:|
+| Normal Growth | 2% | 1.5% | 1.33 |
+| Shrinking Population | 2% | −0.1% | **−20** |
+| Stable Population | 2% | 0.001% | **2,000** |
+:::
+
+The same **2% land growth** reads as 1.33, −20, or 2,000 depending only on how close PGR is to zero. Because the denominator can vanish, the blow-up is **structural**: no winsorising or filtering repairs it, it only hides the symptom.
+
+:::
+
+:::
+
+::: {.callout-note title="Worked example: 5%/yr in both, over 5 years"}
+Same growth factor $g = 1.05^{5} = 1.276$ for built area **and** population:
+$$LCR=\frac{g-1}{5}=\frac{0.276}{5}=5.53\%,\qquad PGR=\frac{\ln g}{5}=\frac{0.244}{5}=4.88\%$$
+$$\Rightarrow \mathbf{LCRPGR = 1.13}\ \text{(not 1)}$$
+Identical growth, yet the formula alone signals "sprawl" because $(g-1) > \ln g$.
+:::
+:::{.notes}
+ "The official ratio has two structural flaws.
+
+ First, a mathematical asymmetry: the numerator (LCR) is an arithmetic rate, the denominator (PGR) a logarithmic one.
+ 
+ If we look at example below – a city growing 5% over 5 years in both land and population. 
+ 
+ Identical growth, yet the formula returns 1.13, not 1 – it falsely signals 'sprawl' purely because the two rates are defined on different scales.
+
+ Second problem, division instability: when population growth is near zero – shrinking or stable cities – the denominator vanishes and the ratio explodes. The same 2% land growth reads as 1.33, as minus 20, or as 2,000, depending only on how close PGR is to zero.
+
+ This blow-up is structural. So the official yardstick is unreliable, which is exactly why we need a better metric."
+:::
+---
+
+## Built-up Area per Capita: The Metadata's Secondary Indicator
+
+::: {.columns}
+
+::: {.column width="65%"}
+### Recommended in the Official Metadata
+
+The 11.3.1 metadata [@unhabitat2025metadata] itself states LCRPGR is **hard to interpret** and proposes **two secondary indicators**, built from the *same inputs* (§4.f):
+
+#### Secondary indicator 1: Built-up area per capita
+$$\text{BUP} = \frac{UrBU_t}{Pop_t}\quad(\text{m}^2/\text{person})$$
+$\rightarrow$ Measures **land consumed per person**: the *state* at one point in time.
+
+#### Secondary indicator 2: Total change in built-up area
+$$\text{Total change} = \frac{UrBU_{t+n} - UrBU_t}{UrBU_t}\quad(\%)$$
+$\rightarrow$ Measures **total urban expansion** over the period (omits population).
+
+We analyse the **growth rate of built-up area per capita**, the dynamic form of secondary indicator 1 (log form following [@Lu2026]):
+
+$$\boxed{BpCR = \frac{\ln\!\left(\dfrac{UrBU_t/Pop_t}{UrBU_{t-z}/Pop_{t-z}}\right)}{z} = LCR_{\log} - PGR_{\log}}$$
+$\rightarrow$ Measures the **annual trend in per-capita land use**: densifying ($<0$) or sprawling ($>0$).
+
+**Where:**
+
+::: {style="display:flex; gap:1.6em; font-size:0.82em;"}
+::: {style="flex:1;"}
+- $UrBU_t$: urban built-up (m²) in year $t$
+- $Pop_t$: urban population in year $t$
+- $z$: period length in years (= 5)
+:::
+::: {style="flex:2;"}
+- $t{-}z$ / $t{+}n$: earlier / later year
+- $LCR_{\log}=\ln(UrBU_t/UrBU_{t-z})/z$: annual log growth of built-up
+- $PGR_{\log}=\ln(Pop_t/Pop_{t-z})/z$: annual log growth of population
+:::
+:::
+
+:::
+
+::: {.column width="35%"}
+### From a Level to a Trend
+
+::: {style="background:#FBCA8D; border-radius:12px; padding:10px 16px; margin-bottom:4px;"}
+**&#9312;&ensp;Built-up per capita[@unhabitat2025metadata]** 
+
+$$\text{BUP} = UrBU \,/\, Pop$$
+
+<span style="opacity: 0.7;"><span style="color: #9E5905;">The level</span>: land per person, right now.</span>
+:::
+
+::: {style="text-align:center; color:#FBCA8D; font-size:1.4em; line-height:1; margin:0;"}
+&#8595;
+:::
+
+::: {style="background:#FAB561; border-radius:12px; padding:10px 16px; margin-bottom:4px;"}
+**&#9313;&ensp;Annual growth of BUP[@Lu2026]** 
+
+$$BpCR = \Delta\ln(\text{BUP})/z = LCR_{\log}-PGR_{\log}$$
+
+<span style="opacity: 0.7;"><span style="color: #9E5905;">The change</span>: is it rising or falling?</span>
+::: 
+
+::: {style="text-align:center; color:#F78B08; font-size:1.4em; line-height:1; margin:0;"}
+&#8595;
+:::
+
+::: {style="background:#f89d2a; border-radius:12px; padding:10px 16px; margin-bottom:4px;"}
+**&#9314;&ensp;BpCR** &ensp;<span style="opacity:.6; font-weight:400;">(Our Dependent Variable)</span>
+
+<span style="color:#b91c1c; font-weight:700;">&#9650; BpCR &gt; 0</span> &emsp; Land &gt; People &emsp; **Sprawl**
+
+<span style="color:#4b5563; font-weight:700;">&#9670; BpCR = 0</span> &emsp; Land = People &emsp; **Balanced**
+
+<span style="color:#047857; font-weight:700;">&#9660; BpCR &lt; 0</span> &emsp; People &gt; Land &emsp; **Densification**
+:::
+
+:::
+
+:::
+
+::: {.notes}
+"The 11.3.1 metadata itself admits the ratio is hard to interpret and offers two secondary indicators, built from the same data – the first being built-up area per capita(BUP): land consumed per person.
+That's a level, a snapshot. 
+
+We turn it into a trend – its annual growth rate, in log form, following Lu and Weng.
+
+We call it BpCR(growth rate of built-up area per capita):
+
+The key is the structure: it's a difference of two logarithmic rates – same scale, and a subtraction instead of a division. 
+
+That single change fixes both flaws: no asymmetry, and no blow-up when population is flat.
+
+The interpretation stays simple: positive means sprawl, negative means densification."
+
+:::
+
+# Literature {.section-slide visibility="uncounted"}
+
+## Literature Review: Drivers & Measurement
+
+::: {.columns}
+
+::: {.column width="50%"}
+### Drivers of Urban Expansion
+
+::: {style="font-size:0.93em; line-height:1.32;"}
+
+**A Meta-Analysis of Global Urban Land Expansion** [@seto2011meta]
+
+- **Data:** 326 remote-sensing studies, global, 1970&ndash;2000
+- **Scope:** rates and drivers of global urban land expansion
+- **Finding:** urban land grew **faster than population** almost everywhere; income drives it in most regions, population growth in India and Africa
+
+**Determinants of Urban Sprawl in European Cities** [@oueslati2015sprawl]
+
+- **Data:** panel of 282 European cities (1990, 2000, 2006)
+- **Scope:** econometric determinants of sprawl (monocentric model)
+- **Finding:** **rising income and population** expand the urban footprint; cities keep spreading even where population is flat
+
+:::
+:::
+
+::: {.column width="50%"}
+### Measurement & SDG 11.3.1
+
+::: {style="font-size:0.93em; line-height:1.32;"}
+
+**Ratio of Land Consumption Rate to Population Growth Rate: Analysis of Different Formulations Applied to Mainland Portugal** [@nicolau2019lcrpgr]
+
+- **Data:** mainland Portugal, municipality level
+- **Scope:** SDG 11.3.1: UN LCRPGR vs an LUE-derived formula
+- **Finding:** the UN **LCRPGR formula is structurally unstable**; a log / LUE-based alternative is more robust
+
+**From Data Inconsistency to Reliable SDG 11.3.1 Monitoring: A Global Multi-Dataset Assessment of Land Use Efficiency** [@Lu2026]
+
+- **Data:** 6 built-up &times; 4 population datasets, 176 countries, 2000&ndash;2020
+- **Scope:** reliability of LUE (11.3.1) across datasets
+- **Finding:** LUE estimates **swing widely with dataset choice**; a **log-based** framework is needed for reliable monitoring
+
+:::
+:::
+
+:::
+
+::: {style="background:rgba(248,157,43,0.15); border:2px solid #f89d2b; border-radius:13px; padding:12px 20px; margin-top:12px; font-size:0.95em; box-shadow:0 3px 14px rgba(248,157,43,0.22);"}
+[<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#b1690f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.3em;"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg> **Our Contribution**]{style="color:#b1690f; font-size:1.18em;"}
+
+- **Metric:** The **log-based BpCR** (Nicolau, Lu)
+- **Method:** Make it **dynamic** with a two-way FE + **GMM(Generalized Method of Moments)** panel of **193 UN Member Countries (1985–2020)** measuring **persistence** (path-dependence)
+:::
+
+::: {.notes}
+"The literature splits in two. On drivers, Seto and Oueslati show income and population push cities to expand. On measurement, Nicolau and Lu show the official ratio is unstable and recommend a log-based metric.
+
+Our contribution sits at the intersection: we take that log metric and add dynamics – a GMM(Generalized Method of Moments) panel of 193 countries – and find that within a country, growing richer leads to densification, not sprawl."
+:::
+
+
+# Data {.section-slide visibility="uncounted"}
+
+## Data Sources
+
+::: {.columns}
+
+::: {.column width="33%"}
+::: {.source-card}
+<div class="source-card-header">
+<div><h3>GHSL</h3><p class="source-subtitle"><strong>Global Human Settlement Layer</strong><br><em>European Commission, Joint Research Centre / Copernicus</em></p></div>
+<a href="https://ghsl.jrc.ec.europa.eu/" target="_blank"><img src="logos/ghsl_logo.svg" alt="GHSL Logo" class="source-logo-inline"></a>
+</div>
+
+- **GHS-BUILT-S** (Built-up Surface), **GHS-POP** (Population), **GHS-SMOD** (Settlement Model)
+- Built-up classified from **Landsat & Sentinel-2** by machine learning; GHS-POP disaggregates census onto that surface; **GHS-SMOD applies the Degree of Urbanisation (DEGURBA)** to flag *urban* cells
+- **Available 1975–2030** at 5-year epochs (1975–2020 observed; 2025 & 2030 *modelled projections*)
+
+::: {style="font-size:0.80em; opacity:0.7; margin-top:4px;"}
+European Union, @pesaresi2024ghsl; @schiavina2023smod
+:::
+:::
+:::
+
+::: {.column width="33%"}
+::: {.source-card}
+<div class="source-card-header">
+<div><h3>GAUL 2024/2025</h3><p class="source-subtitle"><strong>Global Administrative Unit Layers</strong><br><em>FAO, Food and Agriculture Organization</em></p></div>
+<a href="https://data.apps.fao.org/catalog/dataset/global-administrative-unit-layers-gaul-2024" target="_blank"><img src="logos/fao_logo.svg" alt="FAO Logo" class="source-logo-inline"></a>
+</div>
+
+- UN-validated administrative boundaries: politically **neutral**
+- **Level 0** Country Level
+- **Level 1** Province/Region Level
+- **Global coverage** including all UN member states
+
+::: {style="font-size:0.80em; opacity:0.7; margin-top:4px;"}
+Food and Agriculture Organization, @gaul2024
+:::
+:::
+:::
+
+::: {.column width="33%"}
+::: {.source-card}
+<div class="source-card-header">
+<div><h3>UN</h3><p class="source-subtitle"><strong>UN Statistics & Population Division</strong><br><em>United Nations</em></p></div>
+<a href="https://data.un.org/" target="_blank"><img src="logos/un_logo.svg" alt="UN Logo" class="source-logo-inline"></a>
+</div>
+
+- **Socio-economic controls** (built-up, population, urban share & density come from GHSL/SMOD)
+
+| Control | Source |
+|:-------------|:-------|
+| GDP per capita Constant 2020 US\$) | **UN SNAAMA** |
+| Net migration (% of Population) | **UN DESA WPP 2024** |
+
+::: {style="font-size:0.80em; opacity:0.7; margin-top:4px;"}
+@unsd2025snaama; @undesa2024wpp; @unsd2024m49
+:::
+
+:::
+:::
+
+:::
+
+::: {.full-width-map style="margin-top:6px; width:100%; display:block;"}
+<iframe src="figures/data_sources_map.html" width="100%" height="510px" style="display:block; border:none; border-radius:12px;"></iframe>
+:::
+
+::: {.notes}
+"I used three data sources, all are at the global level and official and what UN uses.
+
+GHSL, the European Commission's Global Human Settlement Layer, gives us built-up area, population and the urban area mask – all derived from Landsat and Sentinel satellites, every five years from 1975.
+
+Global Administrative Unit Layers, from the Food and Agriculture Organization of the UN, provides administrative boundaries for every country.
+
+And from the UN come our socio-economic controls: GDP per capita and net migration
+
+:::
+
+# Descriptive Statistics {.section-slide visibility="uncounted"}
+
+## Descriptive Statistics
+
+```{r}
+#| label: descriptive
+#| echo: false
+desc_vars <- c(
+    bpcr = "BpCR",
+    lcrpgr_log = "LCRPGR (log)",
+    ln_gdp_pc = "ln(GDP per capita)",
+    urban_pop_share = "Urban Pop. Share",
+    ln_urban_density = "ln(Urban Density)",
+    net_migr_pct = "Net Migration (% Pop)"
+)
+panel_fixed |>
+    select(all_of(names(desc_vars))) |>
+    pivot_longer(everything(), names_to = "var", values_to = "v") |>
+    group_by(var) |>
+    summarise(
+        N = sum(!is.na(v)),
+        Mean = mean(v, na.rm = TRUE),
+        SD = sd(v, na.rm = TRUE),
+        Min = min(v, na.rm = TRUE),
+        Median = median(v, na.rm = TRUE),
+        Max = max(v, na.rm = TRUE),
+        .groups = "drop"
+    ) |>
+    mutate(Variable = desc_vars[var]) |>
+    arrange(match(var, names(desc_vars))) |>
+    select(Variable, N, Mean, SD, Min, Median, Max) |>
+    gt() |>
+    gt::fmt_number(columns = c(Mean, SD, Min, Median, Max), decimals = 3) |>
+    gt::fmt_number(columns = N, decimals = 0) |>
+    tbl_style() |>
+    gt::tab_options(table.font.size = gt::px(30))
+```
+
+:::: {style="font-size:1.18em;"}
+
+::: {.callout-important title="Read the LCRPGR row"}
+**LCRPGR (log)** already screams the problem: **SD ≈ 18** and a range from **−568 to +281**, vs **BpCR**'s SD ≈ **0.017** and range **[−0.11, +0.11]**. A ~1,000× wider spread: driven by LCRPGR's division instability when PGR ≈ 0.
+:::
+
+::::
+:::{.notes}
+Data sample includes 193 UN member countries from 1985 to 2020, with about 1,500 observations.
+
+
+The official LCRPGR has an Standard Deviation of ~18, ranging from −568 to +281 – the division blow-up, now visible in real data. 
+
+BpCR stays in a tight band, SD ~0.017 – roughly a thousand times narrower.
+
+So even before any regression, the data already shows which variable is usable – and which isn't.
+:::
+
+---
+
+## Country Trends: Regional Representatives
+
+<iframe src="figures/desc_trend_regional.html" width="100%" height="640px" allowtransparency="true" style="border:none; display:block; background:transparent;" scrolling="no"></iframe>
+
+::: {.callout-note title="Key patterns"}
+::: {style="font-size:1.42em;"}
+- **China**: strongest, most persistent per-capita sprawl (BpCR ≈ +0.02 to +0.03), peaking around 2000 then easing to 0.016; LCRPGR drifts up to ~4.4.
+- **Germany**: trends toward balance (BpCR 0.015 → 0.002), yet its LCRPGR swings wildly (−13.2 to +12.9).
+- **Japan**: BpCR negative in the 1980s, then a low, stable ~+0.01, while its LCRPGR lurches from +14.6 to −6.7.
+- **Nigeria & Brazil**: oscillate around zero in BpCR (no persistent sprawl), with low LCRPGR (~1).
+- **Takeaway**: BpCR gives a stable, interpretable per-capita signal; LCRPGR does not.
+:::
+:::
+:::{.notes}
+Seven selected countries, both metrics. On the Left, official indicator LCRPGR is swinging from −13 to +15 – unreadable.
+
+On the Right, BpCR is smooth, interpretable, and consistent.
+
+China has the strongest sprawl, peaking ~2000 then easing;
+
+the rest drift toward balance.
+
+
+:::
+
+
+# Empirical Analysis {.section-slide visibility="uncounted"}
+
+## Research Question & Hypotheses
+
+### [Research question]{style="font-size:1.4em"}
+
+::: {style="font-size:1.5em;"}
+**What economic and structural factors drive within-country changes in per-capita urban land use over time, and how persistent are these trajectories?**
+:::
+
+::: {.callout-note title="Measurement sub-question" style="font-size:1.5em;"}
+Does the official SDG 11.3.1 indicator (**LCRPGR**) reliably capture this, or does the **choice of metric** change the conclusions?
+:::
+
+### [Hypotheses]{style="font-size:1.4em"}
+
+::: {style="font-size:2.7em;"}
+| | Hypothesis | Expected Sign |
+|:-:|:------------------------------------------------|:----:|
+| **H1** | BpCR measures efficiency better than LCRPGR | Higher Fit |
+| **H2** | Higher urban density → less land/capita | − |
+| **H3** | Higher income → less land/capita | − |
+| **H4** | Net in-migration densifies cities | − |
+| **H5** | Per-capita land use is path-dependent | + |
+:::
+
+:::{.notes}
+My research question is
+what drives within-country changes in per-capita urban land use, how persistent are they – and does the metric choice change the answer?
+
+Five hypotheses:
+
+H1, BpCR measures efficiency better than LCRPGR;
+
+H2, denser cities use less land per person;
+
+H3, richer countries densify rather than sprawl;
+
+H4, in-migration densifies;
+
+and H5, land use is path-dependent.
+
+
+:::
+
+## Empirical Strategy
+
+### One specification, two dependent variables
+
+::: {style="background:#f89d2b; border:3px solid #b1690f; border-radius:10px; padding:4px 14px; margin:10px auto; max-width:99%;"}
+$$\small \text{Metric}_{i,t} = \rho\,\text{Metric}_{i,t-1} + \beta_1\ln(UrbDens)_{i,t} + \beta_2\,UrbShare_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,NetMigr_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+:::
+
+::: {style="text-align:left; font-size:1.1em; background:rgba(248,157,43,0.14); border:2px solid #f89d2b; border-radius:10px; padding:10px 18px; margin:10px auto; max-width:99%;"}
+**Two-stage plan**
+
+**①** Compare the metric **statically** (drop $\rho\,\text{Metric}_{i,t-1}$) to isolate **LCRPGR vs BpCR**
+
+**②** **Add the lagged DV** for dynamics and correct its Nickell bias with **GMM** *(Final Model)*
+:::
+
+::: {.columns}
+
+::: {.column style="width:47%; margin-right:5%;"}
+**The same model is estimated twice; only $Y$ changes:**
+
+::: {style="font-size:1.3em;"}
+| | Model 1 | Model 2 |
+|:--|:-------:|:-------:|
+| **DV** | **LCRPGR** (UN) | **BpCR** (Ours) |
+| FE | Country + Period | Country + Period |
+| SE | Clustered (country) | Clustered (country) |
+| N | `r nobs(l5_int)` | `r nobs(b5_int)` |
+:::
+
+
+- **Dynamic two-way FE panel**: country + period fixed effects ($\mu_i,\ \delta_t$)
+- **Same RHS, two DVs** (LCRPGR vs BpCR): any divergence isolates the *metric*, not the data
+- **Lagged DV** ($\rho\,Y_{t-1}$): captures inertia; the FE $\rho$ is Nickell-biased downward, GMM-corrected (see Final Model)
+- **Controls** (contemporaneous, at $t$): urban density, urban share, GDP pc, net migration
+- **193 countries $\times$ 8 five-year periods** (1985–2020); SE clustered by country
+
+:::
+
+::: {.column style="width:48%;"}
+### Why Each Variable Enters
+
+::: {style="font-size:1.3em;"}
+| Variables | Rationale |
+|:-----|:-------------|
+| **Lagged DV** ($\rho$)| Captures inertia: once a country sprawls, it tends to keep sprawling |
+| **ln(Urban Density)** | Urban form: denser cities consume less new land per resident |
+| **Urban Pop. Share** | How urbanised the country already is; less rural land left to convert |
+| **ln(GDP Per Capita)** | Tests whether richer countries use more or less built-up land per person |
+| **Net Migration** | Demographic pressure: do newcomers densify cities or push outward expansion? |
+| **Country & Period FE** | Absorb fixed geography and institutions, plus shocks shared in each period |
+:::
+
+:::
+
+:::
+:::{.notes}
+The empirical strategy is straightforward. I run one model and estimate it twice – once with the official LCRPGR, once with BpCR. Everything else stays identical: same controls, country and period fixed effects, errors clustered by country. So we're really comparing the metrics, not the data.
+
+And we do it in two steps. First, statically: does switching the metric change the story? Then we add the lagged dependent variable for dynamics, and correct its downward Nickell bias with GMM (Generalized Method of Moments).
+:::
+
+
+---
+
+## Model 1: UN Approach: LCRPGR Regression
+
+::: {style="border:3px solid #f89d2b; border-radius:10px; padding:2px 16px; margin:8px auto; max-width:83%;"}
+$$\small LCRPGR_{i,t} = \beta_1\ln(UrbDens)_{i,t} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+:::
+
+::: {.eqmatch}
+```{r}
+#| label: lcrpgr-stepwise
+#| echo: false
+modelsummary(
+    list(
+        "Density" = ls1,
+        "+ Net Migr." = ls2,
+        "+ GDP pc" = ls3,
+        "+ Urban %" = ls4
+    ),
+    coef_map = cm_lcrpgr,
+    gof_map = gm,
+    stars = c("*" = .10, "**" = .05, "***" = .01),
+    fmt = fmt_sprintf("%.3f"),
+    output = "gt",
+    notes = "SE clustered at country level. DV: LCRPGR (log) = Land Consumption Rate ÷ Population Growth Rate (both log rates). Static two-way FE (no lagged DV); GHSL/SMOD + UN (GDP, net migration)."
+) |>
+    tbl_style(
+        dv = "Dependent variable: LCRPGR (log)",
+        meta = sprintf(
+            "%d countries × %d periods, 1985–2020",
+            n_distinct(panel_fixed$iso3),
+            n_distinct(panel_fixed$period_f)
+        )
+    )
+```
+:::
+:::{.notes}
+Here's Model 1, using the official LCRPGR as the dependent variable, controls added one by one.
+
+Nothing is significant, and the within-country R² is about 0.003 – so low. The metric is so noisy that the coefficients come out huge and unstable.
+
+:::
+
+---
+
+## Model 2: Our Approach: BpCR Regression
+
+::: {style="border:3px solid #f89d2b; border-radius:10px; padding:2px 16px; margin:8px auto; max-width:83%;"}
+$$\small BpCR_{i,t} = \beta_1\ln(UrbDens)_{i,t} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+:::
+
+::: {.eqmatch}
+```{r}
+#| label: bpcr-stepwise
+#| echo: false
+modelsummary(
+    list(
+        "Density" = bs1,
+        "+ Net Migr." = bs2,
+        "+ GDP pc" = bs3,
+        "+ Urban %" = bs4
+    ),
+    coef_map = cm_bpcr,
+    gof_map = gm,
+    stars = c("*" = .10, "**" = .05, "***" = .01),
+    fmt = fmt_sprintf("%.4f"),
+    output = "gt",
+    notes = "SE clustered at country level. DV: BpCR = Δln(built-up per capita)/z ≡ LCR − PGR. Static two-way FE (no lagged DV); GHSL/SMOD + UN (GDP, net migration)."
+) |>
+    tbl_style(
+        dv = "Dependent variable: BpCR",
+        meta = sprintf(
+            "%d countries × %d periods, 1985–2020",
+            n_distinct(panel_fixed$iso3),
+            n_distinct(panel_fixed$period_f)
+        )
+    )
+```
+:::
+:::{.notes}
+Now Model 2 – exact same controls, same fixed effects. The only change is the dependent variable: BpCR instead of LCRPGR.
+
+And everything changes. The fit jumps to about 0.065 – roughly 20 times better. The coefficients now turn significant and interpretable: denser cities use less land, richer countries use less, migration densifies.
+
+Same data, same model – just a better-built metric. This is the clearest evidence for H1.
+:::
+---
+
+## Final Model: BpCR under Dynamic-Panel GMM
+
+::: {style="border:3px solid #f89d2b; border-radius:10px; padding:2px 16px; margin:6px auto; max-width:100%;"}
+$$\small BpCR_{i,t} = \rho\,BpCR_{i,t-1} + \beta_1\ln(UrbDens)_{i,t} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+:::
+
+The dynamic FE model is built up control-by-control (first five columns); the last two columns correct the lagged-DV **Nickell bias** with **Arellano-Bond** and **Blundell-Bond** GMM (instrumenting the lagged BpCR with its deeper lags).
+
+::: {.columns}
+
+::: {.column width="64%"}
+
+::: {.leftalign}
+
+```{r}
+#| label: gmm-fullmodel
+#| echo: false
+gmm_gt(
+    gmm_res$main_combo,
+    meta = sprintf(
+        "%d countries × %d periods, 1985–2020",
+        n_distinct(panel_fixed$iso3),
+        n_distinct(panel_fixed$period_f)
+    ),
+    fontpx = 17,
+    note = paste0(
+        "<b>* p&lt;0.10, ** p&lt;0.05, *** p&lt;0.01.</b><br>",
+        "Standard errors clustered by country.<br>",
+        "<b>Notes:</b><br>",
+        "<b>1)</b> Cols 1&ndash;5: dynamic two-way FE (country + period FE), controls added stepwise. <br>",
+        "<b>2)</b> <b>AB</b> = Arellano-Bond difference GMM; <b>BB</b> = Blundell-Bond system GMM, instrumenting the lagged BpCR with lags &ge; 2 (two-step, Windmeijer-robust SE).<br>",
+        "<b>3)</b> <b>Sargan/Hansen</b> = over-identification test (p &gt; 0.10 &rarr; valid instruments); <b>AR(2)</b> = second-order serial correlation (p &gt; 0.10 &rarr; valid).<br>"
+    )
+)
+```
+
+:::
+
+:::
+
+::: {.column width="36%"}
+
+:::: {style="font-size:0.8em; background:rgba(248,157,43,0.13); border-left:4px solid #b1690f; border-radius:8px; padding:5px 11px; margin:0 0 7px 0;"}
+[<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#b1690f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><polyline points="21 3 21 8 16 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><polyline points="3 21 3 16 8 16"/></svg> &nbsp;**BpCR[t−1]**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[INERTIA]{style="background:#b1690f; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
+[ρ = `r ab_coef(1L, 2L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} ~60% of last period's BpCR persists; Bias-Corrected <br>**ρ ≈ 3× FE** → **Strong path-dependence**.<br>[**H5** ✓ Supported: Per-Capita Land Use is Path-Dependent (+)]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+::::
+
+:::: {style="font-size:0.8em; background:rgba(14,124,102,0.10); border-left:4px solid #0e7c66; border-radius:8px; padding:5px 11px; margin:7px 0;"}
+[<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#0e7c66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><rect x="3" y="9" width="7" height="12" rx="1"/><rect x="13" y="3" width="8" height="18" rx="1"/><path d="M6 13h1M6 17h1M16 7h2M16 11h2M16 15h2"/></svg> &nbsp;**ln(Urban Density)**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[DENSIFICATION]{style="background:#0e7c66; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
+[β₁ = `r ab_coef(2L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} **Compact-City Effect**: Denser cities use less new land per resident.<br>[**H1** ✓ Supported: Density → Less Land/Capita (−)]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+::::
+
+:::: {style="font-size:0.8em; background:rgba(14,124,102,0.10); border-left:4px solid #0e7c66; border-radius:8px; padding:5px 11px; margin:7px 0;"}
+[<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#0e7c66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.3a3 3 0 0 1 0 5.4"/><path d="M21 20a6 6 0 0 0-4-5.6"/></svg> &nbsp;**Net Migration**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[DENSIFICATION]{style="background:#0e7c66; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
+[β₂ = `r ab_coef(3L, 4L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} In-migrants pack into the **existing** stock faster than built-up grows.<br>[**H4** ✓ Supported: In-migration densifies (−)]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+::::
+
+:::: {style="font-size:0.8em; background:rgba(14,124,102,0.10); border-left:4px solid #0e7c66; border-radius:8px; padding:5px 11px; margin:7px 0;"}
+[<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#0e7c66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><path d="M3 3v18h18"/><polyline points="7 14 11 10 14 13 19 7"/></svg> &nbsp;**ln(GDP per capita)**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[DENSIFICATION]{style="background:#0e7c66; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
+[β₃ = `r ab_coef(4L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} Richer countries **densify, not sprawl** → **Growth ≠ Sprawl**.<br>[**H3** ✓ Supported: Higher income → less land/capita (−)]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+::::
+
+:::: {style="font-size:0.8em; background:rgba(154,160,166,0.12); border-left:4px solid #9aa0a6; border-radius:8px; padding:5px 11px; margin:7px 0;"}
+[<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg> &nbsp;**Urban Pop. Share**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[NOT SIGNIFICANT]{style="background:#9aa0a6; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
+[β₄ = `r ab_coef(5L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} The *level* of urbanisation adds nothing once the rest is controlled → urban **form** matters.<br>[Control · No dedicated hypothesis]{style="color:#9aa0a6; font-weight:700; font-size:0.85em;"}
+::::
+
+:::
+
+:::
+
+::: {.notes}
+"Now the final model. I add the lagged dependent variable to capture inertia effect.
+
+But this creates a problem. Once a lagged dependent variable enters a fixed-effects model, it becomes correlated with the demeaned error also known as the Nickell bias – which pushes persistence downward. That's why FE reports only 0.23.
+
+The fix is dynamic-panel GMM-Generalized Method of Moments. Arellano-Bond differences the equation and instruments the lagged term with its own deeper lags; Blundell-Bond adds the levels equation. Both recover the true persistence – about 0.6, nearly three times the FE estimate. So sprawl is strongly path-dependent.
+
+And the drivers hold: denser cities densify, in-migration densifies, and higher income densifies too.
+
+Two tests confirm the model is valid. The Sargan–Hansen test checks our instruments – the deeper lags – and with a p-value above 0.10 we don't reject them, so they're valid. The AR(2) test checks for second-order serial correlation, and again above 0.10 . So the estimates are trustworthy. This confirms hypotheses H2 through H5.
+:::
+
+
+
+
+
+# Conclusion {.section-slide visibility="uncounted"}
+
+## Conclusion
+
+
+::: {style="font-size:1.8em; line-height:1.4;"}
+
+1. **Sprawl is real and measurable.** In most world regions urban land grows faster than population: a policy-relevant inefficiency.
+
+    - BpCR > 0 (sprawl) in **62%** of country-period observations; **64% of countries (124/193)** sprawl on average over time [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
+    - Median BpCR = **+0.0036** (built-up per capita rising); LCRPGR > 1 in **55%** of cases [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
+
+2. **The official LCRPGR is unreliable.** A raw ratio that explodes when population growth is near zero (division instability) and explains almost nothing within countries (within R² ≈ 0.003).
+
+3. **Our log-based BpCR is the better metric.** Symmetric and numerically stable (following Nicolau and Lu), it fits about **20× better** (within R² ≈ 0.065 static, ≈ 0.23 dynamic).
+
+4. **Robust drivers (Bias-Corrected GMM).** Denser cities densify (negative, highly significant); sprawl is **path-dependent** (ρ ≈ 0.6); net migration densifies; and **higher income densifies too** (negative, significant).
+
+5. **We complement the literature, not contradict it.** Between countries, richer ones are more sprawled (the usual finding); but within a single country, growing richer leads to **densification** (building up, not out). Our country fixed effects capture this within-country effect that cross-country studies miss.
+
+6. **Methodological contribution.** A dynamic two-way FE + **GMM** panel of **193 UN member countries (1985–2020)** that corrects the Nickell bias and quantifies persistence.
+
+:::
+
+::: {.notes}
+"To conclude. Sprawl is real: in about two-thirds of countries, urban land grows faster than population over time.
+
+But our central message is that the metric matters. The official LCRPGR is mathematically unreliable; our log-based BpCR fits roughly 20 times better.
+
+And with a reliable metric, clear drivers emerge: denser cities densify, sprawl is strongly path-dependent, and – within countries – higher income densifies, it doesn't sprawl.
+
+That refines the literature: across countries the rich look more sprawled, but as a single country grows richer, it builds up, not out. We capture that within-country margin with a dynamic, bias-corrected panel of 193 countries.
+
+The bottom line: a better yardstick gives better answers. Thank you.
+
+:::
+
+
+## References {visibility="uncounted"}
+
+::: {style="font-size:1.5em; line-height:1.35;"}
+
+- **Lu, W. & Weng, Q. (2026).** From data inconsistency to reliable SDG 11.3.1 monitoring: A log-based framework for measuring urban land efficiency. *Land Use Policy*, 168, 108088.
+- **Seto, K. C., et al. (2011).** A meta-analysis of global urban land expansion. *PLOS ONE*, 6(8).
+- **Oueslati, W., Alvanides, S. & Garrod, G. (2015).** Determinants of urban sprawl in European cities. *Urban Studies*, 52(9), 1594–1614.
+- **Nicolau, R., David, J., Caetano, M. & Pereira, J. M. C. (2019).** Ratio of Land Consumption Rate to Population Growth Rate: analysis of different formulations applied to mainland Portugal. *ISPRS Int. J. Geo-Information*, 8(1), 10.
+- **UN-Habitat. (2023).** *World Cities Report 2022: Envisaging the Future of Cities*.
+- **Pesaresi, M., Schiavina, M., Politis, P., Freire, S., Krasnodębska, K., Uhl, J. H., … Kemper, T. (2024).** Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and population survey data. *International Journal of Digital Earth*, 17(1). https://doi.org/10.1080/17538947.2024.2390454
+- **GHS-BUILT-S (R2023A).** European Commission, Joint Research Centre (JRC). Product: GHS-BUILT-S; epoch 2020; 100 m; Mollweide. © European Union, 1995–2025: CC BY 4.0.
+- **Schiavina, M., Melchiorri, M. & Pesaresi, M. (2023).** GHS-SMOD R2023A: GHS settlement layers, application of the Degree of Urbanisation methodology (stage I) to GHS-POP R2023A and GHS-BUILT-S R2023A, multitemporal (1975–2030). European Commission, JRC. doi:10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA
+- **FAO (2024).** The Global Administrative Unit Layers (GAUL) 2024. Food and Agriculture Organization of the United Nations: CC BY 4.0.
+- **UN Statistics Division (2025).** National Accounts Main Aggregates Database (SNAAMA): per-capita GDP, constant 2020 US$.
+- **UN DESA, Population Division (2024).** World Population Prospects 2024: crude net-migration rate.
+- **Worldometer (2024).** *World Population Clock: Current World Population*. https://www.worldometers.info/world-population/ (real-time projection based on UN DESA WPP 2024).
+
+
+:::
+
+::: {#refs style="display:none;"}
+:::
+
+# Thank you for your attention! {.section-slide visibility="uncounted"}
+
+# Questions? {.section-slide visibility="uncounted"}
+
+# Appendix: Backup Slides {.section-slide visibility="uncounted"}
+
+## The Five Indicators at a Glance {visibility="uncounted"}
+
+::: {style="font-size:2em;"}
+
+| Indicator | Formula (annualised) | Type | What it measures | Caveat |
+|:--|:--|:--:|:--|:--|
+| **LCR** · Land Consumption Rate | $\frac{UrBU_t-UrBU_{t-z}}{UrBU_{t-z}}\cdot\frac{1}{z}$ *(arithmetic)* | rate | how fast built-up area expands | ignores population |
+| **PGR** · Population Growth Rate | $\ln(Pop_t/Pop_{t-z})/z$ *(log)* | rate | how fast urban population grows | building block |
+| **LCRPGR** · *official 11.3.1* | $LCR / PGR$ | ratio | land growth **relative to** population growth | unstable: $\to\pm\infty$ as $PGR\to0$; arithmetic $\div$ log |
+| **BUP** · Built-up per capita *(secondary 1)* | $UrBU_t/Pop_t$ | level | land consumed per person (the *state*) | a stock: mechanical as a regression DV |
+| **BpCR** · *our dependent variable* | $\frac{\ln(BUP_t/BUP_{t-z})}{z}=LCR_{\log}-PGR_{\log}$ | rate | the *trend* in per-capita land use (efficiency) | not named in metadata; growth of secondary 1 |
+
+:::
+
+*Metadata secondary indicator 2, Total change in built-up $=(UrBU_{t+n}-UrBU_t)/UrBU_t$, measures total expansion but, like LCR, omits population. $UrBU$ = urban built-up area, $Pop$ = urban population, $z$ = period length (5 yr).*
+
+
+## Global BpCR Distribution {visibility="uncounted"}
+
+<iframe src="figures/bpcr_interactive.html"
+        width="100%" height="970px"
+        allowtransparency="true"
+        style="border:none; display:block; max-width:none !important; width:100% !important; margin:0 auto;"
+        scrolling="no">
+</iframe>
+
+::: {.notes}
+**Reading the three layers (toggle, top-right).**
+
+**1. BpCR Category.** Each country's *mean* BpCR over 1980-2020, split around zero (side medians at −0.0078 and +0.0081). Positive means built-up grows faster than people (sprawl); negative means people grow faster than built-up (densification). Result: 124 of 193 countries (64%) sprawl (62 strong, 62 mild) and 69 (36%) densify (34 strong, 35 mild). Per-capita urban land is rising in nearly two-thirds of countries.
+
+**2. Active vs Passive.** Combines the BpCR sign with total built-up change (dln_B = BpCR + population growth) to show the mechanism. Active sprawl: per-capita up AND built-up genuinely expanding (construction-driven). Passive sprawl: per-capita up but built-up flat or shrinking (depopulation-driven). Active densification: land actually contracting. Passive densification: per-capita down because population outpaces an already-growing built-up. Result: Active sprawl 116 (60%), Passive densification 61 (32%), Passive sprawl 12, Active densification 1. Two takeaways: sprawl is mostly active (real construction outpacing people, not an artefact), and densification is almost entirely passive (demographic, not deliberate compaction: 61 vs 1).
+
+**3. BpCR Trend (2000-2020).** Slope of BpCR over the last two decades (significant at p < 0.10). Improving: decelerating per-capita land growth (toward efficiency). Worsening: accelerating. Stable: no significant trend. Result: 90 improving, 101 stable, only 2 worsening. Almost no country is getting worse and about half are improving, suggesting partial convergence toward efficiency.
+
+**Bottom line:** sprawl is the global norm (64%) and mostly construction-driven (active); where densification occurs it is overwhelmingly demographic (passive); and the recent trajectory is cautiously positive (decelerating, rarely worsening).
+:::

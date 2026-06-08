@@ -1,0 +1,916 @@
+/* ============================================================
+   CLEAN ACADEMIC THEME - Quarto RevealJS
+   Palette: off-white / charcoal / teal accent
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Kill all scrollbars globally ───────────────────────────── */
+html, body {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+}
+
+.reveal,
+.reveal .slides,
+.reveal .slides section,
+.reveal .slides section.level1,
+.reveal .slides section.level2 {
+  overflow: hidden !important;
+}
+
+
+/* ── Tokens ─────────────────────────────────────────────────── */
+:root {
+  --c-bg:       #f5f5f0;      /* warm off-white background      */
+  --c-surface:  #ffffff;      /* card / slide surface           */
+  --c-text:     #18181b;      /* near-black body text           */
+  --c-muted:    #71717a;      /* secondary / metadata text      */
+  --c-border:   #d4d4d8;      /* subtle divider                 */
+  --c-accent:   #fd9d24;      /* SDG 11 orange                  */
+  --c-accent2:  #e8890d;      /* darker orange for links        */
+  --c-dark:     #18181b;      /* section slide background       */
+  --c-head:     #18181b;      /* heading colour                 */
+
+  --r-background-color: #f5f5f0;
+  --r-main-color:       #18181b;
+  --r-heading-color:    #18181b;
+  --r-link-color:       #0f766e;
+  --r-main-font:        'DM Sans', sans-serif;
+  --r-heading-font:     'DM Sans', sans-serif;
+  --r-main-font-size:   32px;
+
+  /* Force progress indicator to inherit theme accent color */
+  --primary-color: var(--c-accent) !important;
+  --completed-color: var(--c-accent) !important;
+}
+
+/* ── Global ──────────────────────────────────────────────────── */
+.reveal,
+.reveal .slides {
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+}
+
+/* ── Content slide padding & overflow ────────────────────────── */
+.reveal .slides section.level2 {
+  padding: 0px 64px 0px;
+  box-sizing: border-box;
+  overflow: hidden !important;
+}
+
+/* Ensure content slides in vertical stacks start from top */
+.reveal .slides > section > section.level2 {
+  top: 0 !important;
+}
+
+/* ── Headings ─────────────────────────────────────────────────── */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  color: var(--c-head);
+  margin-top: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Slide title */
+.reveal h2 {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: var(--c-head);
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--c-border);
+  position: relative;
+}
+
+/* teal rule under title */
+.reveal h2::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--c-accent);
+}
+
+.reveal h3 {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--c-accent);
+  margin-bottom: 8px;
+}
+
+.reveal h4 {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+}
+
+/* ── Section divider slides ───────────────────────────────────── */
+.reveal .section-slide.present {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-left: 96px !important;
+}
+
+.reveal .section-slide h1 {
+  color: var(--c-head) !important;
+  font-size: 2.4em !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  line-height: 1.1 !important;
+  border-left: 5px solid var(--c-accent) !important;
+  padding-left: 24px !important;
+}
+
+/* ── Title slide ──────────────────────────────────────────────── */
+
+/* Full-screen gradient overlay - applied to the reveal background container 
+   to fill the entire viewport without any margins or padding. 
+   Fades from left (orange) to right (transparent). */
+.reveal .slide-background.title-slide-background::after,
+.reveal .backgrounds .slide-background:first-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(253, 157, 36, 0.95) 0%,
+    rgba(253, 157, 36, 0.55) 42%,
+    transparent 72%
+  ) !important;
+  z-index: 3; /* above the background video */
+  pointer-events: none;
+}
+
+.reveal #title-slide.present {
+  background: transparent !important;
+}
+
+/* Center-aligned container */
+.reveal #title-slide.present,
+.reveal #title-slide.center.present {
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; /* Centered horizontally */
+  justify-content: center !important; /* Centered vertically */
+  text-align: center !important;
+  padding: 0 !important; /* Removed left padding */
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Center all text blocks with auto margins */
+.reveal #title-slide h1.title,
+.reveal #title-slide p.subtitle,
+.reveal #title-slide .quarto-title-authors,
+.reveal #title-slide p.date {
+  max-width: 1200px !important; /* Wider max-width for centering */
+  width: 100% !important;
+  margin-left: auto !important; /* Centered block */
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  text-align: center !important;
+}
+
+
+
+.reveal #title-slide h1.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.9em;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.12;
+  margin: 0 auto 20px !important; /* Centered margin */
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.35); /* Heavy layered shadow */
+  max-width: 92% !important;
+  white-space: normal !important; /* allow wrapping for long titles */
+}
+
+.reveal #title-slide p.subtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.70em;
+  color: #ffffff; /* Fully opaque white */
+  line-height: 1.55;
+  margin: 0 auto 36px !important; /* Centered margin */
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.60), 0 1px 4px rgba(0, 0, 0, 0.40); /* Heavy layered shadow */
+}
+
+/* Center the authors block on page and center contents within */
+.reveal #title-slide .quarto-title-authors {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 auto 16px !important; /* Centered margin */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; /* Center within the block */
+  gap: 4px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.reveal #title-slide .quarto-title-author {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center within the block */
+}
+
+.reveal #title-slide .quarto-title-author-name {
+  font-size: 0.82em;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.60), 0 1px 3px rgba(0, 0, 0, 0.40); /* Heavy layered shadow */
+}
+
+/* Center institute & date within the block */
+.reveal #title-slide .quarto-title-affiliation {
+  font-size: 0.60em;
+  color: #ffffff; /* Fully opaque white */
+  margin: 2px 0 10px;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.60), 0 1px 3px rgba(0, 0, 0, 0.40); /* Heavy layered shadow */
+}
+
+.reveal #title-slide p.date {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.52em;
+  color: #ffffff; /* Fully opaque white */
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin: 8px auto 0 !important; /* Centered margin */
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.60), 0 1px 3px rgba(0, 0, 0, 0.40); /* Heavy layered shadow */
+}
+
+/* ── Body text ────────────────────────────────────────────────── */
+.reveal p {
+  font-size: 0.72em;
+  line-height: 1.65;
+  color: var(--c-text);
+  margin: 0 0 10px;
+}
+
+.reveal strong, .reveal b {
+  font-weight: 700;
+  color: var(--c-head);
+}
+
+.reveal em, .reveal i {
+  color: var(--c-muted);
+}
+
+/* ── Lists ────────────────────────────────────────────────────── */
+.reveal ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reveal ul li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 8px;
+  font-size: 0.70em;
+  line-height: 1.55;
+  color: var(--c-text);
+}
+
+.reveal ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  background: var(--c-accent);
+  border-radius: 50%;
+}
+
+.reveal ol {
+  padding-left: 20px;
+}
+
+.reveal ol li {
+  margin-bottom: 8px;
+  font-size: 0.70em;
+  line-height: 1.55;
+  color: var(--c-text);
+}
+
+.reveal ol li::marker {
+  color: var(--c-accent);
+  font-weight: 700;
+}
+
+.reveal ul ul li,
+.reveal ol ol li {
+  font-size: 0.90em;
+  color: var(--c-muted);
+}
+
+.reveal ul ul li::before {
+  width: 4px;
+  height: 4px;
+  top: 10px;
+  background: var(--c-muted);
+}
+
+/* ── Tables ───────────────────────────────────────────────────── */
+.reveal table {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 0.50em;
+  margin: 12px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #f89d2b !important;
+}
+
+/* force the orange rounded frame on gt tables too (gt sets its own borders) */
+.reveal .gt_table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 2px solid #f89d2b !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  width: auto !important;          /* size to content -> narrower columns */
+  margin: 12px auto !important;    /* centred */
+}
+
+/* Model 1/2: match the gt table width to the formula box above it (85%, centred) */
+.reveal .eqmatch .gt_table {
+  width: 85% !important;
+  margin: 8px auto !important;
+}
+
+/* Final Model: left-align the table within its column + top-align with right cards */
+.reveal .leftalign .gt_table {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  margin-top: 0 !important;
+}
+
+/* Final Model: tighter horizontal cell padding -> narrower table (font unchanged) */
+.reveal .leftalign .gt_table th,
+.reveal .leftalign .gt_table td {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+/* Final Model: drop the gt container's top padding so the table top-aligns with the right cards */
+.reveal .leftalign .cell-output-display > div {
+  padding-top: 0 !important;
+}
+
+/* bold the first column: variable names + the bottom (gof) property labels */
+.reveal .gt_table tbody td:first-child,
+.reveal .gt_table tbody th:first-child,
+.reveal .gt_table .gt_stub {
+  font-weight: 700 !important;
+  white-space: nowrap !important;   /* keep variable names on one line (column auto-widens) */
+}
+
+/* modern font for all tables (gt sets its own font inline -> override) */
+.reveal table,
+.reveal .gt_table,
+.reveal .gt_table * {
+  font-family: "Plus Jakarta Sans", "DM Sans", system-ui, sans-serif !important;
+  font-feature-settings: "tnum" 1;   /* tabular figures, aligned numbers */
+}
+
+.reveal table th {
+  background: var(--c-dark);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 8px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--c-accent);
+  font-size: 1em;
+}
+
+.reveal table td {
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text);
+  background: var(--c-surface);
+  line-height: 1.4;
+}
+
+.reveal table tr:nth-child(even) td {
+  background: #f4f4f5;
+}
+
+/* ── gt regression tables: zebra every 2 rows (coef + SE pair) ── */
+.reveal .gt_table tr:nth-child(even) td {
+  background: inherit;
+}
+.reveal .gt_table tr:nth-child(4n+1) td,
+.reveal .gt_table tr:nth-child(4n+2) td {
+  background-color: #f4f4f5 !important;
+}
+.reveal .gt_table tr:nth-child(4n+3) td,
+.reveal .gt_table tr:nth-child(4n+4) td {
+  background-color: #ffffff !important;
+}
+
+/* ── GOF rows (N, R², Within R²): normal every-1-row zebra ────── */
+.reveal .gt_table tr:nth-last-child(1) td { background-color: #f4f4f5 !important; }
+.reveal .gt_table tr:nth-last-child(2) td { background-color: #ffffff !important; }
+.reveal .gt_table tr:nth-last-child(3) td { background-color: #f4f4f5 !important; }
+
+/* Final Model combo: single-row coefficients -> simple every-1-row zebra */
+.reveal .leftalign .gt_table tbody tr td { background-color: #ffffff !important; }
+.reveal .leftalign .gt_table tbody tr:nth-child(even) td { background-color: #f4f4f5 !important; }
+
+.reveal table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Callouts ─────────────────────────────────────────────────── */
+.reveal .callout {
+  border-radius: 4px;
+  border: 1px solid var(--c-border);
+  border-left: 3px solid var(--c-accent);
+  background: var(--c-surface);
+  padding: 10px 14px;
+  margin: 8px 0;
+}
+
+.reveal .callout-note     { border-left-color: #2563eb; background: #eff6ff; }
+.reveal .callout-tip      { border-left-color: #059669; background: #ecfdf5; }
+.reveal .callout-warning  { border-left-color: #d97706; background: #fffbeb; }
+.reveal .callout-caution  { border-left-color: #dc2626; background: #fef2f2; }
+.reveal .callout-important{ border-left-color: #7c3aed; background: #f5f3ff; }
+
+.reveal .callout-title {
+  font-weight: 700;
+  font-size: 0.72em;
+  color: var(--c-head);
+  margin-bottom: 4px;
+}
+
+.reveal .callout-content {
+  font-size: 0.70em;
+  line-height: 1.55;
+  color: var(--c-text);
+}
+
+.reveal .callout-content p { font-size: 1em; margin: 0; }
+.reveal .callout-content ul li,
+.reveal .callout-content ol li { font-size: 0.92em; }
+
+/* ── Columns ──────────────────────────────────────────────────── */
+.reveal .columns {
+  display: flex;
+  gap: 0px;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.reveal .column {
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Blockquote ───────────────────────────────────────────────── */
+.reveal blockquote {
+  border-left: 3px solid var(--c-accent);
+  padding: 8px 16px;
+  background: var(--c-surface);
+  font-style: italic;
+  color: var(--c-muted);
+  font-size: 0.70em;
+  margin: 8px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* ── Code ─────────────────────────────────────────────────────── */
+.reveal code {
+  font-size: 0.78em;
+  background: #f4f4f5;
+  color: #be123c;
+  border-radius: 3px;
+  padding: 1px 5px;
+  border: 1px solid var(--c-border);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.reveal pre code {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: block;
+  font-size: 0.54em;
+  line-height: 1.5;
+}
+
+/* ── Math ─────────────────────────────────────────────────────── */
+.reveal .math-display { font-size: 0.82em; margin: 8px 0; overflow-x: auto; }
+
+/* ── Links ────────────────────────────────────────────────────── */
+.reveal a { color: var(--c-accent2); font-weight: 500; text-decoration: none; }
+.reveal a:hover { text-decoration: underline; }
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.reveal .footer {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.36em;
+  color: var(--c-muted);
+  border-top: 1px solid var(--c-border);
+  padding-top: 2px;
+  line-height: 1.4;
+  bottom: 2px !important;
+  text-transform: uppercase;
+}
+
+.reveal .footer p {
+  color: inherit;
+  margin: 0;
+}
+
+.reveal.has-dark-background .footer,
+.reveal.has-dark-background .footer p {
+  color: rgba(255,255,255,0.72);
+  border-top-color: rgba(255,255,255,0.18);
+}
+
+/* ── Slide number - bottom right ──────────────────────────────── */
+.reveal .slide-number {
+  font-size: 0.36em;
+  background: transparent;
+  position: fixed !important;
+  bottom: 6px !important;
+  /* right: 92px !important; */
+  top: auto !important;
+  left: auto !important;
+}
+
+.reveal.has-light-background .slide-number {
+  color: var(--c-muted);
+}
+
+.reveal.has-dark-background .slide-number {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Progress bar ─────────────────────────────────────────────── */
+.reveal .progress { color: var(--c-accent); height: 3px; }
+
+/* ── Controls ─────────────────────────────────────────────────── */
+.reveal .controls { color: var(--c-accent); opacity: 0.5; }
+.reveal .controls:hover { opacity: 1; }
+
+/* ── Menu & settings buttons - accent color ───────────────────── */
+.reveal .slide-menu-button .fa-bars::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(253, 157, 36)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>');
+}
+
+.reveal .slide-chalkboard-buttons .fa-easel2::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(253, 157, 36)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0a.5.5 0 0 1 .447.276L8.81 1h4.69A1.5 1.5 0 0 1 15 2.5V11h.5a.5.5 0 0 1 0 1h-2.86l.845 3.379a.5.5 0 0 1-.97.242L12.11 14H3.89l-.405 1.621a.5.5 0 0 1-.97-.242L3.36 12H.5a.5.5 0 0 1 0-1H1V2.5A1.5 1.5 0 0 1 2.5 1h4.691l.362-.724A.5.5 0 0 1 8 0ZM2 11h12V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5V11Zm9.61 1H4.39l-.25 1h7.72l-.25-1Z"/></svg>');
+}
+
+.reveal .slide-chalkboard-buttons .fa-brush::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(253, 157, 36)" viewBox="0 0 16 16"><path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.067 6.067 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.118 8.118 0 0 1-3.078.132 3.659 3.659 0 0 1-.562-.135 1.382 1.382 0 0 1-.466-.247.714.714 0 0 1-.204-.288.622.622 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896.126.007.243.025.348.048.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04z"/></svg>');
+}
+
+/* ── UOL Logo - top left ──────────────────────────────────────── */
+.reveal .slide-logo {
+  position: fixed !important;
+  top: 14px !important;
+  left: 16px !important;
+  bottom: auto !important;
+  right: auto !important;
+  max-height: 64px !important;
+  width: auto !important;
+  opacity: 0.92;
+  z-index: 900;
+}
+
+/* Invert to white on dark title slide and Land Cover slide */
+body:has(.reveal #title-slide.present) .reveal .slide-logo,
+body:has(.reveal #land-cover-change-the-evidence.present) .reveal .slide-logo {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+/* Hide SDG icon on title slide */
+body:has(.reveal #title-slide.present)::after {
+  display: none;
+}
+
+/* Hide slide number on title slide, section slides, and references slides (any uncounted slide) */
+body:has(.reveal [data-visibility="uncounted"].present) .reveal .slide-number {
+  display: none !important;
+}
+
+/* ── SDG 11 icon - bottom right ───────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 120px;
+  right: 14px;
+  width: 68px;
+  height: 68px;
+  background-image: url('sdg11.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  z-index: 900;
+  pointer-events: none;
+}
+
+/* ── Clip video ───────────────────────────────────────────────── */
+.reveal .slide-background-content { overflow: hidden; }
+
+/* ── Data Source Cards ──────────────────────────────────────── */
+.source-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  padding: 10px 14px 6px 14px;
+  height: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: visible; /* allow citation hover popup to escape */
+}
+
+.source-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: var(--c-accent);
+}
+
+.source-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.source-card-header > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.source-logo-inline {
+  height: 60px;
+  width: auto;
+  max-width: 110px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.source-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  margin-bottom: 10px;
+  background: #fdfdfd;
+  border-radius: 8px;
+  border: 1px dashed var(--c-border);
+  padding: 10px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.source-logo-container img {
+  max-height: 60px !important;
+  max-width: 100% !important;
+  width: auto !important;
+  object-fit: contain;
+  margin: 0 !important;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.source-card:hover .source-logo-container {
+  border-color: var(--c-accent);
+  background: #ffffff;
+}
+
+.source-card:hover .source-logo-container img {
+  transform: scale(1.05);
+}
+
+.source-card h3 {
+  font-size: 0.95em !important;
+  margin-top: 0 !important;
+  margin-bottom: 4px !important;
+  color: var(--c-head) !important;
+  font-weight: 700 !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+.source-card h3::after {
+  display: none !important;
+}
+
+.source-card .source-subtitle {
+  font-size: 0.58em;
+  color: var(--c-muted);
+  font-weight: 500;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.source-card ul {
+  flex-grow: 1;
+  margin-bottom: 8px !important;
+}
+
+.source-card ul li {
+  font-size: 0.58em !important;
+  line-height: 1.45 !important;
+  margin-bottom: 4px !important;
+}
+
+.source-card p {
+  font-size: 0.56em !important;
+  line-height: 1.45 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Secondary source heading inside a card (e.g. GAUL within the GADM card) */
+.source-card .subsource-head {
+  color: var(--c-accent) !important;
+  text-transform: none !important;
+  font-size: 0.62em !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  border-top: 1px solid var(--c-border);
+  padding-top: 6px;
+  margin-top: 8px !important;
+  margin-bottom: 4px !important;
+}
+
+/* ── Map container (Data Sources slide) ────────────────────── */
+.full-width-map {
+  width: 100% !important;
+  max-width: none !important;
+  overflow: visible !important;
+}
+
+.full-width-map iframe {
+  display: block;
+  width: 100% !important;
+  max-width: none !important;
+  height: 510px !important;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Align map with columns on Data Sources slide */
+#data-sources .columns .column {
+  flex: 1 !important;
+  width: auto !important;
+}
+
+/* ── Citation hover popup (tippy) ───────────────────────────── */
+/* Tippy appends to body so overflow:hidden on ancestors won't clip it */
+.tippy-box[data-theme~='quarto'] {
+  background: var(--c-dark);
+  color: #f4f4f5;
+  border-radius: 6px;
+  font-size: 0.55em;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+  max-width: 380px !important;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.tippy-box[data-theme~='quarto'] .tippy-arrow::before {
+  border-top-color: var(--c-dark);
+}
+
+.tippy-box[data-theme~='quarto'] a {
+  color: var(--c-accent);
+}
+
+/* ── GHSL processing flow diagram (Satellite → Numbers) ──────── */
+.ghsl-flow {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 22px;
+  margin: 22px 0 8px;
+}
+.ghsl-flow .flow-step {
+  flex: 1 1 0;
+  position: relative;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-top: 3px solid var(--c-border);
+  border-radius: 10px;
+  padding: 14px 12px 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+.ghsl-flow .flow-step.stage-a { border-top-color: #0ea5e9; }
+.ghsl-flow .flow-step.stage-b { border-top-color: var(--c-accent); }
+.ghsl-flow .flow-step:not(:last-child)::after {
+  content: '\25B8';            /* ▸ */
+  position: absolute;
+  right: -17px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--c-accent);
+  font-size: 1.5em;
+  font-weight: 700;
+  z-index: 3;
+}
+.ghsl-flow .fs-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--c-head);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.ghsl-flow .flow-step.stage-a .fs-num { background: #0ea5e9; }
+.ghsl-flow .flow-step.stage-b .fs-num { background: var(--c-accent); }
+.ghsl-flow .fs-title {
+  font-weight: 700;
+  font-size: 0.6em;
+  color: var(--c-head);
+  line-height: 1.2;
+  margin-bottom: 5px;
+}
+.ghsl-flow .fs-desc {
+  font-size: 0.46em;
+  line-height: 1.35;
+  color: var(--c-muted);
+}
+.ghsl-flow .fs-desc code { font-size: 0.95em; }
+.flow-legend {
+  text-align: center;
+  font-size: 0.5em;
+  color: var(--c-muted);
+  margin-top: 8px;
+}
+.flow-legend .dot-a,
+.flow-legend .dot-b {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.flow-legend .dot-a { background: #0ea5e9; }
+.flow-legend .dot-b { background: var(--c-accent); }
+
+/* Utility: enlarge text on a slide (apply with {.larger} on the heading) */
+.reveal section.larger { font-size: 1.22em; }
+
+/* References slide: smaller title + compact list (backmatter) */
+.reveal .refslide h2 { font-size: 1.0em; }
