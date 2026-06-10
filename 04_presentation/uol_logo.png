@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html class="uol" lang="de">
+<head>
+    <meta charset="utf-8">
+
+<!-- 
+	This website is powered by TYPO3 - inspiring people to share!
+	TYPO3 is a free open source Content Management Framework initially created by Kasper Skaarhoj and licensed under GNU/GPL.
+	TYPO3 is copyright 1998-2026 of Kasper Skaarhoj. Extensions are copyright of their respective owners.
+	Information and contribution at https://typo3.org/
+-->
+
+
+<title>404: Seite nicht gefunden // Universität Oldenburg</title>
+<meta http-equiv="x-ua-compatible" content="IE=edge">
+<meta name="generator" content="TYPO3 CMS">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="twitter:card" content="summary">
+<meta name="apple-mobile-web-app-title" content="Carl von Ossietzky Universität Oldenburg">
+
+
+<link rel="stylesheet" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Css/fonts.css?1779377195" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/media2click-517303abfd860d1dfa4ecb8991ed1835.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/ecb3e01623a42af68084ccb4b40d310f-b1ab4ded80441ae39a3e5067b947b3f7.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/ods_osm-87b73690e7090695e7ca4a32f342ef80.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/bootstrap.min-88ffaf41b7bba238566757ef373c77e2.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/uol-fontawesome-794183bca1d7566071a182994bfb9b68.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/flexslider-d5e158ced47fc20bfbef8a360dab0582.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/uol-flexslider-b36693676e050206e5f137bc7240d167.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/magnific-popup-de911286e283166ec4e382e1bce7639b.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/owl.carousel.min-9ca0afdc1cd1e068c15b207f74258d4f.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/owl.theme.default-0be9d90152af8da97cedae350a014cd0.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/perfect-scrollbar-0efc17d5f5f2a20062bca83b153d12e3.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/uol-656f4f8b2a0551b700cbe354daed3729.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/jquery.fancybox.min-95b3f82c95ca5edd529253f3c939ecb5.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/custom-82a7f96f011cf0a9f1b5f2ba6433d2e9.css?1779377322" media="all">
+<link rel="stylesheet" href="/typo3temp/assets/compressed/813d34f895255febb1e8f81adb68ca31-1477388eb8d045bdf11f76099d966b85.css?1779377322" media="all">
+
+
+
+<script src="/typo3temp/assets/compressed/hasjs-692f91456e13674a22099673766f4c6b.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/jquery-3.7.1.min-3e125270d5024325a9a932c547f17cd8.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/popper.min-dbe307a6532756298a5e3e8c55da17c5.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/ekko-lightbox.min-67844235340211d60ac946da6c92ae8d.js?1779377322"></script>
+<script>
+    const m2cLifetime = "7";
+</script>
+
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/typo3conf/ext/unioltemplate/Resources/Public/Assets/Css/vc_lte_ie9.min.css" media="screen">
+<![endif]-->
+<!--[if IE  8]>
+<link rel="stylesheet" type="text/css" href="/typo3conf/ext/unioltemplate/Resources/Public/Assets/Css/vc-ie8.min.css" media="screen">
+<![endif]-->
+<script>
+var prefersDarkScheme;
+var currentTheme;
+function checkDarkMode() {
+  prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  currentTheme = localStorage.getItem("color-mode");
+  if (currentTheme == "dark") {
+    document.documentElement.setAttribute("data-colormode", "dark");
+  } else if (currentTheme == "light") {
+    document.documentElement.setAttribute("data-colormode", "light");
+  } else {
+    if(prefersDarkScheme.matches) {
+      document.documentElement.setAttribute("data-colormode", "system-dark");
+    } else {
+      document.documentElement.setAttribute("data-colormode", "system-light");
+    }
+  }
+  setTimeout(checkDarkMode, 5000);
+  return currentTheme;
+}
+checkDarkMode();
+</script>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/apple-touch-icon.png?v=3&amp;1779377196">
+	<link rel="icon" type="image/png" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/apple-touch-icon-120x120.png?v=3&amp;1779377196" sizes="120x120">
+	<link rel="icon" type="image/png" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/apple-touch-icon-152x152.png?v=3&amp;1779377196" sizes="152x152">
+	<link rel="icon" type="image/png" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/android-chrome-192x192.png?v=3&amp;1779377196" sizes="192x192">
+	<link rel="icon" type="image/png" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/android-chrome-512x512.png?v=3&amp;1779377196" sizes="512x512">
+	<link rel="icon" type="image/png" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/favicon-16x16.png?v=5&amp;1779377196" sizes="16x16">
+	<link rel="icon" type="image/png" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/favicon-32x32.png?v=4&amp;1779377196" sizes="32x32">
+	<link rel="manifest" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/site.webmanifest?v=1&amp;1779377196">
+	<link rel="mask-icon" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/safari-pinned-tab.svg?v=1&amp;1779377196" color="#0059ab">
+	<link rel="shortcut icon" href="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/favicon-16x16.png?v=5&amp;1779377196">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="msapplication-TileImage" content="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/mstile-150x150.png?v=1&amp;1779377196">
+	<meta name="theme-color" content="#ffffff">
+</head>
+<body id="p28701" class=" t3 header-3 layout0">
+<div id="wrapper" class="default">
+    <nav id="sprungnavi">
+	<p><a href="#sprung_sprache" accesskey="1"><strong>Navigation</strong></a> [<code>Access-Key 1</code>]</p>
+	<ul>
+		<li><a id="sprung_sprache" accesskey="8" href="#language_menu" lang="en">Choose other language</a> [<code>Access-Key 8</code>]</li>
+		<li><a id="sprung_inhalt" accesskey="2" href="#content">Zum Inhalt springen</a> [<code>Access-Key 2</code>]</li>
+		<li><a id="sprung_suche" href="#searchform">Zur Suche springen</a> [<code>Access-Key 4</code>]</li>
+		<li><a id="sprung_hauptnavi" accesskey="6" href="#nav-top">Zur Hauptnavigation springen</a> [<code>Access-Key 6</code>]</li>
+		<li><a id="sprung_zielgr" accesskey="9" href="#zielgruppennavi">Zur Zielgruppennavigation springen</a> [<code>Access-Key 9</code>]</li>
+		<li><a id="sprung_bc" accesskey="7" href="#navizeile">Zur Brotkrumennavigation springen</a> [<code>Access-Key 7</code>]</li>
+		<li><a id="sprung_acc" href="/barrierefreiheit">Informationen zur Barrierefreiheit</a></li>
+	</ul>
+</nav>
+
+<header id="header" class="main-header header-3">
+	<div id="header-container" class="container">
+		<div id="uol_logo" class="header-logo">
+			<a title="Carl von Ossietzky Universität Oldenburg - Offen für neue Wege." rel="home" href="/">
+				<img width="132" height="85"
+					src="/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/UOL-Logo.svg?1779377196" style="width:132px" alt="Carl von Ossietzky Universität Oldenburg"/>
+
+			</a>
+		</div>
+
+		<div id="mainmenu" class="menu-main-inner">
+			<nav id="nav-mega" role="navigation"><ul id="nav-top" class="nav nav-menu level-1"><li id="menu-item-57057" class="nav-item item-1"><a href="/universitaet" title="Universität">Universität</a><ul class="row level-2 uol-submenu"><li class="btn-portal"><a href="/universitaet">InfoPortal Universität</a></li><li id="menu-item-57081" class="menu-item item-1 menu-col-mode-0"><a href="/im-profil" title="Im Profil">Im Profil</a><ul class="level-3"><li><a href="/im-profil" title="Die Universität">Die Universität</a></li><li><a href="/chancengleichheit" title="Chancengleichheit">Chancengleichheit</a></li><li><a href="/digitalisierung" title="Digitalisierung">Digitalisierung</a></li><li><a href="/klimaschutz-nachhaltigkeit" title="Klimaschutz und Nachhaltigkeit">Klimaschutz und Nachhaltigkeit</a></li><li><a href="/leitbild-lehre" title="Leitbild für die Lehre">Leitbild für die Lehre</a></li><li><a href="/im-profil/geschichte" title="Daten zur Geschichte">Daten zur Geschichte</a></li><li><a href="/im-profil/namensgebung-chronologie" title="Namensgebung – Carl von Ossietzky">Namensgebung – Carl von Ossietzky</a></li><li><a href="/im-profil/persoenlichkeiten" title="Persönlichkeiten">Persönlichkeiten</a></li><li><a href="/in-bildern" title="Universität in Bildern">Universität in Bildern</a></li><li><a href="/kontakt" title="Kontakt / Anfahrt / Lageplan">Kontakt / Anfahrt / Lageplan</a></li></ul></li><li id="menu-item-57072" class="menu-item item-2 menu-col-mode-0"><a href="/aktuelles" title="Aktuelles">Aktuelles</a><ul class="level-3"><li><a href="/pressedienst" title="Pressedienst">Pressedienst</a></li><li><a href="/jobs" title="Stellenangebote">Stellenangebote</a></li><li><a href="/veranstaltungen" title="Veranstaltungskalender">Veranstaltungskalender</a></li><li><a href="/einblicke" title="EINBLICKE - Forschungsmagazin">EINBLICKE - Forschungsmagazin</a></li><li><a href="/presse/uni-info" title="UNI-INFO - Hochschulzeitung">UNI-INFO - Hochschulzeitung</a></li><li><a href="/aktuelles/news-feeds" title="News-Feeds">News-Feeds</a></li><li><a href="/zahlen-fakten" title="Zahlen und Fakten">Zahlen und Fakten</a></li><li><a href="/50jahre" title="Jubiläum 2024: 50 Jahre UOL">Jubiläum 2024: 50 Jahre UOL</a></li></ul></li><li id="menu-item-57058" class="menu-item item-3 menu-col-mode-0"><a href="/einrichtungen" title="Organe und Einrichtungen">Organe und Einrichtungen</a><ul class="level-3"><li><a href="/praesidium" title="Präsidium">Präsidium</a></li><li><a href="/gremien" title="Gremien">Gremien</a></li><li><a href="/verwaltung" title="Zentrale Verwaltung sowie Referate und Stabsstellen des Präsidiums">Zentrale Verwaltung sowie Referate und Stabsstellen des Präsidiums</a></li><li><a href="/bis" title="Universitätsbibliothek">Universitätsbibliothek</a></li><li><a href="/einrichtungen" title="Einrichtungen (A-Z)">Einrichtungen (A-Z)</a></li><li><a href="/dezernat1/organigramm-der-universitaet" title="Organigramm der Universität">Organigramm der Universität</a></li></ul></li><li id="menu-item-57065" class="menu-item item-4 menu-col-mode-0"><a href="/fakultaeten" title="Fakultäten">Fakultäten</a><ul class="level-3"><li><a href="/fk1" title="Fakultät I - Bildungs- und Sozialwissenschaften">Fakultät I - Bildungs- und Sozialwissenschaften</a></li><li><a href="/fk2" title="Fakultät II - Informatik, Wirtschafts- und Rechtswissenschaften">Fakultät II - Informatik, Wirtschafts- und Rechtswissenschaften</a></li><li><a href="/fk3" title="Fakultät III - Sprach- und Kulturwissenschaften">Fakultät III - Sprach- und Kulturwissenschaften</a></li><li><a href="/fk4" title="Fakultät IV - Human- und Gesellschaftswissenschaften">Fakultät IV - Human- und Gesellschaftswissenschaften</a></li><li><a href="/fk5" title="Fakultät V - Mathematik und Naturwissenschaften">Fakultät V - Mathematik und Naturwissenschaften</a></li><li><a href="/fk6" title="Fakultät VI - Medizin und Gesundheitswissenschaften">Fakultät VI - Medizin und Gesundheitswissenschaften</a></li></ul></li></ul></li><li id="menu-item-57022" class="nav-item item-2"><a href="/studium" title="Studium">Studium</a><ul class="row level-2 uol-submenu"><li class="btn-portal"><a href="/studium">InfoPortal Studium</a></li><li id="menu-item-57046" class="menu-item item-1 menu-col-mode-0"><a href="/studium/studienentscheidung" title="Studienentscheidung">Studienentscheidung</a><ul class="level-3"><li><a href="/studium/studienangebot" title="Studienangebot">Studienangebot</a></li><li><a href="/lehrkraeftebildung/studieninteressierte" title="Lehramt">Lehramt</a></li><li><a href="/studium/beratung-studieninteressierte" title="Beratung Studieninteressierte">Beratung Studieninteressierte</a></li><li><a href="/studium/angebote-zur-studienorientierung" title="Angebote zur Studienorientierung">Angebote zur Studienorientierung</a></li><li><a href="/hit" title="Hochschulinformationstag">Hochschulinformationstag</a></li><li><a href="/studium/bewerben" title="Bewerben und Einschreiben">Bewerben und Einschreiben</a></li><li><a href="/studium/studienberechtigung" title="Studium ohne Abitur">Studium ohne Abitur</a></li><li><a href="/studium/vom-beruf-ins-studium" title="Vom Beruf ins Studium">Vom Beruf ins Studium</a></li><li><a href="/studium/campusleben" title="Campusleben">Campusleben</a></li><li><a href="/studium/finanzierung" title="Studienfinanzierung">Studienfinanzierung</a></li></ul></li><li id="menu-item-57036" class="menu-item item-2 menu-col-mode-0"><a href="/studium/studium-organisieren" title="Studium organisieren">Studium organisieren</a><ul class="level-3"><li><a href="/studium/studieneinstieg" title="Studieneinstieg">Studieneinstieg</a></li><li><a href="/studium/beratung-studierende" title="Beratung Studierende">Beratung Studierende</a></li><li><a href="https://elearning.uni-oldenburg.de/dispatch.php/search/angebot?cancel_login=1" target="target=_blank" rel="noreferrer" title="Veranstaltungsverzeichnis">Veranstaltungsverzeichnis</a></li><li><a href="/studium/erstsemester/studienplanung/stundenplan" title="Studienplanung">Studienplanung</a></li><li><a href="/studium/semestertermine" title="Semestertermine">Semestertermine</a></li><li><a href="/studium/pruefungen" title="Prüfungen">Prüfungen</a></li><li><a href="/anerkennung" title="Anerkennung">Anerkennung</a></li><li><a href="/studium/studierendenstatus" title="Studierendenstatus">Studierendenstatus</a></li><li><a href="/studium/workshops" title="Veranstaltungen">Veranstaltungen</a></li><li><a href="/studium/gebuehren/semesterbeitraege" title="Semesterbeiträge">Semesterbeiträge</a></li></ul></li><li id="menu-item-57029" class="menu-item item-3 menu-col-mode-0"><a href="/studium/perspektiven-nach-dem-studium" title="Perspektiven nach dem Studium">Perspektiven nach dem Studium</a><ul class="level-3"><li><a href="/karriereberatung/karriereportal" title="KarrierePortal">KarrierePortal</a></li><li><a href="/careerday" title="Career Day">Career Day</a></li><li><a href="/karriereberatung" title="Karriereberatung">Karriereberatung</a></li><li><a href="/zskb/beratung/promovieren" title="Promovieren">Promovieren</a></li><li><a href="/alumni" title="Alumni">Alumni</a></li><li><a href="/giz" title="Existenzgründung">Existenzgründung</a></li></ul></li><li id="menu-item-57023" class="menu-item item-4 menu-col-mode-0"><a href="/c3l" title="Lebenslanges Lernen">Lebenslanges Lernen</a><ul class="level-3"><li><a href="/c3l" title="Berufsbegleitende Studiengänge und Weiterbildungen">Berufsbegleitende Studiengänge und Weiterbildungen</a></li><li><a href="/lehre/hochschuldidaktik/zertifikat" title="Hochschuldidaktische Weiterbildung">Hochschuldidaktische Weiterbildung</a></li><li><a href="/gasthoerstudium" title="Gasthörstudium">Gasthörstudium</a></li><li><a href="/c3l/offene-hochschule" title="Offene Hochschule">Offene Hochschule</a></li><li><a href="/weiterbildung" title="Weiterbildungsangebote Übersicht">Weiterbildungsangebote Übersicht</a></li></ul></li></ul></li><li id="menu-item-56994" class="nav-item item-3"><a href="/forschung" title="Forschung">Forschung</a><ul class="row level-2 uol-submenu"><li class="btn-portal"><a href="/forschung">InfoPortal Forschung</a></li><li id="menu-item-57014" class="menu-item item-1 menu-col-mode-0"><a href="/forschung" title="Forschung">Forschung</a><ul class="level-3"><li><a href="/profile-schwerpunkte" title="Profile und Schwerpunkte">Profile und Schwerpunkte</a></li><li><a href="/exzellenzstrategie" title="Exzellenzstrategie">Exzellenzstrategie</a></li><li><a href="/forschung/programm-fuer-exzellenz" title="Programm für Exzellenz">Programm für Exzellenz</a></li><li><a href="/forschung/koordinierte-forschungsprogramme" title="Koordinierte Forschungsprogramme">Koordinierte Forschungsprogramme</a></li><li><a href="/forschung/gefoerderte-nachwuchsgruppen" title="Geförderte Nachwuchsgruppen">Geförderte Nachwuchsgruppen</a></li><li><a href="/forschung/zentren" title="Zentren">Zentren</a></li><li><a href="/forschung/ausseruniversitaere-forschungseinrichtungen" title="Außeruniversitäre Forschungseinrichtungen">Außeruniversitäre Forschungseinrichtungen</a></li><li><a href="/forschung/qualitaetssicherung" title="Qualitätssicherung">Qualitätssicherung</a></li><li><a href="/tiere-und-tierversuche" title="Tiere und Tierversuche an der Universität Oldenburg">Tiere und Tierversuche an der Universität Oldenburg</a></li></ul></li><li id="menu-item-60096" class="menu-item item-2 menu-col-mode-0"><a href="/forschung/akademische-karrierewege" title="Akademische Karrierewege">Akademische Karrierewege</a><ul class="level-3"><li><a href="/forschung/akademische-karrierewege/strategisches" title="Strategisches">Strategisches</a></li><li><a href="/forschung/akademische-karrierewege/promotionsinteressierte" title="Promotionsinteressierte">Promotionsinteressierte</a></li><li><a href="/forschung/akademische-karrierewege/promovierende" title="Promovierende">Promovierende</a></li><li><a href="/forschung/akademische-karrierewege/postdocs" title="Postdocs">Postdocs</a></li><li><a href="/forschung/akademische-karrierewege/juniorprofessur-und-nachwuchsgruppenleitung" title="Juniorprofessur und Nachwuchsgruppenleitung">Juniorprofessur und Nachwuchsgruppenleitung</a></li><li><a href="/forschung/akademische-karrierewege/fuehrungskraefte-in-der-wissenschaft" title="Führungskräfte in der Wissenschaft">Führungskräfte in der Wissenschaft</a></li><li><a href="/forschung/akademische-karrierewege/internationale-vernetzung" title="Allianzen und Netzwerke">Allianzen und Netzwerke</a></li></ul></li><li id="menu-item-56995" class="menu-item item-3 menu-col-mode-0"><a href="/forschungsfoerderung" title="Förderung und Beratung">Förderung und Beratung</a><ul class="level-3"><li><a href="/forschungsfoerderung/foerderung-durch-die-universitaet/young-researchers-fellowship" title="Förderung durch die Universität">Förderung durch die Universität</a></li><li><a href="/forschungsfoerderung/nationale-foerderung" title="Nationale Förderung">Nationale Förderung</a></li><li><a href="/forschungsfoerderung/internationale-foerderung" title="Internationale Förderung">Internationale Förderung</a></li><li><a href="/forschungsfoerderung/qualifizierungsphase" title="Förderung in Qualifizierungsphasen">Förderung in Qualifizierungsphasen</a></li><li><a href="/forschungsfoerderung/wissenschaftliche-preise-und-weitere-foerdermassnahmen" title="Weitere Fördermaßnahmen">Weitere Fördermaßnahmen</a></li></ul></li></ul></li><li id="menu-item-113611" class="nav-item item-4"><a href="/transfer" title="Transfer">Transfer</a><ul class="row level-2 uol-submenu"><li class="btn-portal"><a href="/transfer">InfoPortal Transfer</a></li><li id="menu-item-113653" class="menu-item item-1 menu-col-mode-0"><a href="/transfer/wissenstransfer" title="Wissenstransfer">Wissenstransfer</a><ul class="level-3"><li><a href="/transfer/wissenstransfer/wissenschaftskommunikation" title="Wissenschaftskommunikation">Wissenschaftskommunikation</a></li><li><a href="/transfer/wissenstransfer/wissenschaftskommunikation/region" title="Transfer in die Region">Transfer in die Region</a></li><li><a href="/c3l" title="Lebenslanges Lernen (C3L)">Lebenslanges Lernen (C3L)</a></li><li><a href="/veranstaltungen/kindercampus" title="KinderCampus">KinderCampus</a></li></ul></li><li id="menu-item-113654" class="menu-item item-2 menu-col-mode-0"><a href="/transfer/technologietransfer-und-patente" title="Technologietransfer">Technologietransfer</a><ul class="level-3"><li><a href="/transfer/technologietransfer-und-patente/patente-und-schutzrechte" title="Patente und Schutzrechte">Patente und Schutzrechte</a></li><li><a href="/transfer/an-institute" title="An-Institute">An-Institute</a></li><li><a href="/transfer/technologietransfer-und-patente/hochschule-und-wirtschaft" title="Hochschule und Wirtschaft: Unternehmenskooperationen">Hochschule und Wirtschaft: Unternehmenskooperationen</a></li></ul></li><li id="menu-item-113655" class="menu-item item-3 menu-col-mode-0"><a href="/giz" title="Gründungsförderung">Gründungsförderung</a><ul class="level-3"><li><a href="/giz" title="Gründungs- und Innovationszentrum (GIZ)">Gründungs- und Innovationszentrum (GIZ)</a></li><li><a href="/giz/gruendungsberatung" title="Beratung und Fördermittel">Beratung und Fördermittel</a></li><li><a href="/giz/veranstaltungen" title="Formate und Veranstaltungen">Formate und Veranstaltungen</a></li><li><a href="/giz/gruendungsportraits" title="Startup-Portraits">Startup-Portraits</a></li><li><a href="/giz/lehre" title="Lehrstühle für Entrepreneurship &amp; Innovationsmanagement">Lehrstühle für Entrepreneurship & Innovationsmanagement</a></li><li><a href="/giz/ueber-das-giz/netzwerk" title="Netzwerke &amp; Partnerschaften">Netzwerke & Partnerschaften</a></li></ul></li><li id="menu-item-113656" class="menu-item item-4 menu-col-mode-0"><a href="/transfer/orte-des-transfers" title="Orte des Transfers">Orte des Transfers</a><ul class="level-3"><li><a href="/transfer/angebote-am-innovationscampus" title="Innovationscampus">Innovationscampus</a></li><li><a href="/transfer/schlaues-haus-oldenburg" title="Schlaues Haus Oldenburg (SHO)">Schlaues Haus Oldenburg (SHO)</a></li><li><a href="/diz/olela" title="Lehr-Lern-Räume">Lehr-Lern-Räume</a></li><li><a href="/botgarten" title="Botanischer Garten">Botanischer Garten</a></li></ul></li></ul></li><li id="menu-item-56972" class="nav-item item-5"><a href="/international" title="International">International</a><ul class="row level-2 uol-submenu"><li class="btn-portal"><a href="/international">InfoPortal Internationales</a></li><li id="menu-item-56988" class="menu-item item-1 menu-col-mode-0"><a href="/willkommen-in-oldenburg" title="Willkommen in Oldenburg">Willkommen in Oldenburg</a><ul class="level-3"><li><a href="/internationale-studierende" title="Internationale Studierende (Studium mit Abschluss)">Internationale Studierende (Studium mit Abschluss)</a></li><li><a href="/austauschstudium" target="_blank" title="Internationale Austauschstudierende">Internationale Austauschstudierende</a></li><li><a href="/forschen-und-arbeiten-in-oldenburg/internationale-promovierende" title="Internationale Promovierende">Internationale Promovierende</a></li><li><a href="/forschen-und-arbeiten-in-oldenburg" title="Internationale WissenschaftlerInnen / Post-Docs / Personal">Internationale WissenschaftlerInnen / Post-Docs / Personal</a></li><li><a href="/gefluechtete" title="Geflüchtete">Geflüchtete</a></li></ul></li><li id="menu-item-56982" class="menu-item item-2 menu-col-mode-0"><a href="/international#c315122" title="Wege ins Ausland">Wege ins Ausland</a><ul class="level-3"><li><a href="/wege-ins-ausland" title="Studierende">Studierende</a></li><li><a href="/forschung/akademische-karrierewege/promovierende#c758454" title="Promovierende">Promovierende</a></li><li><a href="/forschung/akademische-karrierewege/postdocs#c691438" title="Post-Docs">Post-Docs</a></li><li><a href="/io/foerderung-internationaler-mobilitaet-und-kooperation" title="WissenschaftlerInnen">WissenschaftlerInnen</a></li><li><a href="/erasmus-stt" title="Hochschulpersonal">Hochschulpersonal</a></li></ul></li><li id="menu-item-56978" class="menu-item item-3 menu-col-mode-0"><a href="/international" title="Weltweit vernetzt">Weltweit vernetzt</a><ul class="level-3"><li><a href="/partneruniversitaeten" title="Partnerhochschulen">Partnerhochschulen</a></li><li><a href="/partneruniversitaeten/strategische-partneruniversitaeten" title="Strategische Partneruniversitäten">Strategische Partneruniversitäten</a></li><li><a href="/erasmus" title="Erasmus+ Programm">Erasmus+ Programm</a></li><li><a href="/international/projekte" title="Internationales Projektschaufenster">Internationales Projektschaufenster</a></li><li><a href="/partneruniversitaeten/subsahara-afrika" title="Fokus: Subsahara-Afrika">Fokus: Subsahara-Afrika</a></li><li><a href="/forschung/akademische-karrierewege/research-advisor-for-international-networking" title="Research Advisor Programme">Research Advisor Programme</a></li><li><a href="/internationale-projektfoerderung" title="Förderung internationaler Projekte">Förderung internationaler Projekte</a></li></ul></li><li id="menu-item-56973" class="menu-item item-4 menu-col-mode-0"><a href="/international#c315124" title="Internationale Hochschule">Internationale Hochschule</a><ul class="level-3"><li><a href="/internationalisierungsstrategie" title="Internationalisierungsstrategie">Internationalisierungsstrategie</a></li><li><a href="/studium/internationale-studiengaenge" title="Internationale Studiengänge">Internationale Studiengänge</a></li><li><a href="/sprachenzentrum" title="Sprachangebote">Sprachangebote</a></li><li><a href="/internationalisierung-zu-hause" title="Vernetzung von Studierenden">Vernetzung von Studierenden</a></li><li><a href="/glossar" title="Deutsch-Englische Terminologie">Deutsch-Englische Terminologie</a></li><li><a href="/lehramtinternational" title="Lehramt.International">Lehramt.International</a></li></ul></li></ul></li></ul></nav>
+		</div>
+
+		
+		<ul id="service_nav" class="nav nav-pills pull-right nav-service">
+			<li id="service_lang">
+				<a href="#tab-language-menu-mobile" data-toggle="tab"><i class="fa fa-globe"></i></a>
+			</li>
+			<li id="service_colormode">
+				<a href="#tab-colormode-mobile" data-toggle="tab" title="Dark mode"><i class="fa fa-adjust"></i></a>
+			</li>
+			<li id="service_search">
+				<a href="#tab-search-mobile" accesskey="4" data-toggle="tab"><i class="fa fa-search"></i></a>
+			</li>
+			<li id="service_info">
+				<a href="#tab-info-mobile" data-toggle="tab"><i class="fa fa-info"></i></a>
+			</li>
+			<li id="service_login">
+				<a href="#tab-login-mobile" data-toggle="tab"><i class="fa fa-sign-in"></i></a>
+			</li>
+		</ul>
+		
+
+		<div class="x-nav-menu-toggle">
+			<div class="x-nav-menu-toggle-inner">
+				<div class="x-nav-menu-toggle-icon"><span></span></div>
+			</div>
+		</div>
+
+		<div id="tab-mobile" class="tab-content">
+			<div class="tab-pane fade popover" id="tab-language-menu-mobile">
+				<h4 class="lang_de">Sprache wechseln</h4>
+				<h4 class="lang_en">Change Language</h4>
+					
+					<ul id="language_menu_mobile" class="language-menu">
+						
+							
+									<li class="CUR flag_de">
+										<span class="langcode">de</span>Deutsch
+									</li>
+								
+						
+							
+									
+										<li class="NO SPC flag_en">
+											<a class="linked-language" href="/en/error404" title="English"><span class="langcode">en</span>English</a>
+										</li>
+									
+								
+						
+							
+									
+										<li class="NO SPC flag_nl">
+											<a class="linked-language" href="/nl/error404" title="Nederlands"><span class="langcode">nl</span>Nederlands</a>
+										</li>
+									
+								
+						
+							
+									
+										<li class="NO SPC flag_ru">
+											<a class="linked-language" href="/ru/error404" title="Russisch"><span class="langcode">ru</span>Russisch</a>
+										</li>
+									
+								
+						
+							
+									
+										<li class="NO SPC flag_pl">
+											<a class="linked-language" href="/pl/error404" title="Polish"><span class="langcode">pl</span>Polish</a>
+										</li>
+									
+								
+						
+							
+									
+										<li class="NO SPC flag_es">
+											<a class="linked-language" href="/es/error404" title="Spanisch"><span class="langcode">es</span>Spanisch</a>
+										</li>
+									
+								
+						
+							
+									
+										<li class="NO SPC flag_ar">
+											<a class="linked-language" href="/ar/error404" title="Arabisch"><span class="langcode">ar</span>Arabisch</a>
+										</li>
+									
+								
+						
+							
+									
+										<li class="NO SPC flag_tr">
+											<a class="linked-language" href="/tr/error404" title="Türkisch"><span class="langcode">tr</span>Türkisch</a>
+										</li>
+									
+								
+						
+							
+									
+								
+						
+					</ul>
+					
+
+				<span class="btn-close"><i class="fa fa-close"></i></span>
+			</div>
+			<div class="tab-pane fade popover" id="tab-colormode-mobile">
+				<h4 class="lang_de">Hell-/Dunkelmodus</h4><h4 class="lang_en">Light mode / Dark mode</h4>
+				<div id="colormode-wrap"><a class="color-mode__btn system"><span></span><b class="lang_de">Systemstandard</b><b class="lang_en">System standard</b></a>
+					<a class="color-mode__btn light"><span></span><b class="lang_de">Hell</b><b class="lang_en">Light</b></a>
+					<a class="color-mode__btn dark"><span></span><b class="lang_de">Dunkel</b><b class="lang_en">Dark</b></a>
+					<!-- div class="colormode-bw"><input id="colormode_bw" name="colormodebw" type="checkbox"><label for="colormode_bw"><span class="lang_de">schwarz-weiß</span></label></div -->
+
+				</div>
+				<p class="text-center" style="margin-bottom:0"><a href="https://uol.de/p88187" class="button_inline lang_de">Info und Anleitung</a>
+				<a href="https://uol.de/p88187en" class="button_inline lang_en">Info and instruction</a>
+				</p>
+				<span class="btn-close"><i class="fa fa-close"></i></span>
+			</div>
+			<div class="tab-pane fade popover" id="tab-search-mobile">
+				<div id="search-wrap">
+					<label for="suchfeld"><span class="lang_de">Suche</span> <span class="lang_en">Search</span></label>
+					<form role="search" class="search-form" method="get" action="/suche" accept-charset="utf-8">
+						<input type="text" value="" name="q" id="suchfeld">
+						<p style="padding-left:2px"><input type="checkbox" id="s_extsuche" name="extsuche" value="goo" checked="checked" style="margin-right:4px"><label for="s_extsuche" style="cursor:pointer">&nbsp;<span class="lang_en">Embed&nbsp;</span><img src="https://uol.de/img/objekte/google.png" title="Google" alt="Google" style="height:1.3em;"><span class="lang_de">-Suche einbinden</span><span class="lang_en">&nbsp;search</span></label>
+							<span class="google-dsgvo-hinweis lang_de">(Mit der Aktivierung der Google-Suche bestätigen Sie, dass Sie mit der Einbindung und der dazu erforderlichen Datenübermittlung an Google einverstanden sind.)</span>
+							<span class="google-dsgvo-hinweis lang_en">(By activating Google Search, you confirm that you agree to the integration and the necessary data transfer to Google.)</span>
+							<script>document.getElementById("s_extsuche").checked = localStorage.getItem("uol_extsuche") == 'goo' ? true : false;</script>
+							<input type="hidden" name="ie" value="utf-8">
+							<input type="hidden" name="oe" value="utf-8">
+							<input type="hidden" name="cx" value="009619950304644246032:tmpbaar2o8i">
+							<input type="hidden" name="cof" value="FORID:9">
+							<input type="hidden" name="t3f" value="j">
+
+						</p>
+						<button type="submit"><span class="lang_de">suchen</span><span class="lang_en">search</span></button>
+					</form>
+				</div>
+				<span class="btn-close"><i class="fa fa-close"></i></span>
+			</div>
+			<div class="tab-pane fade popover" id="tab-info-mobile">
+				<ul class="sub-menu"><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/alumni" title="Alumni Relations">Alumni</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/jav" title="Auszubildende">Auszubildende</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/berufsausbildung" title="Berufsausbildungs-Interessierte">Berufsausbildungs-Interessierte</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/beschaeftigte" title="Informationen für Beschäftigte">Beschäftigte</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/ehemalige" title="Ehemalige Beschäftigte">Ehemalige Beschäftigte</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/studium/studieneinstieg" title="Erstsemester">Erstsemester</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/gasthoerstudium" title="Gasthörende">Gasthörende</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/gefluechtete" title="Angebote und Programme für Geflüchtete">Geflüchtete</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/giz" title="Gründungsinteressierte">Gründungsinteressierte</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/willkommen-in-oldenburg" title="Internationale">Internationale</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/pressedienst" title="Journalistinnen und Journalisten">Journalistinnen und Journalisten</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/lehre" title="Für Lehrende und Lernende">Lehrende und Lernende</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/studium/studienentscheidung" title="Studieninteressierte">Studieninteressierte</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/studium/studium-organisieren" title="Studierende">Studierende</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/unternehmen" title="Informationen für Unternehmen">Unternehmen</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/weiterbildung" title="Weiterbildungsinteressierte">Weiterbildungsinteressierte</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/forschung/akademische-karrierewege" title="Wissenschaftlicher Nachwuchs">Wissenschaftl. Nachwuchs</a></li></ul>
+				<span class="btn-close"><i class="fa fa-close"></i></span>
+			</div>
+			<div class="tab-pane fade popover" id="tab-login-mobile">
+				<h4>Login</h4>
+				<ul class="cleanmenu geweitet logins">
+					<li id="studip-mobil">
+						<a id="siplogo" class="loginlink" href="https://elearning.uni-oldenburg.de"
+							 title="Stud.IP - Campus- und Lernmanagementsystem ">CampusPortal&nbsp;<span style="display: inline-block; background-image: url(/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/studip_logo.svg?v=1723061785); height: 22px; width: 64px; background-size: contain; background-repeat: no-repeat;"></span>
+						</a>
+					</li>
+					<li id="peoeip-desktop">
+						<a id="peoeiplink" class="loginlink" href="https://personalentwicklung.elearning.uni-oldenburg.de/" title="Personalweiterbildung PEOE.IP"><span class="lang_de">Personalweiterbildung</span><span class="lang_en">Staff training</span>&nbsp;<span id="head_peoeiplogo" style="display: inline-block; background-image: url(/_assets/d433799a7157dc4ba6bb3ee09f89cb2e/Assets/Images/peoeip-logo.svg?v=1723061785); height: 22px; width: 64px; background-size: contain; background-repeat: no-repeat;"></span>
+					  </a>
+					</li>
+					<li id="verwportal-desktop"><a id="verwaltlink" class="loginlink" href="https://uol.de/verwaltungsportal" title="Portal der Verwaltung"><span class="lang_de">Portal der Verwaltung</span><span class="lang_en">Portal of the Administration</span></a>
+					</li>
+					<li id="bewerbungsportale"><h4>Bewerbungsportal für Studienplätze</h4>
+<ul class="geweitet"><li data-list-item-id="e4e1a29274fd3fae0d058925706e838e9"><a href="https://stums.uni-oldenburg.de/">Bachelor</a></li><li data-list-item-id="e1f7578cb6b92b46bd2c5becb9a878711"><a href="https://hochschulstart.de/" target="_blank">Staatsexamen</a></li><li data-list-item-id="e096bfcec3558ebe3e0200900725c601e"><a href="https://stums.uni-oldenburg.de/">Promotion</a></li></ul></li>
+
+				</ul>
+
+				<span class="btn-close"><i class="fa fa-close"></i></span>
+			</div>
+		</div>
+	</div>
+
+</header>
+
+    <div id="wrapper-content" class="clearfix test2">
+        
+
+
+
+
+
+
+
+
+
+
+
+<div id="instbar">
+    <div class="inner">
+
+        
+
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+        <main class="site-content-page">
+            <div class="container">
+                
+
+<div id="content">
+	
+	<div id="content_header">
+
+
+
+
+    
+
+<div id="navizeile_platzhalter"><nav id="navizeile" aria-label="breadcrumb"><span id="bclabel">Navigation:</span><ol aria-describedby="bclabel"><li id="navp3" class="bcitem hide-sub- curifsub"><a href="/" target="_top" class="bclink"><span>UOL</span></a><ul class="sublinks" id="navcount3"><li><a href="/universitaet" target="_top">Universität</a></li><li><a href="/studium" target="_top">Studium</a></li><li><a href="/forschung" target="_top">Forschung</a></li><li><a href="/transfer" target="_top">Transfer</a></li><li><a href="/international" target="_top">International</a></li><li><a href="/weiterbildung" target="_top">Weiterbildung</a></li></ul></li><li id="navp28701" class="bcitem hide-sub- curifsub"><a href="/error404" target="_top" class="bclink"><span>404: Seite nicht gefunden</span></a></li></ol></nav></div>
+
+
+
+    <div id="headline">
+        <h1>404: Seite nicht gefunden</h1>
+    </div>
+
+</div>
+
+	<div class="row" id="content_body">
+		<div id="left" class="col-lg-4">
+			
+
+			</div>
+		<div id="main" tabindex="0" class="col-lg-8">
+			
+
+
+
+    <div id="headline_content">
+        <h1>404: Seite nicht gefunden</h1>
+    </div>
+
+
+	<!-- #BeginEditable "Textkoerper" -->
+			
+			
+
+			
+				
+					
+    
+
+    <div id="c726902" class="frame  frame-uol-info closed">
+        
+
+
+
+
+
+
+
+
+
+
+
+        <div class="grid-1c">
+            
+                
+                    
+
+	
+			<div id="c89510" class="frame frame-default frame-type-textmedia frame-layout-0 fehlertext closed">
+				
+				
+					
+
+
+
+				
+				
+
+	
+		
+
+    
+
+
+
+	
+
+
+				
+	
+	<div class="ce-textpic ce-center ce-above ">
+		
+			
+
+
+
+		
+
+		
+				<div class="ce-bodytext">
+					
+					<p>Die von Ihnen aufgerufene Seite konnte leider nicht gefunden werden.</p>
+				</div>
+			
+
+		
+	</div>
+	
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+                
+            
+                
+                    
+
+	
+			<div id="c669445" class="frame frame-default frame-type-html frame-layout-0 frame-space-before-small ersatzseite closed">
+				
+				
+					
+
+
+
+				
+				
+				
+
+    <!-- ###ERRORMARKER### -->
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+                
+            
+        </div>
+    </div>
+
+    
+
+
+
+	
+			<div id="c760721" class="frame frame-default frame-type-html frame-layout-0 closed">
+				
+				
+					
+
+
+
+				
+				
+				
+
+    <form action="//uol.de/suche" name="suchformklein" accept-charset="utf-8" style="" class="noscroll">
+<p style="display:flex;flex-flow:row wrap">
+  <input type="text" style="width:60%;margin-right:5px;" name="q" value=""> <input type="submit" value="Suchen">
+</p>
+</form>
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+				
+
+			
+
+
+
+
+			<!-- #EndEditable -->
+		</div>
+	</div>
+
+</div>
+
+            </div>
+					  
+            <div id="inhalt_infos" class="fullwidth">
+                <div class="container">
+                    <div>
+											
+											
+<a href="https://uol.de/suche/person?username=VBurggraef1">Internetkoordinator</a>
+(Stand: 10.02.2026)
+&nbsp;<span id="uol_shortlink_wrap">|&nbsp; <span class="lang_de">Kurz-URL:</span><span class="lang_en">Shortlink:</span> <a href="https://uol.de/p28701" id="uol_shortlink" class="shortlink" title="Shortlink">https://uol.de/p28701</a></span>
+
+		    </div>
+		</div>
+            </div>
+        </main>
+    </div>
+    <footer id="wrapper-footer">
+	<div class="container">
+		<div class="row footer-top-col-3 footer-5">
+			<div class="col-lg-4 col-pos-1">
+				<aside id="footer_left">
+					<i class="mobile-icon fa fa-bank"></i>
+					
+    
+
+    <div id="c266316" class="frame  frame-default closed">
+        
+
+
+
+
+
+	
+		<header>
+            
+			<h4>Anschrift</h4>
+
+			
+            
+		</header>
+	
+
+
+
+
+
+
+
+        <div class="grid-1c">
+            
+                
+                    
+
+	
+			<div id="c266318" class="frame frame-default frame-type-textmedia frame-layout-0 frame-space-before-small closed">
+				
+				
+					
+
+
+
+				
+				
+
+	
+		
+
+
+
+	
+
+
+				
+	
+	<div class="ce-textpic ce-right ce-intext ">
+		
+			
+
+
+
+		
+
+		
+				<div class="ce-bodytext">
+					
+					<p>Carl von Ossietzky Universität Oldenburg<br>Ammerländer Heerstraße 114-118<br>26129 Oldenburg<br>Tel. <a href="tel:+494417980">+49-(0)441-798-0</a>&nbsp;</p>
+				</div>
+			
+
+		
+	</div>
+	
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+                
+            
+                
+                    
+
+	
+			<div id="c377683" class="frame frame-default frame-type-textmedia frame-layout-0 frame-space-before-small closed">
+				
+				
+					
+
+
+
+				
+				
+
+	
+		
+
+
+
+	
+
+
+				
+	
+	<div class="ce-textpic ce-center ce-above ">
+		
+			
+
+
+
+		
+
+		
+				<div class="ce-bodytext">
+					
+					<p class="mit-icon zeiger"><a href="/kontakt">Kontakt / Anfahrt / Lageplan</a></p>
+				</div>
+			
+
+		
+	</div>
+	
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+                
+            
+        </div>
+    </div>
+
+    
+
+
+				</aside>
+			</div>
+			<div class="col-lg-4 col-sm-6 col-pos-2">
+				<aside id="footer_center">
+					<i class="mobile-icon fa fa-info-circle"></i>
+					
+    
+
+    <div id="c266289" class="frame  frame-default closed">
+        
+
+
+
+
+
+	
+		<header>
+            
+			<h4>Informationen</h4>
+
+			
+            
+		</header>
+	
+
+
+
+
+
+
+
+        <div class="grid-1c">
+            
+                
+                    
+
+	
+			<div id="c266319" class="frame frame-default frame-type-html frame-layout-0 closed">
+				
+				
+					
+
+
+
+				
+				
+				
+
+    <ul class="uol_footer_links">
+<li><a class="internal-link" href="https://uol.de/datenschutzerklaerung">Datenschutz</a></li>
+  
+<li><a class="internal-link" href="https://uol.de/barrierefreiheit">Barrierefreiheit</a></li>
+
+<li><a class="internal-link" href="https://uol.de/sponsoringleistungen">Sponsoringleistungen</a></li>
+
+<li><a class="internal-link" href="https://uol.de/drittmittelforschung">Drittmittelforschung</a></li>
+
+<li><a class="internal-link" href="https://uol.de/impressum">Impressum</a></li>
+</ul>
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+                
+            
+        </div>
+    </div>
+
+    
+
+
+				</aside>
+			</div>
+			<div class="col-lg-4 col-sm-6 col-pos-3">
+				<aside id="footer_right">
+					<i class="mobile-icon fa fa-share-alt-square"></i>
+					
+    
+
+    <div id="c266321" class="frame  frame-default closed">
+        
+
+
+
+
+
+	
+		<header>
+            
+			<h4>Besuchen Sie uns auch hier</h4>
+
+			
+            
+		</header>
+	
+
+
+
+
+
+
+
+        <div class="grid-1c">
+            
+                
+                    
+
+	
+			<div id="c266322" class="frame frame-default frame-type-html frame-layout-0 closed">
+				
+				
+					
+
+
+
+				
+				
+				
+
+      <div>        
+    <ul class="widget-social-profile social-icon-no-border uol_footer_links">
+      <li><a href="https://www.instagram.com/uni.oldenburg/" target="_blank"><i class="fa fa-instagram"></i> Instagram</a></li>
+      <li><a href="https://www.linkedin.com/school/carl-von-ossietzky-university-of-oldenburg/" target="_blank"><i class="fa fa-linkedin"></i> LinkedIn</a></li>
+      <li><a href="https://wisskomm.social/@UniOldenburg" target="_blank" id="uol_footer_mastodon"><span></span> Mastodon</a></li>
+      <li><a href="https://www.youtube.com/user/UniversityOldenburg" target="_blank"><i class="fa fa-youtube"></i> Youtube</a></li>
+      <li><a href="https://www.facebook.com/UniversitaetOldenburg" target="_blank"><i class="fa fa-facebook"></i> Facebook</a></li>
+      
+      <li class="unishop"><a href="https://unishop-oldenburg.de/"><i class="fa fa-shopping-cart"></i> Unishop</a></li>
+    </ul>
+  </div>
+<style>
+  .widget-social-profile .unishop a {
+    background-color: var(--uol-uniblau)!important;
+  }
+  .widget-social-profile .unishop a:hover {
+    background-color: var(--uol-blau1)!important;
+  }
+</style>
+
+
+				
+					
+
+
+
+				
+				
+					
+
+
+
+				
+			</div>
+		
+
+
+                
+            
+        </div>
+    </div>
+
+    
+
+
+				</aside>
+			</div>
+		</div>
+	</div>
+        <script type="text/javascript">
+            (function($){
+                setWidgetCollapse();
+                $(window).resize(function () {
+                    setWidgetCollapse();
+                });
+
+                function setWidgetCollapse(){
+                    var $windowWidth = $(window).width();
+                    if($windowWidth<576){
+                        $('footer aside.widget').each(function(){
+                            var title = $('h4:first',this);
+                            var content = $(title).next();
+                            $(title).addClass('show collapse');
+                            if(content!=null && content!='undefined')
+                                $(content).hide();
+                            $(title).off();
+                            $(title).click(function(){
+                                var content = $(this).next();
+                                if($(this).hasClass('expanded')){
+                                    $(this).removeClass('expanded');
+                                    $(title).addClass('collapse');
+                                    $(content).slideUp();
+                                }
+                                else
+                                {
+                                    $(this).addClass('expanded');
+                                    $(title).removeClass('collapse');
+                                    $(content).slideDown();
+                                }
+
+                            });
+
+                        });
+                    }else{
+                        $('footer aside.widget').each(function(){
+                            var title = $('h4:first',this);
+                            $(title).off();
+                            var content = $(title).next();
+                            $(title).removeClass('collapse');
+                            $(title).removeClass('expanded');
+                            $(content).show();
+                        });
+                    }
+                }
+            })(jQuery);
+        </script>
+        <div class="footer_bottom_holder">
+
+        </div>
+</footer>
+<a class="gotop" href="javascript:;">
+	<i class="fa fa-angle-up"><span lang="DE">Zum Seitananfang scrollen</span> <span lang="en">Scroll to the top of the page</span></i>
+</a>
+
+</div>
+<!-- CAMPUS_LINGO_AUTOTRANSLATION_INFORMATION -->
+
+<script src="/typo3temp/assets/compressed/media2click-93f7c2fec30edf8236ca1b7a9278908b.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/Form.min-c18be1143c51be5bb3eccbf3aa8590bf.js?1779377322" defer="defer"></script>
+<script src="/typo3temp/assets/compressed/bootstrap.min-7d5e3d17cc330a6e412870606dbdd7d5.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/owl.carousel-943f21ef4d65a05697915bb6e2d68405.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/jquery.slicknav.min-247e4999725086da40084d1381b9f429.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/jquery.flexslider-min-4793a1a4a7ac20c01c89a23c1865df13.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/facelift-156189e70394b92b228b92cd49693f52.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/jquery.magnific-popup.min-f0cc2c018cc40a77480ac19fc7fc30de.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/jquery-accessibleMegaMenu.min-b77ac074ec99db0443259a5d471345d5.js?1779377322"></script>
+<script src="/typo3temp/assets/compressed/jquery.fancybox.min-0f86cd30a880e2bf418e11c8eb162f69.js?1779377322"></script>
+
+<!-- Piwik/Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  _paq.push(["setExcludedQueryParams", ["cHash"]]);
+  _paq.push(["setCookieDomain", "uol.de"]);
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    // https://analyse.uol.de/piwik
+    var u="https://analyse.uol.de/piwik/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    if (0 == 1) {
+      console.log('site_id=' + '1');
+    }
+    _paq.push(['setSiteId', 1]);
+
+
+    // subsite: Unterseiten loggen zusätzlich site
+    if('0' == '1' && '0' != '0' && '0' != '') {
+      if (0 == 1) {
+        console.log('subsite_id=' + '0');
+      }
+      //_paq.push(['addTracker', piwikUrl = u+'matomo.php', '0']);
+      const subSiteArray = '0'.split(',');
+      const subSiteArrayLength = subSiteArray.length;
+      for (var i = 0; i < subSiteArrayLength; i++) {
+        let subSiteId = subSiteArray[i];
+        if (0 == 1) {
+          console.log('in loop: subSiteId=' + subSiteId);
+        }
+        _paq.push(['addTracker', piwikUrl = u+'matomo.php', subSiteId]);
+      }
+    }
+
+    // nur für 404-Seite
+    if('1' == '1') {
+      _paq.push(['setDocumentTitle',  '404/URL = '
+        +  encodeURIComponent(document.location.pathname+document.location.search)
+        + ' /From = ' + encodeURIComponent(document.referrer)]);
+    }
+
+    // nur für Seite mit Suchergebnissen
+    /**
+     * Anzahl Suchergebnisse setzen (Variable searchCountForMatomo muss bereits gesetzt sein)
+     * - ermöglicht Ansicht "Search Keywords with No Results" (auch in matomo_widgets für TYPO3)
+     *
+     * @see https://matomo.org/faq/reports/tracking-site-search-keywords/#tracking-no-result-search-keywords
+     */
+    if('0' == '1') {
+          if (typeof searchCountForMatomo !== 'undefined') {
+              _paq.push(['setCustomUrl', document.URL + '&search_count=' + searchCountForMatomo]);
+          }
+    }
+
+
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async='async'; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik/Matomo Code -->
+
+<script type="application/ld+json">{"@context":"https://schema.org/","@type":"WebPage"}</script>
+</body>
+</html>
