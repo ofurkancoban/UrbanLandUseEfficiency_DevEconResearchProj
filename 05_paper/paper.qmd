@@ -1,0 +1,133 @@
+---
+title: "Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers"
+author: "Ömer Furkan Çoban"
+date: today
+abstract: |
+  The official SDG 11.3.1 indicator, the ratio of land consumption rate to
+  population growth rate (LCRPGR), is unstable: it divides by a growth rate that
+  approaches zero and mixes an arithmetic numerator with a logarithmic
+  denominator. We propose the Built-up per Capita Rate (BpCR), the log change in
+  built-up area per person, which equals the difference of two log growth rates
+  and is therefore well-defined for every country-period. Using a harmonised
+  global panel of 193 UN member states (1985–2020) built from GHSL built-up and
+  population grids under the Degree of Urbanisation, we (i) document where LCRPGR
+  breaks down, (ii) show BpCR reproduces the policy signal without the
+  instability, and (iii) estimate its economic drivers with two-way fixed-effects
+  and dynamic-panel GMM models.
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=1in
+    fontsize: 11pt
+    number-sections: true
+    toc: false
+    keep-tex: false
+bibliography: references.bib
+csl: https://www.zotero.org/styles/apa
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+library(here)
+library(dplyr)
+library(readr)
+library(fixest)
+panel <- read_csv(here("03_datasets/processed/reg_panel_urban.csv"),
+                  show_col_types = FALSE)
+gmm   <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
+```
+
+# Introduction
+
+<!-- TODO: motivate global urban land monitoring; state the gap (LCRPGR
+instability) and the contribution (BpCR + drivers). ~1 page. -->
+Cities must grow to house more people; the policy question is how much land each
+new resident consumes [@seto2011meta; @oueslati2015sprawl]. SDG target 11.3 asks
+countries to keep land consumption in line with population growth, and indicator
+11.3.1 operationalises this as the LCRPGR ratio [@unhabitat2025metadata].
+
+# The SDG 11.3.1 indicator and its limitations
+
+<!-- TODO: define LCR, PGR, LCRPGR exactly as in the metadata; show the two
+problems: (1) division by PGR near zero, (2) arithmetic-vs-log asymmetry.
+Reference Nicolau et al. on alternative formulations. -->
+$$
+\text{LCRPGR} = \frac{\text{LCR}}{\text{PGR}},\qquad
+\text{LCR}=\frac{V_t-V_{t-z}}{V_{t-z}}\cdot\frac{1}{z},\qquad
+\text{PGR}=\frac{\ln(P_t/P_{t-z})}{z}.
+$$
+The arithmetic LCR over a logarithmic PGR makes the ratio asymmetric, and PGR in
+the denominator makes it diverge when population is roughly stable
+[@nicolau2019lcrpgr].
+
+# A stable metric: the Built-up per Capita Rate (BpCR)
+
+<!-- TODO: define BpCR = log growth of built-up per capita = LCR_log - PGR_log;
+show it is finite, symmetric, and additively decomposable. -->
+$$
+\text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right)
+= \text{LCR}_{\log}-\text{PGR}_{\log}.
+$$
+
+# Data
+
+<!-- TODO: GHSL built-up (GHS-BUILT-S) and population (GHS-POP) under DEGURBA
+(GHS-SMOD >= 21); GAUL 2024 admin units; UN GDP per capita and net migration;
+World Bank income groups; WGI. Describe the 193-country, 1985-2020 panel. -->
+See @pesaresi2024ghsl, @schiavina2023smod, @unsd2025snaama and @undesa2024wpp for
+the source datasets.
+
+```{r sample-size}
+#| label: tbl-sample
+#| tbl-cap: "Estimation sample"
+n_ctry <- length(unique(panel$iso3))
+n_obs  <- sum(!is.na(panel$bpcr))
+data.frame(Quantity = c("Countries", "Country-period observations"),
+           Value    = c(n_ctry, n_obs)) |>
+  knitr::kable()
+```
+
+# Empirical strategy
+
+<!-- TODO: one specification, two dependent variables (LCRPGR vs BpCR); two-way
+fixed effects; then the dynamic version with the lagged DV and its Nickell-bias
+correction via Arellano-Bond / Blundell-Bond GMM. -->
+$$
+\text{Metric}_{i,t}=\rho\,\text{Metric}_{i,t-1}
+ + \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t}
+ + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t}
+ + \mu_i + \delta_t + \varepsilon_{i,t}.
+$$
+
+# Results
+
+<!-- TODO: static comparison (metric matters), then the final dynamic model.
+The GMM table is produced by 02_scripts/02_analysis/04_dynamic_gmm.R and stored
+in dynamic_gmm.rds (object `main_combo`). -->
+
+
+
+# Robustness
+
+<!-- TODO: 2000-2020 subsample, alternative instrument depth, winsorisation;
+results from 02_scripts/02_analysis/09_robustness_checks.R. -->
+
+# Discussion
+
+<!-- TODO: reconcile the within-country income->densification finding with the
+cross-sectional income->sprawl literature; the measurement-source sensitivity
+critique. -->
+
+# Conclusion
+
+<!-- TODO: BpCR as a drop-in, stable replacement that complements rather than
+contradicts the literature; methodological contribution. -->
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
