@@ -204,11 +204,30 @@ web downloads do not).
 - **Quarto** (≥ 1.4) on `PATH`, plus LaTeX/TinyTeX for the paper PDF.
 - **Google Earth Engine** account + the `rgee`/Python stack **only** for `--gee`.
 
-## 11. Credentials
+## 11. Credentials & reproducing the raw collection
 
-Earth Engine and Google Drive credentials are stored **encrypted** in
-`03_datasets/config/*.enc` and decrypted at runtime by
-`02_scripts/00_setup/01_encryption_utils.R`. Decrypted secrets are git-ignored.
+**No credentials are shipped with this repo**, and you do not need the author's.
+The committed `processed/` data already lets you reproduce the entire analysis,
+figures, and deck **without any Google account** (`Rscript run_pipeline.R`).
+
+To rebuild the **raw** data from source (`--gee`), use **your own** free Google
+Earth Engine + Drive. The setup scripts **fall back to your own login** whenever
+the author's encrypted credentials are absent:
+
+1. Create a (free) Earth Engine account and authenticate once:
+   `earthengine authenticate` (or `ee$Authenticate()` in Python / `rgee::ee_Authenticate()`).
+2. Point the pipeline at **your** Cloud project, e.g. in `~/.Renviron`:
+   `GEE_PROJECT=your-ee-project`
+3. Run `Rscript run_pipeline.R --gee`. When no `*.enc` is found the scripts
+   automatically use your interactive Earth Engine / Google Drive login (your
+   GEE exports land in your own Drive, then download locally).
+
+> The author's own credentials live **only** locally as encrypted `*.enc` files
+> (git-ignored). They are intentionally **not** published: the in-repo decryption
+> password would otherwise make them readable, and live credentials on a public
+> repo can be abused (GEE/Drive quota, billing) and are auto-revoked by Google.
+> `02_scripts/00_setup/02_configure_secrets.R` shows how the author created them,
+> should you wish to cache your own the same way.
 
 ## 12. Attribution
 

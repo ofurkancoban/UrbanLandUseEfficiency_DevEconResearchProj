@@ -44,7 +44,7 @@ library(sf)
 library(cli)
 
 ee <- reticulate::import("ee")
-ee$Initialize(project = Sys.getenv("GEE_PROJECT"))
+if (nzchar(Sys.getenv("GEE_PROJECT"))) ee$Initialize(project = Sys.getenv("GEE_PROJECT")) else ee$Initialize()
 
 # 2. SETTINGS
 output_dir <- file.path(project_root, "03_datasets/raw/Zonal_Stats_Global_GAUL2024/")

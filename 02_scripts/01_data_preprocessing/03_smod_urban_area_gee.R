@@ -11,7 +11,7 @@ pr <- here::here(); setwd(pr)
 source(file.path(pr,"02_scripts/00_setup/01_encryption_utils.R")); my_password <- "OmerFurkanCoban"
 load_secure_secrets(my_password, file.path(pr,"03_datasets/config/secrets.enc"))
 load_ee_credentials(my_password, file.path(pr,"03_datasets/config/ee_credentials.enc"))
-ee <- reticulate::import("ee"); ee$Initialize(project = Sys.getenv("GEE_PROJECT"))
+ee <- reticulate::import("ee"); if (nzchar(Sys.getenv("GEE_PROJECT"))) ee$Initialize(project = Sys.getenv("GEE_PROJECT")) else ee$Initialize()
 
 years <- seq(1975, 2020, by = 5); URBAN_MIN <- 21L
 smod  <- ee$ImageCollection("JRC/GHSL/P2023A/GHS_SMOD")

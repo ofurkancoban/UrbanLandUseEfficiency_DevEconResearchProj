@@ -20,12 +20,15 @@ library(sodium)
 
 # Function to load and decrypt secrets into environment
 load_secure_secrets <- function(password, encrypted_vault_path) {
+  # Fall back to the user's own environment when the vault is absent (e.g. a
+  # public clone): set any needed variables (such as GEE_PROJECT) yourself.
+  if (!file.exists(encrypted_vault_path)) {
+    message("ℹ No encrypted secrets vault (", basename(encrypted_vault_path),
+            "); skipping. Set GEE_PROJECT (and any other env vars) yourself.")
+    return(invisible(FALSE))
+  }
   pw_raw <- sodium::sha256(charToRaw(password))
   key <- cyphr::key_sodium(pw_raw)
-  
-  if (!file.exists(encrypted_vault_path)) {
-    stop("Encrypted vault not found!")
-  }
   
   # Read raw bytes
   file_size <- file.info(encrypted_vault_path)$size
@@ -77,8 +80,13 @@ save_encrypted_drive_token <- function(password, output_path) {
 
 # Function to load encrypted Drive token (no browser needed)
 load_drive_token <- function(password, encrypted_token_path) {
+  # Fall back to interactive Google Drive login (the reproducer's OWN account)
+  # when no encrypted token is shipped.
   if (!file.exists(encrypted_token_path)) {
-    stop("Encrypted Drive token not found. Run 02_configure_secrets.R first.")
+    message("ℹ No encrypted Drive token (", basename(encrypted_token_path),
+            "); using interactive Google Drive login (your own account).")
+    googledrive::drive_auth()
+    return(invisible(FALSE))
   }
 
   pw_raw    <- sodium::sha256(charToRaw(password))
@@ -119,8 +127,12 @@ save_encrypted_ee_credentials <- function(password, output_path) {
 
 # Function to restore EE credentials headlessly (no browser needed)
 load_ee_credentials <- function(password, encrypted_creds_path) {
+  # Fall back to the reproducer's OWN Earth Engine login when none is shipped.
   if (!file.exists(encrypted_creds_path)) {
-    stop("Encrypted EE credentials not found. Run save_encrypted_ee_credentials() first.")
+    message("ℹ No encrypted EE credentials (", basename(encrypted_creds_path),
+            "); using your own Earth Engine login. Run `earthengine authenticate` ",
+            "(or ee$Authenticate() in Python) once if you have not already.")
+    return(invisible(FALSE))
   }
   pw_raw    <- sodium::sha256(charToRaw(password))
   key       <- cyphr::key_sodium(pw_raw)
@@ -135,12 +147,12 @@ load_ee_credentials <- function(password, encrypted_creds_path) {
 
 # Function to decrypt GEE Key to a temporary file
 get_decrypted_gee_key <- function(password, encrypted_key_path) {
+  if (!file.exists(encrypted_key_path)) {
+    message("ℹ No encrypted GEE service-account key; using your own EE auth instead.")
+    return(NULL)
+  }
   pw_raw <- sodium::sha256(charToRaw(password))
   key <- cyphr::key_sodium(pw_raw)
-  
-  if (!file.exists(encrypted_key_path)) {
-    stop("Encrypted GEE key not found!")
-  }
   
   # Read raw bytes
   file_size <- file.info(encrypted_key_path)$size

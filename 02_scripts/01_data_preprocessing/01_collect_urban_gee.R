@@ -27,7 +27,7 @@ my_password <- "OmerFurkanCoban"
 load_secure_secrets(my_password, file.path(project_root, "03_datasets/config/secrets.enc"))
 load_ee_credentials(my_password, file.path(project_root, "03_datasets/config/ee_credentials.enc"))
 library(tidyverse); library(cli)
-ee <- reticulate::import("ee"); ee$Initialize(project = Sys.getenv("GEE_PROJECT"))
+ee <- reticulate::import("ee"); if (nzchar(Sys.getenv("GEE_PROJECT"))) ee$Initialize(project = Sys.getenv("GEE_PROJECT")) else ee$Initialize()
 
 # ── settings ──────────────────────────────────────────────────────────────────
 output_dir    <- file.path(project_root, "03_datasets/raw/Zonal_Stats_Urban_GAUL2024/")

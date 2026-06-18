@@ -33,7 +33,7 @@ library(sf)
 library(cli)
 
 ee <- reticulate::import("ee")
-ee$Initialize(project = Sys.getenv("GEE_PROJECT"))
+if (nzchar(Sys.getenv("GEE_PROJECT"))) ee$Initialize(project = Sys.getenv("GEE_PROJECT")) else ee$Initialize()
 
 gee_project  <- Sys.getenv("GEE_PROJECT")
 asset_id     <- paste0("projects/", gee_project, "/assets/GADM_level1")
