@@ -928,7 +928,11 @@ body::after {
     overflow: visible !important;
     height: auto !important;
   }
+  /* Fixed top-left logo overlaps the top-aligned slide title in print; hide it
+     here (the footer still carries university/author branding). */
+  .reveal .slide-logo { display: none !important; }
 }
+.reveal.print-pdf .slide-logo { display: none !important; }
 .reveal.print-pdf .slides,
 .reveal.print-pdf .slides section,
 .reveal.print-pdf .slides section.level1,
