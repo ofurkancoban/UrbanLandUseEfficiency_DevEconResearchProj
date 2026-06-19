@@ -176,7 +176,19 @@ from 04_outputs/figures/ once finalised. -->
 # Empirical strategy
 
 **Research question.** What are the economic drivers of per-capita urban land use,
-and how persistent is it over time? We run **one specification** with each metric
+and how persistent is it over time? We test five hypotheses:
+
+| | Hypothesis | Expected |
+|:--:|:--|:--:|
+| H1 | BpCR captures land-use efficiency more reliably than LCRPGR | better fit |
+| H2 | Higher urban density is associated with less land per capita | $-$ |
+| H3 | Higher income is associated with less land per capita | $-$ |
+| H4 | Net in-migration densifies cities | $-$ |
+| H5 | Per-capita land use is path-dependent | $+$ |
+
+: Hypotheses {#tbl-hyp}
+
+We run **one specification** with each metric
 as the dependent variable, so the comparison is like-for-like:
 $$
 \text{Metric}_{i,t}=\rho\,\text{Metric}_{i,t-1}
