@@ -1,6 +1,13 @@
 ---
 title: "Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers"
-author: "Ömer Furkan Çoban"
+author:
+  - name: Ömer Furkan Çoban
+    email: ofurkancoban@gmail.com
+    affiliations:
+      - name: Carl von Ossietzky University of Oldenburg
+        department: Applied Economics and Data Science
+        city: Oldenburg
+        country: Germany
 date: today
 abstract: |
   The official SDG 11.3.1 indicator, the ratio of land consumption rate to
@@ -14,16 +21,23 @@ abstract: |
   breaks down, (ii) show BpCR reproduces the policy signal without the
   instability, and (iii) estimate its economic drivers with two-way fixed-effects
   and dynamic-panel GMM models.
+keywords:
+  - SDG 11.3.1
+  - Urban land-use efficiency
+  - Built-up per capita rate (BpCR)
+  - LCRPGR
+  - Dynamic panel GMM
+  - GHSL / Degree of Urbanisation
+journal:
+  name: Development Economics seminar working paper
 format:
-  pdf:
-    documentclass: article
-    geometry: margin=1in
-    fontsize: 11pt
-    number-sections: true
-    toc: false
-    keep-tex: false
+  elsevier-pdf:
+    keep-tex: true
+    journal:
+      formatting: preprint      # preprint | review | doubleblind
+      model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
+      cite-style: authoryear    # elsarticle author-year citations
 bibliography: references.bib
-csl: https://www.zotero.org/styles/apa
 execute:
   echo: false
   warning: false
@@ -37,8 +51,9 @@ library(dplyr)
 library(readr)
 library(fixest)
 panel <- read_csv(here("03_datasets/processed/reg_panel_urban.csv"),
-                  show_col_types = FALSE)
-gmm   <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
+    show_col_types = FALSE
+)
+gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 ```
 
 # Introduction
@@ -76,8 +91,8 @@ $$
 # Data
 
 <!-- TODO: GHSL built-up (GHS-BUILT-S) and population (GHS-POP) under DEGURBA
-(GHS-SMOD >= 21); GAUL 2024 admin units; UN GDP per capita and net migration;
-World Bank income groups; WGI. Describe the 193-country, 1985-2020 panel. -->
+(GHS-SMOD >= 21); GAUL 2024 admin units; UN GDP per capita and net migration.
+Describe the 193-country, 1985-2020 panel. -->
 See @pesaresi2024ghsl, @schiavina2023smod, @unsd2025snaama and @undesa2024wpp for
 the source datasets.
 
@@ -85,10 +100,12 @@ the source datasets.
 #| label: tbl-sample
 #| tbl-cap: "Estimation sample"
 n_ctry <- length(unique(panel$iso3))
-n_obs  <- sum(!is.na(panel$bpcr))
-data.frame(Quantity = c("Countries", "Country-period observations"),
-           Value    = c(n_ctry, n_obs)) |>
-  knitr::kable()
+n_obs <- sum(!is.na(panel$bpcr))
+data.frame(
+    Quantity = c("Countries", "Country-period observations"),
+    Value = c(n_ctry, n_obs)
+) |>
+    knitr::kable()
 ```
 
 # Empirical strategy
@@ -113,8 +130,7 @@ in dynamic_gmm.rds (object `main_combo`). -->
 
 # Robustness
 
-<!-- TODO: 2000-2020 subsample, alternative instrument depth, winsorisation;
-results from 02_scripts/02_analysis/09_robustness_checks.R. -->
+<!-- TODO: 2000-2020 subsample, alternative instrument depth, winsorisation. -->
 
 # Discussion
 
