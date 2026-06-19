@@ -10,9 +10,12 @@ Development Economics seminar, University of Oldenburg (SoSe 2026).
 Author: Ömer Furkan Çoban.
 Project date: 13.06.2026.
 
-This project (1) shows that the **official SDG 11.3.1 indicator (LCRPGR) is
-statistically unstable**, (2) proposes a stable, log-based replacement, the
-**Built-up per Capita Rate (BpCR)**, and (3) estimates the **economic drivers** of
+This project 
+- (1) shows that the **official SDG 11.3.1 indicator (LCRPGR) is
+statistically unstable**,
+- (2) proposes a stable, log-based replacement, the
+**Built-up per Capita Rate (BpCR)**, and
+- (3) estimates the **economic drivers** of
 urban land use across a harmonised satellite panel of **193 UN member states,
 1985–2020**, using two-way fixed effects and dynamic-panel GMM.
 
