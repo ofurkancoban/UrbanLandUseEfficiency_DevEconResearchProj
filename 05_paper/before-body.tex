@@ -7,7 +7,7 @@ $if(by-author.note.text)$\fnref{fn$by-author.note.number$}$endif$}
 $if(by-author.email)$ \ead{$by-author.email$} $endif$
 $endfor$
 $for(by-affiliation)$
-\affiliation{organization={$it.name$$if(it.department)$, $it.department$$endif$},$if(it.address)$addressline={$it.address$}$endif$$if(it.city)$$if(it.address)$,$endif$city={$it.city$}$endif$$if(it.country)$$if(it.city)$,$elseif(it.address)$,$endif$country={$it.country$},countrysep={,}$endif$$if(it.postal-code)$$if(it.country)$,$elseif(it.city)$,$elseif(it.address)$,$endif$postcode={$it.postal-code$}$endif$,postcodesep={}}
+\affiliation{organization={$it.name$$if(it.department)$, $it.department$$endif$}$if(it.city)$, city={$it.city$}$endif$$if(it.country)$, country={$it.country$}$endif$}
 $endfor$
 
 $if(abstract)$
