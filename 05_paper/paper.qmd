@@ -164,7 +164,7 @@ data.frame(
 Across 1985–2020 a clear majority of countries record $\text{BpCR}>0$: built-up
 area is expanding faster than urban population for most of the world, i.e. sprawl
 is the global norm rather than the exception. The contrast with LCRPGR is
-instructive — LCRPGR's distribution is dominated by extreme tail values
+instructive -- LCRPGR's distribution is dominated by extreme tail values
 concentrated exactly where population growth is near zero, whereas BpCR is
 well-behaved across the whole sample. Regional trajectories show convergence
 towards balance in some fast-urbanising economies while others continue to
@@ -186,7 +186,7 @@ $$
 $$
 with country fixed effects $\mu_i$, period fixed effects $\delta_t$, and standard
 errors clustered by country. We proceed in two stages. **(1) Static** (dropping
-the lagged dependent variable) to isolate the role of the *metric* — LCRPGR versus
+the lagged dependent variable) to isolate the role of the *metric* -- LCRPGR versus
 BpCR. **(2) Dynamic** (adding the lagged DV) to capture path-dependence. Because
 the lagged-DV coefficient is **downward-biased under fixed effects (Nickell
 bias)**, we correct it with **Arellano-Bond difference GMM** and **Blundell-Bond
@@ -217,7 +217,7 @@ $\rho$ is about three times the FE estimate, exactly as the Nickell bias predict
 confirming **strong path-dependence** in per-capita land use. Among the drivers,
 **urban density** enters negative (a compact-city effect: denser cities consume
 less new land per resident), **net migration** negative (in-migrants pack into the
-existing stock faster than built-up grows), and **GDP per capita** negative —
+existing stock faster than built-up grows), and **GDP per capita** negative --
 within countries, getting richer is associated with **densification, not sprawl**.
 The level of urbanisation (urban population share) is insignificant once the rest
 is controlled, suggesting that urban **form**, not stage, drives land use.
@@ -237,7 +237,7 @@ to contradict the cross-sectional literature in which richer countries have
 historically sprawled. The two are complementary: *across* countries, higher
 income has coincided with more sprawl historically, but *within* a country, rising
 income over time is associated with denser, not more sprawling, urban land use.
-Measuring this distinction requires a metric that is stable within country-period —
+Measuring this distinction requires a metric that is stable within country-period --
 which BpCR provides and LCRPGR does not.
 
 # Conclusion
@@ -248,7 +248,7 @@ symmetric, and interpretable for every country-period, and it reproduces the
 policy signal without the instability. Estimated dynamically on a global panel,
 per-capita urban land use is strongly path-dependent and, within countries,
 declines with density, in-migration, and income. The contribution is as much
-**methodological** — a stable metric and a bias-corrected dynamic estimator — as
+**methodological** -- a stable metric and a bias-corrected dynamic estimator -- as
 substantive, and it complements rather than overturns the existing literature.
 
 # References {.unnumbered}
