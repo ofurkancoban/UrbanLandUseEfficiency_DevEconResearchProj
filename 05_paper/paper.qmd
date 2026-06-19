@@ -1,8 +1,12 @@
 ---
-title: "Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers"
+title: "Urban Land-Use Efficiency"
+subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic Drivers"
+doc-type: "Seminar Paper"
+course-info: "Development Economics · SoSe 2026"
+lecturer: "Lecturer: Prof. Dr. Jürgen Bitzer"
 author:
   - name: Ömer Furkan Çoban
-    email: ofurkancoban@gmail.com
+    email: oemer.furkan.coban@uni-oldenburg.de
     affiliations:
       - name: Carl von Ossietzky University of Oldenburg
         department: Applied Economics and Data Science
@@ -60,12 +64,87 @@ gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 
 # Introduction
 
-<!-- TODO: motivate global urban land monitoring; state the gap (LCRPGR
-instability) and the contribution (BpCR + drivers). ~1 page. -->
-Cities must grow to house more people; the policy question is how much land each
-new resident consumes [@seto2011meta; @oueslati2015sprawl]. SDG target 11.3 asks
-countries to keep land consumption in line with population growth, and indicator
-11.3.1 operationalises this as the LCRPGR ratio [@unhabitat2025metadata].
+The world is in the midst of the largest urban expansion in history. Every single
+year, the global built-up area grows by roughly the size of the Netherlands as
+housing, roads, and industry spread outward [@seto2012global]. Urbanisation itself
+is not the problem --- cities must grow to house more people --- but the policy
+question is *how much* land each new resident consumes. If land grows at the same
+pace as population, the city stays compact and infrastructure costs remain
+manageable. If land grows substantially faster than population, the city sprawls,
+and sprawl carries measurable costs: higher per-capita expenditure on roads,
+water, and transit; the systematic displacement of poorer residents to the
+periphery; permanent farmland loss; and locking cities into car-dependent,
+high-emission growth paths [@oueslati2015sprawl].
+
+To track this, the United Nations adopted Sustainable Development Goal (SDG)
+target 11.3, which asks countries to "enhance inclusive and sustainable
+urbanisation" by keeping land consumption in line with population growth.
+Indicator 11.3.1 operationalises this target as the Ratio of Land Consumption
+Rate to Population Growth Rate (LCRPGR), a single metric intended to signal
+whether cities are densifying, balancing, or sprawling [@unhabitat2025metadata].
+
+Yet the official indicator carries a structural flaw: it divides an arithmetic
+(linear) land growth rate by a logarithmic (exponential) population growth rate,
+creating a ratio that is dimensionally inconsistent and that explodes to
+$\pm\infty$ whenever population growth approaches zero --- a common occurrence in
+shrinking or demographically stable cities [@nicolau2019lcrpgr]. A city with
+identical 5\% growth in both built-up area and population produces LCRPGR = 1.13,
+not 1.0, because $(g-1) > \ln(g)$. The same 2\% land expansion reads as 1.33,
+$-20$, or $2\,000$ depending only on how close the denominator is to zero. The
+UN metadata itself acknowledges that LCRPGR is "difficult to interpret" and
+proposes secondary indicators built from the same inputs, including built-up area
+per capita [@unhabitat2025metadata, §4.f].
+
+The literature on urban land expansion has developed along two largely separate
+tracks. On the measurement side, @nicolau2019lcrpgr document the instability of
+the official ratio and recommend a log-based formulation; @Lu2026 demonstrate
+that land-use efficiency estimates swing widely with dataset choice and argue for
+a log-based framework for reliable monitoring. On the driver side, @seto2011meta
+show in a meta-analysis of 326 remote-sensing studies that urban land grew faster
+than population almost everywhere, with income as the dominant driver across most
+regions; @oueslati2015sprawl find that rising income and population both expand
+the urban footprint in European cities, and that cities continue to spread even
+where population is flat.
+
+We bridge these two strands. Following the log-based approach recommended by
+@nicolau2019lcrpgr and @Lu2026, we construct the Built-up per Capita Rate
+(BpCR) --- the annual log growth rate of built-up area per capita, defined as the
+difference of two logarithmic rates:
+
+$$ \text{BpCR} = \frac{1}{z}\ln\!\left(\frac{V_t / P_t}{V_{t-z} / P_{t-z}}\right)
+= \text{LCR}_{\log} - \text{PGR}_{\log}. $$
+
+Unlike LCRPGR, BpCR places numerator and denominator on the same mathematical
+scale, is well-defined for every country-period including those with stable or
+shrinking populations, and retains an intuitive interpretation: positive values
+signal sprawl (per-capita land use rising), negative values signal densification
+(per-capita land use falling).
+
+We then make the metric *dynamic*. Using a harmonised global panel of 193 UN
+member states spanning eight five-year periods (1985--2020) --- built from GHSL
+built-up and population grids under the Degree of Urbanisation --- we estimate a
+two-way fixed-effects model with a lagged dependent variable to capture
+path-dependence in per-capita land use, and we correct the resulting Nickell bias
+with Arellano-Bond and Blundell-Bond dynamic-panel GMM. This allows us to answer
+three questions: (i) does the choice of metric change the empirical conclusions?
+(ii) what economic and structural factors drive within-country changes in
+per-capita urban land use? and (iii) how persistent are these trajectories?
+
+We find that the metric matters decisively. The official LCRPGR produces a
+within-country $R^2$ of approximately 0.003, with no variable reaching
+statistical significance. The same specification estimated with BpCR yields a
+within-country $R^2$ roughly twenty times higher, and clear, significant drivers
+emerge. Our GMM-corrected estimates reveal strong path-dependence ($\rho \approx
+0.6$): roughly 60\% of the previous period's per-capita land-use change persists
+into the next. Within countries, higher urban density, net in-migration, and
+higher GDP per capita all predict *less* per-capita land consumption --- i.e.,
+richer countries densify, not sprawl, when we look at the within-country margin
+that cross-sectional studies miss.
+
+The remainder of the paper is structured as follows. Section 2 formally defines the
+SDG 11.3.1 indicator and its limitations. Section 3 introduces BpCR and
+demonstrates its properties. Section 4 describes the data. Section 5 outlines the
+empirical strategy. Section 6 presents the results, and Section 7 concludes.
 
 # The SDG 11.3.1 indicator and its limitations
 

@@ -1,17 +1,49 @@
 
+% ── Cover aesthetics ──────────────────────────────────────────────────
+\definecolor{accent}{HTML}{D97706}
+\definecolor{dark}{HTML}{1F2937}
+
+% ── Patch elsarticle email label ───────────────────────────────────────
+\makeatletter
+\patchcmd{\printFirstPageNotes}{Email address:}{E-Mail Adress:}{}{}
+\patchcmd{\printFirstPageNotes}{Email addresses:}{E-Mail Adresses:}{}{}
+\makeatother
+
 \begin{frontmatter}
-\title{$title$$if(subtitle)$ \\\large{$subtitle$} $endif$}
+
+% ── University logo ───────────────────────────────────────────────────
+\begin{center}
+\vspace{0.2cm}
+\includegraphics[height=2.8cm]{uol_logo.png}
+\end{center}
+\vspace{0.3cm}
+
+\title{%
+  \vspace{0.3cm}
+  {\color{dark}\LARGE\bfseries $title$}
+  $if(subtitle)$\\[0.3cm]
+  {\Large\itshape\color{black!60}$subtitle$}$endif$
+  $if(course-info)$\\[0.25cm]
+  {\large\color{black!55}$course-info$}$endif$
+  $if(lecturer)$\\[0.15cm]
+  {\normalsize\color{black!50}$lecturer$}$endif$\\[0.3cm]
+  {\color{accent}\rule{0.35\textwidth}{1pt}}
+}
+
 $for(by-author)$\author{$by-author.name.literal$%
 $if(by-author.attributes.corresponding)$\corref{cor1}$endif$%
 $if(by-author.note.text)$\fnref{fn$by-author.note.number$}$endif$}
 $if(by-author.email)$ \ead{$by-author.email$} $endif$
 $endfor$
+
 $for(by-affiliation)$
 \affiliation{organization={$it.name$$if(it.department)$, $it.department$$endif$}$if(it.city)$, city={$it.city$}$endif$$if(it.country)$, country={$it.country$}$endif$}
 $endfor$
 
 $if(abstract)$
+\vspace{0.3cm}
 \begin{abstract}
+\noindent{\color{accent}\rule{2.5cm}{0.6pt}}\\[0.15cm]
 $abstract$
 \end{abstract}
 $endif$
@@ -26,5 +58,13 @@ $if(keywords)$
     $for(keywords/allbutlast)$$keywords$ \sep $endfor$
     $for(keywords/last)$$keywords$$endfor$
 \end{keyword}
+$endif$
+
+% ── Document type ──────────────────────────────────────────────────────
+$if(doc-type)$
+\vspace{0.5cm}
+\begin{center}
+{\color{black!40}\scshape $doc-type$}
+\end{center}
 $endif$
 \end{frontmatter}
