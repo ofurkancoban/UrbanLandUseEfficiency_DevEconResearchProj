@@ -914,3 +914,24 @@ body::after {
 
 /* References slide: smaller title + compact list (backmatter) */
 .reveal .refslide h2 { font-size: 1.0em; }
+
+/* ── PDF / print export ───────────────────────────────────────────────
+   The screen-only `overflow:hidden` + `height:100%` rules above clip every
+   slide's body during reveal.js `?print-pdf` export (pages come out blank
+   except fixed logo/footer). Undo them when printing so content renders. */
+@media print {
+  html, body,
+  .reveal, .reveal .slides,
+  .reveal .slides section,
+  .reveal .slides section.level1,
+  .reveal .slides section.level2 {
+    overflow: visible !important;
+    height: auto !important;
+  }
+}
+.reveal.print-pdf .slides,
+.reveal.print-pdf .slides section,
+.reveal.print-pdf .slides section.level1,
+.reveal.print-pdf .slides section.level2 {
+  overflow: visible !important;
+}
