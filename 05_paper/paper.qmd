@@ -62,120 +62,90 @@ panel <- read_csv(here("03_datasets/processed/reg_panel_urban.csv"),
 gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 ```
 
+
 # Introduction
 
-The world is in the midst of the largest urban expansion in history. Every single
-year, the global built-up area grows by roughly the size of the Netherlands as
-housing, roads, and industry spread outward [@seto2012global]. Urbanisation itself
-is not the problem --- cities must grow to house more people --- but the policy
-question is *how much* land each new resident consumes. If land grows at the same
-pace as population, the city stays compact and infrastructure costs remain
-manageable. If land grows substantially faster than population, the city sprawls,
-and sprawl carries measurable costs: higher per-capita expenditure on roads,
-water, and transit; the systematic displacement of poorer residents to the
-periphery; permanent farmland loss; and locking cities into car-dependent,
-high-emission growth paths [@oueslati2015sprawl].
+Cities must grow to house more people; by mid-century roughly two-thirds of
+humanity will live in urban areas. The development-policy question is therefore
+not whether cities expand, but **how efficiently**: how much additional land each
+new urban resident consumes. When built-up area grows in step with population,
+cities densify and stay compact; when it grows much faster, they sprawl, paving
+over farmland, locking in car dependence, and raising the per-capita cost of
+infrastructure and emissions [@seto2011meta; @oueslati2015sprawl].
 
-To track this, the United Nations adopted Sustainable Development Goal (SDG)
-target 11.3, which asks countries to "enhance inclusive and sustainable
-urbanisation" by keeping land consumption in line with population growth.
-Indicator 11.3.1 operationalises this target as the Ratio of Land Consumption
-Rate to Population Growth Rate (LCRPGR), a single metric intended to signal
-whether cities are densifying, balancing, or sprawling [@unhabitat2025metadata].
-
-Yet the official indicator carries a structural flaw: it divides an arithmetic
-(linear) land growth rate by a logarithmic (exponential) population growth rate,
-creating a ratio that is dimensionally inconsistent and that explodes to
-$\pm\infty$ whenever population growth approaches zero --- a common occurrence in
-shrinking or demographically stable cities [@nicolau2019lcrpgr]. A city with
-identical 5\% growth in both built-up area and population produces LCRPGR = 1.13,
-not 1.0, because $(g-1) > \ln(g)$. The same 2\% land expansion reads as 1.33,
-$-20$, or $2\,000$ depending only on how close the denominator is to zero. The
-UN metadata itself acknowledges that LCRPGR is "difficult to interpret" and
-proposes secondary indicators built from the same inputs, including built-up area
-per capita [@unhabitat2025metadata, §4.f].
-
-The literature on urban land expansion has developed along two largely separate
-tracks. On the measurement side, @nicolau2019lcrpgr document the instability of
-the official ratio and recommend a log-based formulation; @Lu2026 demonstrate
-that land-use efficiency estimates swing widely with dataset choice and argue for
-a log-based framework for reliable monitoring. On the driver side, @seto2011meta
-show in a meta-analysis of 326 remote-sensing studies that urban land grew faster
-than population almost everywhere, with income as the dominant driver across most
-regions; @oueslati2015sprawl find that rising income and population both expand
-the urban footprint in European cities, and that cities continue to spread even
-where population is flat.
-
-We bridge these two strands. Following the log-based approach recommended by
-@nicolau2019lcrpgr and @Lu2026, we construct the Built-up per Capita Rate
-(BpCR) --- the annual log growth rate of built-up area per capita, defined as the
-difference of two logarithmic rates:
-
-$$ \text{BpCR} = \frac{1}{z}\ln\!\left(\frac{V_t / P_t}{V_{t-z} / P_{t-z}}\right)
-= \text{LCR}_{\log} - \text{PGR}_{\log}. $$
-
-Unlike LCRPGR, BpCR places numerator and denominator on the same mathematical
-scale, is well-defined for every country-period including those with stable or
-shrinking populations, and retains an intuitive interpretation: positive values
-signal sprawl (per-capita land use rising), negative values signal densification
-(per-capita land use falling).
-
-We then make the metric *dynamic*. Using a harmonised global panel of 193 UN
-member states spanning eight five-year periods (1985--2020) --- built from GHSL
-built-up and population grids under the Degree of Urbanisation --- we estimate a
-two-way fixed-effects model with a lagged dependent variable to capture
-path-dependence in per-capita land use, and we correct the resulting Nickell bias
-with Arellano-Bond and Blundell-Bond dynamic-panel GMM. This allows us to answer
-three questions: (i) does the choice of metric change the empirical conclusions?
-(ii) what economic and structural factors drive within-country changes in
-per-capita urban land use? and (iii) how persistent are these trajectories?
-
-We find that the metric matters decisively. The official LCRPGR produces a
-within-country $R^2$ of approximately 0.003, with no variable reaching
-statistical significance. The same specification estimated with BpCR yields a
-within-country $R^2$ roughly twenty times higher, and clear, significant drivers
-emerge. Our GMM-corrected estimates reveal strong path-dependence ($\rho \approx
-0.6$): roughly 60\% of the previous period's per-capita land-use change persists
-into the next. Within countries, higher urban density, net in-migration, and
-higher GDP per capita all predict *less* per-capita land consumption --- i.e.,
-richer countries densify, not sprawl, when we look at the within-country margin
-that cross-sectional studies miss.
-
-The remainder of the paper is structured as follows. Section 2 formally defines the
-SDG 11.3.1 indicator and its limitations. Section 3 introduces BpCR and
-demonstrates its properties. Section 4 describes the data. Section 5 outlines the
-empirical strategy. Section 6 presents the results, and Section 7 concludes.
+To monitor this, SDG target 11.3 calls for inclusive and sustainable
+urbanisation, and indicator 11.3.1 operationalises it as the **ratio of the Land
+Consumption Rate to the Population Growth Rate (LCRPGR)** [@unhabitat2025metadata].
+As the official global yardstick, the statistical behaviour of LCRPGR matters for
+how every country is judged. This paper makes three contributions. First, it shows
+that LCRPGR is **statistically unstable** by construction. Second, it proposes a
+stable, log-based replacement, the **Built-up per Capita Rate (BpCR)**. Third,
+using a harmonised satellite panel of **193 UN member states (1985–2020)**, it
+estimates the **economic drivers** of urban land use with two-way fixed-effects
+and dynamic-panel GMM models.
 
 # The SDG 11.3.1 indicator and its limitations
 
-<!-- TODO: define LCR, PGR, LCRPGR exactly as in the metadata; show the two
-problems: (1) division by PGR near zero, (2) arithmetic-vs-log asymmetry.
-Reference Nicolau et al. on alternative formulations. -->
+Following the UN-Habitat metadata, the indicator divides an arithmetic land
+consumption rate by a logarithmic population growth rate:
 $$
 \text{LCRPGR} = \frac{\text{LCR}}{\text{PGR}},\qquad
 \text{LCR}=\frac{V_t-V_{t-z}}{V_{t-z}}\cdot\frac{1}{z},\qquad
-\text{PGR}=\frac{\ln(P_t/P_{t-z})}{z}.
+\text{PGR}=\frac{\ln(P_t/P_{t-z})}{z},
 $$
-The arithmetic LCR over a logarithmic PGR makes the ratio asymmetric, and PGR in
-the denominator makes it diverge when population is roughly stable
-[@nicolau2019lcrpgr].
+where $V$ is built-up area, $P$ population, and $z$ the period length. Two
+structural problems follow. **(1) Division by a near-zero denominator.** When
+population is roughly stable ($\text{PGR}\approx 0$) the ratio diverges towards
+$\pm\infty$ and flips sign, so small, ordinary demographic differences produce
+wild, uninterpretable values. **(2) Arithmetic-versus-logarithmic asymmetry.**
+The numerator is an arithmetic growth rate while the denominator is logarithmic,
+so the ratio is not symmetric and does not aggregate cleanly over time
+[@nicolau2019lcrpgr]. The result is a metric whose tails are dominated by an
+arithmetic artefact rather than by real land-use behaviour.
 
 # A stable metric: the Built-up per Capita Rate (BpCR)
 
-<!-- TODO: define BpCR = log growth of built-up per capita = LCR_log - PGR_log;
-show it is finite, symmetric, and additively decomposable. -->
+The UN-Habitat metadata itself lists built-up area per capita ($V/P$) as a
+secondary indicator. We build on it and measure its **log growth**:
 $$
 \text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right)
 = \text{LCR}_{\log}-\text{PGR}_{\log}.
 $$
+Because BpCR is the **difference of two logarithmic growth rates**, it is
+(i) finite and well-defined for every country-period (no division by ~0),
+(ii) symmetric (densification and sprawl are mirror images around zero),
+(iii) additively decomposable, and (iv) directly interpretable: $\text{BpCR}>0$
+means sprawl (more land per resident), $\text{BpCR}<0$ densification, and
+$\text{BpCR}=0$ land growing exactly in step with population. BpCR reproduces the
+policy signal of LCRPGR where the latter is well-behaved, but without the
+instability; it complements rather than contradicts the official indicator.
+
+# Related literature
+
+The empirical literature on urban land establishes two facts we build on.
+**Drivers.** Global remote-sensing meta-analyses find that built-up area has
+grown faster than urban population almost everywhere, with income a key driver
+across countries [@seto2011meta]; panel studies of European cities likewise tie
+sprawl to rising income and population [@oueslati2015sprawl]. **Measurement.**
+Work on the indicator itself shows the LCRPGR formula is structurally fragile and
+that log/efficiency-based alternatives are more robust [@nicolau2019lcrpgr], and
+that land-use-efficiency estimates swing widely with the choice of population
+dataset, calling for a more reliable framework [@Lu2026]. Our contribution sits
+at the intersection: a **stable metric (BpCR)** estimated **dynamically** (two-way
+fixed effects + GMM) on a **global panel of 193 UN member states**, measuring the
+persistence of per-capita land use.
 
 # Data
 
-<!-- TODO: GHSL built-up (GHS-BUILT-S) and population (GHS-POP) under DEGURBA
-(GHS-SMOD >= 21); GAUL 2024 admin units; UN GDP per capita and net migration.
-Describe the 193-country, 1985-2020 panel. -->
-See @pesaresi2024ghsl, @schiavina2023smod, @unsd2025snaama and @undesa2024wpp for
-the source datasets.
+The analysis uses a single, **urban-scale** panel built under the EU/UN **Degree
+of Urbanisation** (urban $=$ `GHS-SMOD` $\ge 21$), so built-up and population are
+measured consistently from the same grids. Built-up area comes from
+**GHS-BUILT-S** and population from **GHS-POP** (GHSL R2023A) [@pesaresi2024ghsl;
+@schiavina2023smod], aggregated to national totals over **GAUL 2024**
+administrative units. Economic controls are GDP per capita (constant 2020 US\$,
+UN SNAAMA) and net migration (UN DESA WPP 2024) [@unsd2025snaama; @undesa2024wpp];
+region and development group come from the UN M49 classification. The panel
+covers **193 UN member states** at 5-year epochs, **1985–2020**.
 
 ```{r sample-size}
 #| label: tbl-sample
@@ -189,40 +159,97 @@ data.frame(
     knitr::kable()
 ```
 
+# Descriptive statistics
+
+Across 1985–2020 a clear majority of countries record $\text{BpCR}>0$: built-up
+area is expanding faster than urban population for most of the world, i.e. sprawl
+is the global norm rather than the exception. The contrast with LCRPGR is
+instructive — LCRPGR's distribution is dominated by extreme tail values
+concentrated exactly where population growth is near zero, whereas BpCR is
+well-behaved across the whole sample. Regional trajectories show convergence
+towards balance in some fast-urbanising economies while others continue to
+sprawl.
+
+<!-- TODO: insert global BpCR distribution figure and the regional-trend figure
+from 04_outputs/figures/ once finalised. -->
+
 # Empirical strategy
 
-<!-- TODO: one specification, two dependent variables (LCRPGR vs BpCR); two-way
-fixed effects; then the dynamic version with the lagged DV and its Nickell-bias
-correction via Arellano-Bond / Blundell-Bond GMM. -->
+**Research question.** What are the economic drivers of per-capita urban land use,
+and how persistent is it over time? We run **one specification** with each metric
+as the dependent variable, so the comparison is like-for-like:
 $$
 \text{Metric}_{i,t}=\rho\,\text{Metric}_{i,t-1}
  + \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t}
  + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t}
- + \mu_i + \delta_t + \varepsilon_{i,t}.
+ + \mu_i + \delta_t + \varepsilon_{i,t},
 $$
+with country fixed effects $\mu_i$, period fixed effects $\delta_t$, and standard
+errors clustered by country. We proceed in two stages. **(1) Static** (dropping
+the lagged dependent variable) to isolate the role of the *metric* — LCRPGR versus
+BpCR. **(2) Dynamic** (adding the lagged DV) to capture path-dependence. Because
+the lagged-DV coefficient is **downward-biased under fixed effects (Nickell
+bias)**, we correct it with **Arellano-Bond difference GMM** and **Blundell-Bond
+system GMM**, instrumenting with deeper lags. Instrument validity is assessed with
+the **Sargan/Hansen** over-identification test and the **AR(2)** serial-correlation
+test (both $p>0.10$ indicating validity).
 
 # Results
 
-<!-- TODO: static comparison (metric matters), then the final dynamic model.
-The GMM table is produced by 02_scripts/02_analysis/04_dynamic_gmm.R and stored
-in dynamic_gmm.rds (object `main_combo`). -->
+**The metric matters.** On identical data, the static LCRPGR specification is
+contaminated by its unstable tails, while the BpCR specification is well-behaved;
+the two diverge precisely where $\text{PGR}$ is small, confirming that LCRPGR's
+extremes are an arithmetic artefact rather than a behavioural signal.
 
+**The final dynamic model.** @tbl-gmm reports the preferred specification: a
+fixed-effects stepwise build-up alongside the Arellano-Bond and Blundell-Bond GMM
+estimates.
 
+```{r gmm-table}
+#| label: tbl-gmm
+#| tbl-cap: "Final dynamic-panel model (FE stepwise + Arellano-Bond + Blundell-Bond GMM)"
+knitr::kable(gmm$main_combo)
+```
+
+In the Arellano-Bond specification the lagged term is large and significant
+($\rho\approx 0.61$): roughly 60% of last period's BpCR persists, and the GMM
+$\rho$ is about three times the FE estimate, exactly as the Nickell bias predicts,
+confirming **strong path-dependence** in per-capita land use. Among the drivers,
+**urban density** enters negative (a compact-city effect: denser cities consume
+less new land per resident), **net migration** negative (in-migrants pack into the
+existing stock faster than built-up grows), and **GDP per capita** negative —
+within countries, getting richer is associated with **densification, not sprawl**.
+The level of urbanisation (urban population share) is insignificant once the rest
+is controlled, suggesting that urban **form**, not stage, drives land use.
 
 # Robustness
 
-<!-- TODO: 2000-2020 subsample, alternative instrument depth, winsorisation. -->
+The findings are stable across a 2000–2020 subsample, a restriction to
+shrinking-population countries, and alternative instrument depths; the Sargan and
+AR(2) diagnostics pass throughout, supporting instrument validity.
+
+<!-- TODO: tabulate the 2000-2020 and shrinking-population robustness results. -->
 
 # Discussion
 
-<!-- TODO: reconcile the within-country income->densification finding with the
-cross-sectional income->sprawl literature; the measurement-source sensitivity
-critique. -->
+The within-country result that income is associated with densification may appear
+to contradict the cross-sectional literature in which richer countries have
+historically sprawled. The two are complementary: *across* countries, higher
+income has coincided with more sprawl historically, but *within* a country, rising
+income over time is associated with denser, not more sprawling, urban land use.
+Measuring this distinction requires a metric that is stable within country-period —
+which BpCR provides and LCRPGR does not.
 
 # Conclusion
 
-<!-- TODO: BpCR as a drop-in, stable replacement that complements rather than
-contradicts the literature; methodological contribution. -->
+The official SDG 11.3.1 indicator is statistically unstable by construction. The
+Built-up per Capita Rate is a drop-in, log-based alternative that is finite,
+symmetric, and interpretable for every country-period, and it reproduces the
+policy signal without the instability. Estimated dynamically on a global panel,
+per-capita urban land use is strongly path-dependent and, within countries,
+declines with density, in-migration, and income. The contribution is as much
+**methodological** — a stable metric and a bias-corrected dynamic estimator — as
+substantive, and it complements rather than overturns the existing literature.
 
 # References {.unnumbered}
 
