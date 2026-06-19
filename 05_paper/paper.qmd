@@ -39,6 +39,9 @@ format:
     keep-tex: true
     template-partials:
       - before-body.tex
+    include-in-header:
+      text: |
+        \usepackage{makecell}
     journal:
       formatting: preprint      # preprint | review | doubleblind
       model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
@@ -219,8 +222,22 @@ estimates.
 
 ```{r gmm-table}
 #| label: tbl-gmm
-#| tbl-cap: "Final dynamic-panel model (FE stepwise + Arellano-Bond + Blundell-Bond GMM)"
-knitr::kable(gmm$main_combo)
+#| tbl-cap: "Final dynamic-panel model: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM. Coefficient with significance stars on top, clustered/robust standard error in parentheses below. *** p<0.01, ** p<0.05, * p<0.1."
+if (!requireNamespace("kableExtra", quietly = TRUE)) install.packages("kableExtra")
+mc <- as.data.frame(gmm$main_combo, stringsAsFactors = FALSE)
+# coefficient cells look like "X***<br>(se)" -> stacked \makecell{X*** \\ (se)}
+to_cell <- function(x) ifelse(
+  grepl("<br>", x, fixed = TRUE),
+  paste0("\\makecell[c]{", sub("<br>", " \\\\ ", x, fixed = TRUE), "}"),
+  x)
+for (j in 2:ncol(mc)) mc[[j]] <- to_cell(mc[[j]])
+names(mc)[1] <- ""
+esc <- function(x) gsub("%", "\\%", x, fixed = TRUE)  # literal % -> \% (LaTeX)
+names(mc) <- esc(names(mc))
+mc[[1]] <- esc(mc[[1]])                                  # escape % in row labels too
+knitr::kable(mc, format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+             align = c("l", rep("c", ncol(mc) - 1))) |>
+  kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down"))
 ```
 
 In the Arellano-Bond specification the lagged term is large and significant
