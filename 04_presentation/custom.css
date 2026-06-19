@@ -935,12 +935,8 @@ body::after {
     print-color-adjust: exact !important;
   }
   
-  /* Keep the top-left logo (as on screen), but start the content below it so
-     the slide title clears the logo instead of overlapping it. */
-  .reveal .slides section.level2 > h2:first-of-type { margin-top: 84px !important; }
 }
 
-.reveal.print-pdf .slides section.level2 > h2:first-of-type { margin-top: 84px !important; }
 
 .reveal.print-pdf,
 .reveal.print-pdf .slides,
