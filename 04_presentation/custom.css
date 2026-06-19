@@ -928,14 +928,129 @@ body::after {
     overflow: visible !important;
     height: auto !important;
   }
-  /* Fixed top-left logo overlaps the top-aligned slide title in print; hide it
-     here (the footer still carries university/author branding). */
-  .reveal .slide-logo { display: none !important; }
+  
+  /* Force exact color adjustment to print all backgrounds/colors */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Keep the top-left logo (as on screen), but start the content below it so
+     the slide title clears the logo instead of overlapping it. */
+  .reveal .slides section.level2 > h2:first-of-type { margin-top: 84px !important; }
 }
-.reveal.print-pdf .slide-logo { display: none !important; }
+
+.reveal.print-pdf .slides section.level2 > h2:first-of-type { margin-top: 84px !important; }
+
+.reveal.print-pdf,
 .reveal.print-pdf .slides,
 .reveal.print-pdf .slides section,
 .reveal.print-pdf .slides section.level1,
 .reveal.print-pdf .slides section.level2 {
   overflow: visible !important;
+  height: auto !important;
+}
+
+/* Reset reveal viewport changes from progress indicator when printing */
+body.reveal-viewport.print-pdf,
+.reveal-viewport.print-pdf {
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+}
+
+/* --- Print PDF Backgrounds and Logo Fixes --- */
+.reveal.print-pdf .slide-background {
+  background-color: var(--c-bg) !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.reveal.print-pdf .backgrounds > .slide-background:first-child,
+.reveal.print-pdf .slide-background.title-slide-background {
+  background-color: #18181b !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* Hide global fixed logo during print PDF */
+.reveal.print-pdf .slide-logo {
+  display: none !important;
+}
+
+/* Position slide-specific relative logo inside the slide section so it scales perfectly */
+.reveal.print-pdf .slides > section {
+  position: relative !important;
+}
+
+.reveal.print-pdf .slides > section::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  width: 99px; /* Aspect ratio of uol_logo.svg is 1.55, height 64px -> width 99px */
+  height: 64px;
+  background-image: url('uol_logo.svg') !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Invert the logo to white on dark slides (like the title slide) */
+.reveal.print-pdf #title-slide::after,
+.reveal.print-pdf #land-cover-change-the-evidence::after {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+/* Hide global SDG icon during print PDF */
+body:has(.reveal.print-pdf)::after {
+  display: none !important;
+}
+
+/* Add SDG icon to each content slide in print PDF */
+.reveal.print-pdf .slides > section:not(#title-slide)::before {
+  content: "";
+  position: absolute;
+  bottom: 120px;
+  right: 14px;
+  width: 68px;
+  height: 68px;
+  background-image: url('sdg11.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+  box-shadow: none !important; /* Removed shadow for clean print */
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Hide progress indicator and settings during print PDF */
+.reveal.print-pdf .progress-indicator,
+.reveal.print-pdf .dots-container,
+.reveal.print-pdf .indicator-scroll-content,
+.reveal.print-pdf #indicatorSlideList,
+.reveal.print-pdf .indicator-settings-btn,
+.reveal.print-pdf .indicator-settings-panel {
+  display: none !important;
+}
+
+/* --- Shadow overrides to prevent fuzzy/blocky rendering in PDF --- */
+.reveal.print-pdf #title-slide h1.title,
+.reveal.print-pdf #title-slide p.subtitle,
+.reveal.print-pdf #title-slide .quarto-title-author-name,
+.reveal.print-pdf #title-slide .quarto-title-affiliation,
+.reveal.print-pdf #title-slide p.date {
+  text-shadow: none !important;
+}
+
+.reveal.print-pdf .source-card,
+.reveal.print-pdf .ghsl-flow .flow-step,
+.reveal.print-pdf .callout,
+.reveal.print-pdf .source-logo-container {
+  box-shadow: none !important;
 }
