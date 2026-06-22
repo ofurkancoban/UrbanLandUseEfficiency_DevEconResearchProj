@@ -140,8 +140,9 @@ then introduce the stable, log-based alternative used in the empirical analysis.
 
 ## The SDG 11.3.1 Indicator and Its Limitations
 
-Following the UN-Habitat metadata, the indicator divides an arithmetic land
-consumption rate by a logarithmic population growth rate:
+Following the UN-Habitat metadata [@unhabitat2025metadata], the official
+indicator divides an arithmetic land consumption rate by a logarithmic
+population growth rate:
 $$
 \text{LCRPGR} = \frac{\text{LCR}}{\text{PGR}},\qquad
 \text{LCR}=\frac{V_t-V_{t-z}}{V_{t-z}}\cdot\frac{1}{z},\qquad
@@ -166,8 +167,11 @@ arithmetic artefact rather than by real land-use behaviour.
 
 ## A Stable Metric: The Built-up per Capita Rate (BpCR)
 
-The UN-Habitat metadata itself lists built-up area per capita ($V/P$) as a
-secondary indicator. We build on it and measure its **log growth**:
+The UN-Habitat metadata itself concedes that the ratio is hard to interpret and
+offers built-up area per capita ($V/P$) as a secondary indicator
+[@unhabitat2025metadata]. That quantity is a level, a snapshot at one point in
+time. Following @Lu2026, we turn it into a trend by taking its annual growth in
+logarithmic form:
 $$
 \text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right)
 = \text{LCR}_{\log}-\text{PGR}_{\log}.
