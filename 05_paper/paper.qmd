@@ -610,10 +610,10 @@ r2ratio <- round(r2(mB)["wr2"] / r2(mL)["wr2"])
 ```
 
 With the official LCRPGR as the dependent variable, the model is essentially
-uninformative: the within-country $R^2$ is only `r sprintf("%.3f", r2L)` and not a
+uninformative: the within $R^2$ is only `r sprintf("%.3f", r2L)` and not a
 single control is statistically significant, because the metric's arithmetic
 tail outliers swamp any systematic variation. Replacing the dependent variable
-with BpCR, and changing nothing else, raises the within-country $R^2$ to
+with BpCR, and changing nothing else, raises the within $R^2$ to
 `r sprintf("%.3f", r2B)`, roughly `r r2ratio` times higher, and the coefficients
 become significant and correctly signed: denser cities, richer countries, and
 higher in-migration are all associated with less land per capita. This is the
