@@ -172,8 +172,8 @@ offers built-up area per capita ($V/P$) as a secondary indicator
 time. Following @Lu2026, we turn it into a trend by taking its annual growth in
 logarithmic form:
 $$
-\text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right)
-= \text{LCR}_{\log}-\text{PGR}_{\log}.
+\text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_{i,t}/P_{i,t}}{V_{i,t-z}/P_{i,t-z}}\right)
+= \text{LCR}_{i,\log}-\text{PGR}_{i,\log}.
 $$
 Because BpCR is the **difference of two logarithmic growth rates**, it is
 (i) finite and well-defined for every country-period (no division by ~0),
@@ -375,7 +375,7 @@ ds$ctry_pct <- round(100 * ds$ctry_pos / ds$ctry_tot)
 ```
 
 Even before any regression, the raw data already reveal why the choice of metric
-matters. On the estimation window (`r ds$n` country-periods, 1985--2020), the
+matters. Over the full 1985--2020 sample (`r ds$n` country-periods), the
 official log-LCRPGR has a standard deviation of about `r round(ds$lcr_sd)` and
 ranges from roughly `r round(ds$lcr_lo)` to `r round(ds$lcr_hi)`: its division by a
 near-zero population-growth rate produces enormous, sign-flipping outliers. BpCR,
@@ -417,7 +417,7 @@ knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
 ```
 
 @tbl-desc reports summary statistics for the dependent variables and controls over
-the estimation window.
+the full 1985--2020 sample.
 
 ![Country trajectories for seven regional representatives, 1985--2020. (a) The
 official log-LCRPGR swings erratically and crosses its zero and unity reference
@@ -784,7 +784,7 @@ stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 # Conclusion {#sec-conclusion}
 
 Urban sprawl is real and measurable: across 1985--2020, built-up area per capita
-rose in roughly three out of five country-periods and in about two-thirds of
+rose in almost two-thirds of country-periods and in about two-thirds of
 countries on average. The difficulty is not the phenomenon but the yardstick. The
 official SDG 11.3.1 indicator, LCRPGR, is unstable by construction, dividing an
 arithmetic numerator by a near-zero denominator and producing sign-flipping
