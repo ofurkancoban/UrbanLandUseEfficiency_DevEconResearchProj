@@ -50,7 +50,7 @@ theme_layer <- function() theme_void(base_size = 12) +
         legend.key.height=unit(0.42,"cm"), legend.key.width=unit(0.32,"cm"),
         legend.title=element_text(size=8.5, face="bold"), legend.text=element_text(size=7.5))
 co  <- coord_sf(crs = utm, expand = FALSE, xlim=c(ext_m$xmin,ext_m$xmax), ylim=c(ext_m$ymin,ext_m$ymax))
-bnd <- geom_sf(data = cty, fill=NA, color="#00E5FF", linewidth=0.5, inherit.aes=FALSE)
+bnd <- geom_sf(data = cty, fill=NA, color="#FF2BBE", linewidth=0.6, inherit.aes=FALSE)
 bg  <- geom_spatraster_rgb(data = bm)
 
 pa <- ggplot() + bg + bnd + co + labs(title="(a) Satellite basemap (reference)") + theme_layer()
