@@ -219,7 +219,7 @@ dataset and argue that a log-based framework is needed for reliable monitoring.
 This strand establishes that the choice of metric, and not only the choice of
 data, can change the conclusions drawn about sustainable urbanisation.
 
-## This Paper
+## Research Gap and Contribution
 
 Our contribution sits at the intersection of the two strands. On measurement, we
 adopt the log-based metric that both Nicolau and Lu and Weng recommend, in the
