@@ -222,8 +222,8 @@ data, can change the conclusions drawn about sustainable urbanisation.
 ## Research Gap and Contribution
 
 Our contribution sits at the intersection of the two strands. On measurement, we
-adopt the log-based metric that both Nicolau and Lu and Weng recommend, in the
-form of BpCR. On method, we make it dynamic: a two-way fixed-effects panel with
+adopt the log-based metric that both @nicolau2019lcrpgr and @Lu2026 recommend, in
+the form of BpCR. On method, we make it dynamic: a two-way fixed-effects panel with
 Arellano-Bond and Blundell-Bond GMM, estimated on 193 United Nations member states
 over 1985--2020, that measures the persistence (path-dependence) of per-capita
 land use. The result refines the drivers literature: while richer countries look
