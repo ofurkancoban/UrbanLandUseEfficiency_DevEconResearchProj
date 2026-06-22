@@ -68,24 +68,63 @@ gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 
 # Introduction
 
-Cities must grow to house more people; by mid-century roughly two-thirds of
-humanity will live in urban areas. The development-policy question is therefore
-not whether cities expand, but **how efficiently**: how much additional land each
-new urban resident consumes. When built-up area grows in step with population,
-cities densify and stay compact; when it grows much faster, they sprawl, paving
-over farmland, locking in car dependence, and raising the per-capita cost of
-infrastructure and emissions [@seto2011meta; @oueslati2015sprawl].
+The world is urbanising rapidly: by the middle of this century close to
+two-thirds of humanity will live in cities, and almost all of the projected
+growth in built-up land will occur in developing countries. For development
+policy the central question is not whether cities expand, but how efficiently
+they do so, that is, how much additional land each new urban resident consumes.
+When built-up area grows in step with population, cities densify and remain
+compact; when it grows much faster than population, they sprawl. Sprawl is
+costly: it converts farmland irreversibly, locks settlements into car
+dependence, raises the per-capita cost of infrastructure and public services,
+and is associated with higher per-capita emissions [@seto2011meta;
+@oueslati2015sprawl]. Measuring land-use efficiency well is therefore a
+precondition for monitoring sustainable urbanisation.
 
-To monitor this, SDG target 11.3 calls for inclusive and sustainable
-urbanisation, and indicator 11.3.1 operationalises it as the **ratio of the Land
-Consumption Rate to the Population Growth Rate (LCRPGR)** [@unhabitat2025metadata].
-As the official global yardstick, the statistical behaviour of LCRPGR matters for
-how every country is judged. This paper makes three contributions. First, it shows
-that LCRPGR is **statistically unstable** by construction. Second, it proposes a
-stable, log-based replacement, the **Built-up per Capita Rate (BpCR)**. Third,
-using a harmonised satellite panel of **193 UN member states (1985–2020)**, it
-estimates the **economic drivers** of urban land use with two-way fixed-effects
-and dynamic-panel GMM models.
+The international community monitors this through Sustainable Development Goal
+target 11.3, whose official indicator 11.3.1 is the ratio of the Land
+Consumption Rate to the Population Growth Rate (LCRPGR) [@unhabitat2025metadata].
+Because LCRPGR is the agreed global yardstick, its statistical properties are not
+a technical detail: they determine how every country's progress is judged and
+compared. Yet the indicator is fragile by construction. It divides an arithmetic
+land-consumption rate by a logarithmic population-growth rate, so it is
+internally inconsistent; and because the population-growth rate sits in the
+denominator, the ratio diverges towards plus or minus infinity and changes sign
+whenever population is roughly stable. In exactly the countries where land-use
+efficiency matters most for policy, the official metric becomes uninformative.
+
+This paper makes three contributions. First, it documents, on a harmonised global
+dataset, that LCRPGR is statistically unstable and that its instability is
+concentrated where population growth is near zero. Second, it proposes a simple,
+log-based alternative, the Built-up per Capita Rate (BpCR), defined as the
+logarithmic growth rate of built-up area per capita. BpCR is the difference of
+two logarithmic growth rates, which makes it finite for every country-period,
+symmetric between densification and sprawl, additively decomposable, and directly
+interpretable; it reproduces the policy signal of LCRPGR where the latter is
+well-behaved, and so complements rather than replaces the official indicator.
+Third, using the stable metric, the paper estimates the economic and structural
+drivers of per-capita urban land use on a panel of 193 United Nations member
+states observed at five-year intervals between 1985 and 2020.
+
+The empirical analysis builds the panel from satellite-based settlement data
+under the global Degree of Urbanisation standard, so that built-up area and
+population are measured consistently. To address the well-known downward bias of
+the lagged dependent variable in dynamic fixed-effects models, the persistence of
+per-capita land use is estimated with Arellano-Bond and Blundell-Bond generalised
+method of moments (GMM) estimators. Three results stand out. Sprawl is the global
+norm rather than the exception: built-up area per capita rises in a clear
+majority of country-periods. Per-capita land use is strongly path-dependent, with
+about three-fifths of one period's value carried into the next. And within
+countries, denser cities, net in-migration, and higher income are all associated
+with less land consumed per resident, indicating that, over time, economic growth
+is accompanied by densification rather than sprawl.
+
+The remainder of the paper is organised as follows. Section 2 reviews the
+indicator and the related literature. Section 3 sets out the structural
+limitations of LCRPGR, and Section 4 introduces BpCR. Section 5 describes the
+data and Section 6 presents descriptive evidence. Section 7 details the empirical
+strategy and Section 8 reports the results, including robustness checks. Section 9
+discusses the findings and Section 10 concludes.
 
 # The SDG 11.3.1 indicator and its limitations
 
@@ -185,18 +224,22 @@ and how persistent is it over time? We test five hypotheses (@tbl-hyp).
 #| label: tbl-hyp
 #| tbl-cap: "Hypotheses"
 data.frame(
-  ` `        = c("H1", "H2", "H3", "H4", "H5"),
-  Hypothesis = c("BpCR captures land-use efficiency more reliably than LCRPGR",
-                 "Higher urban density is associated with less land per capita",
-                 "Higher income is associated with less land per capita",
-                 "Net in-migration densifies cities",
-                 "Per-capita land use is path-dependent"),
-  Expected   = c("better fit", "$-$", "$-$", "$-$", "$+$"),
-  check.names = FALSE
+    ` ` = c("H1", "H2", "H3", "H4", "H5"),
+    Hypothesis = c(
+        "BpCR captures land-use efficiency more reliably than LCRPGR",
+        "Higher urban density is associated with less land per capita",
+        "Higher income is associated with less land per capita",
+        "Net in-migration densifies cities",
+        "Per-capita land use is path-dependent"
+    ),
+    Expected = c("better fit", "$-$", "$-$", "$-$", "$+$"),
+    check.names = FALSE
 ) |>
-  knitr::kable(format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
-               align = c("c", "l", "c")) |>
-  kableExtra::kable_styling(latex_options = "HOLD_position")
+    knitr::kable(
+        format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+        align = c("c", "l", "c")
+    ) |>
+    kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
 We run **one specification** with each metric
