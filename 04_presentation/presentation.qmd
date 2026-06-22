@@ -386,13 +386,17 @@ gmm_res <- readRDS(here::here("03_datasets/processed/dynamic_gmm.rds"))
 # go stale. main_combo rows 1-5 are: 1 BpCR[t-1], 2 ln(Urban Density),
 # 3 Net Migration, 4 ln(GDP pc), 5 Urban Pop. Share. Cell = "+0.6057***<br>(se)".
 ab_coef <- function(row, digits = 4) {
-  cell <- gmm_res$main_combo[["Arellano-Bond"]][row]
-  cs   <- sub("<br>.*$", "", cell)                                   # "+0.6057***"
-  num  <- as.numeric(sub("^([+-]?[0-9.]+).*$", "\\1", cs))
-  star <- sub("^[+-]?[0-9.]+", "", cs)                               # "***" or ""
-  val  <- sub("-", "−", sprintf("%+.*f", digits, num))          # proper minus sign
-  if (nzchar(star)) paste0(val, gsub("*", "\\*", star, fixed = TRUE))# escape * for Pandoc
-  else paste0(val, " (n.s.)")
+    cell <- gmm_res$main_combo[["Arellano-Bond"]][row]
+    cs <- sub("<br>.*$", "", cell) # "+0.6057***"
+    num <- as.numeric(sub("^([+-]?[0-9.]+).*$", "\\1", cs))
+    star <- sub("^[+-]?[0-9.]+", "", cs) # "***" or ""
+    val <- sub("-", "−", sprintf("%+.*f", digits, num)) # proper minus sign
+    if (nzchar(star)) {
+        paste0(val, gsub("*", "\\*", star, fixed = TRUE))
+    } # escape * for Pandoc
+    else {
+        paste0(val, " (n.s.)")
+    }
 }
 gmm_gt <- function(tb, meta = NULL, fontpx = NULL, note = NULL) {
     n_terms <- 5L # coefficient rows before the diagnostics block
@@ -1321,20 +1325,20 @@ Two tests confirm the model is valid. The Sargan–Hansen test checks our instru
 
 ::: {style="font-size:1.8em; line-height:1.4;"}
 
-1. **Sprawl is real and measurable.** In most world regions urban land grows faster than population: a policy-relevant inefficiency.
+- **Sprawl is real and measurable.** In most world regions urban land grows faster than population: a policy-relevant inefficiency.
 
     - BpCR > 0 (sprawl) in **62%** of country-period observations; **64% of countries (124/193)** sprawl on average over time [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
     - Median BpCR = **+0.0036** (built-up per capita rising); LCRPGR > 1 in **55%** of cases [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
 
-2. **The official LCRPGR is unreliable.** A raw ratio that explodes when population growth is near zero (division instability) and explains almost nothing within countries (within R² ≈ 0.003).
+- **The official LCRPGR is unreliable.** A raw ratio that explodes when population growth is near zero (division instability) and explains almost nothing within countries (within R² ≈ 0.003).
 
-3. **Our log-based BpCR is the better metric.** Symmetric and numerically stable (following Nicolau and Lu), it fits about **20× better** (within R² ≈ 0.065 static, ≈ 0.23 dynamic).
+- **Our log-based BpCR is the better metric.** Symmetric and numerically stable (following Nicolau and Lu), it fits about **20× better** (within R² ≈ 0.065 static, ≈ 0.23 dynamic).
 
-4. **Robust drivers (Bias-Corrected GMM).** Denser cities densify (negative, highly significant); sprawl is **path-dependent** (ρ ≈ 0.6); net migration densifies; and **higher income densifies too** (negative, significant).
+- **Robust drivers (Bias-Corrected GMM).** Denser cities densify (negative, highly significant); sprawl is **path-dependent** (ρ ≈ 0.6); net migration densifies; and **higher income densifies too** (negative, significant).
 
-5. **We complement the literature, not contradict it.** Between countries, richer ones are more sprawled (the usual finding); but within a single country, growing richer leads to **densification** (building up, not out). Our country fixed effects capture this within-country effect that cross-country studies miss.
+- **We complement the literature, not contradict it.** Between countries, richer ones are more sprawled (the usual finding); but within a single country, growing richer leads to **densification** (building up, not out). Our country fixed effects capture this within-country effect that cross-country studies miss.
 
-6. **Methodological contribution.** A dynamic two-way FE + **GMM** panel of **193 UN member countries (1985–2020)** that corrects the Nickell bias and quantifies persistence.
+- **Methodological contribution.** A dynamic two-way FE + **GMM** panel of **193 UN member countries (1985–2020)** that corrects the Nickell bias and quantifies persistence.
 
 :::
 
