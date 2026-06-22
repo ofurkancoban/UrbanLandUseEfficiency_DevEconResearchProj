@@ -26,7 +26,12 @@ moll <- "ESRI:54009"
 prep <- function(f, method="bilinear"){ r<-rast(f); if(is.na(crs(r))||crs(r)=="") crs(r)<-moll
   project(crop(r, ext(project(vect(win_m),moll))), utm, method=method) }
 built<-prep(built_tif<-here("03_datasets/raw/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")); names(built)<-"built"; built[built<=0]<-NA
-smod <-prep(method="near", f=smod_tif<-here("03_datasets/raw/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0.tif")); names(smod)<-"smod"
+# project SMOD onto the SAME grid as built-up (fine template) so it aligns exactly
+smod_tif <- here("03_datasets/raw/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0.tif")
+smod_src <- rast(smod_tif); if(is.na(crs(smod_src))||crs(smod_src)=="") crs(smod_src)<-moll
+smod_src <- crop(smod_src, ext(project(vect(win_m),moll)))
+tmpl <- disagg(built, fact=4)                      # 250 m UTM template from built-up
+smod <- project(smod_src, tmpl, method="near"); names(smod)<-"smod"
 smod_r<-resample(smod,built,method="near"); urb<-built; urb[smod_r<21]<-NA
 to_pct<-function(r) r/1e6*100; built_p<-to_pct(built); urb_p<-to_pct(urb)
 blim<-c(0, as.numeric(global(built_p,"max",na.rm=TRUE)))
