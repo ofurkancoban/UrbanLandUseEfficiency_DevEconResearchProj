@@ -232,15 +232,55 @@ with densification rather than sprawl.
 
 # Data
 
-The analysis uses a single, **urban-scale** panel built under the EU/UN **Degree
-of Urbanisation** (urban $=$ `GHS-SMOD` $\ge 21$), so built-up and population are
-measured consistently from the same grids. Built-up area comes from
-**GHS-BUILT-S** and population from **GHS-POP** (GHSL R2023A) [@pesaresi2024ghsl;
-@schiavina2023smod], aggregated to national totals over **GAUL 2024**
-administrative units. Economic controls are GDP per capita (constant 2020 US\$,
-UN SNAAMA) and net migration (UN DESA WPP 2024) [@unsd2025snaama; @undesa2024wpp];
-region and development group come from the UN M49 classification. The panel
-covers **193 UN member states** at 5-year epochs, **1985–2020**.
+## Sources
+
+The empirical analysis draws on three official, global data providers, the same
+sources used in international SDG monitoring. Built-up area, population, and the
+urban mask come from the **Global Human Settlement Layer (GHSL)** of the European
+Commission's Joint Research Centre [@pesaresi2024ghsl; @schiavina2023smod].
+Within GHSL we use three products: GHS-BUILT-S for built-up surface, classified
+from Landsat and Sentinel-2 imagery by machine learning; GHS-POP, which
+disaggregates census counts onto that built-up surface; and GHS-SMOD, which
+applies the Degree of Urbanisation (DEGURBA) method to flag urban cells. The
+layers are available at five-year epochs; we use the observed epochs from 1985 to
+2020 and discard the 2025 and 2030 modelled projections. Administrative units come
+from the **Global Administrative Unit Layers (GAUL)** of the UN Food and
+Agriculture Organization [@gaul2024], which provide UN-validated, politically
+neutral country boundaries with global coverage. Socio-economic controls come from
+the **United Nations**: GDP per capita in constant 2020 US dollars from UN SNAAMA
+and net migration as a share of population from UN DESA World Population Prospects
+2024 [@unsd2025snaama; @undesa2024wpp].
+
+## Constructing the Panel Following the UN Metadata
+
+A central design choice is that we build the panel exactly as the SDG 11.3.1
+metadata prescribes [@unhabitat2025metadata], so that our BpCR and the official
+LCRPGR are computed on identical inputs and the comparison is like-for-like. The
+construction follows the metadata stages.
+
+*Stage 0: define the analysis area.* The indicator is, by definition, measured
+inside cities rather than over whole national territories. We delineate the urban
+area with DEGURBA on the GHS-SMOD grid, classifying a cell as urban when its
+settlement code is at least 21 (cities and dense or semi-dense towns). All
+built-up and population quantities are then summed only over urban cells.
+
+*Stage 1: measure built-up area and population at two points in time.* For each
+country and each five-year period we record urban built-up area $V$ and urban
+population $P$ at the start and the end of the period. Following the metadata's
+aggregate-then-rate rule, components are summed to the national level first and
+the rates are formed afterwards; we never average ratios across sub-units.
+
+*Stage 2: form the rates and the indicators.* From these national totals we
+compute the Land Consumption Rate (arithmetic growth of built-up area per year)
+and the Population Growth Rate (logarithmic growth of population per year), their
+ratio LCRPGR, and the built-up-per-capita level. From the same totals we also
+compute BpCR as the logarithmic growth of built-up area per capita, as defined in
+Section 2. Two additional urban controls are derived from the same GHSL/SMOD
+layers: the urban population share (urban population over total population) and
+urban density (urban population over urban land area).
+
+The resulting dataset is a balanced-where-observed panel of 193 United Nations
+member states at five-year epochs from 1985 to 2020 (@tbl-sample).
 
 ```{r sample-size}
 #| label: tbl-sample
