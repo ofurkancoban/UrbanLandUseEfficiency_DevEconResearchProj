@@ -351,17 +351,58 @@ country-period observations.
 
 # Descriptive Statistics {#sec-descriptive}
 
-Across 1985–2020 a clear majority of countries record $\text{BpCR}>0$: built-up
-area is expanding faster than urban population for most of the world, i.e. sprawl
-is the global norm rather than the exception. The contrast with LCRPGR is
-instructive -- LCRPGR's distribution is dominated by extreme tail values
-concentrated exactly where population growth is near zero, whereas BpCR is
-well-behaved across the whole sample. Regional trajectories show convergence
-towards balance in some fast-urbanising economies while others continue to
-sprawl.
+```{r desc-stats}
+#| include: false
+d <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
+ds <- list(
+  n      = nrow(d),
+  lcr_sd = sd(d$lcrpgr_log, na.rm = TRUE),
+  lcr_lo = min(d$lcrpgr_log, na.rm = TRUE),
+  lcr_hi = max(d$lcrpgr_log, na.rm = TRUE),
+  bp_sd  = sd(d$bpcr, na.rm = TRUE),
+  ratio  = round(sd(d$lcrpgr_log, na.rm = TRUE) / sd(d$bpcr, na.rm = TRUE), -1),
+  shr_cp = 100 * mean(d$bpcr > 0, na.rm = TRUE),
+  med    = median(d$bpcr, na.rm = TRUE),
+  shr_l1 = 100 * mean(d$lcrpgr > 1, na.rm = TRUE)
+)
+cm <- aggregate(bpcr ~ iso3, d, mean)
+ds$ctry_pos <- sum(cm$bpcr > 0); ds$ctry_tot <- nrow(cm)
+ds$ctry_pct <- round(100 * ds$ctry_pos / ds$ctry_tot)
+```
 
-<!-- TODO: insert global BpCR distribution figure and the regional-trend figure
-from 04_outputs/figures/ once finalised. -->
+Even before any regression, the raw data already reveal why the choice of metric
+matters. On the estimation window (`r ds$n` country-periods, 1985--2020), the
+official log-LCRPGR has a standard deviation of about `r round(ds$lcr_sd)` and
+ranges from roughly `r round(ds$lcr_lo)` to `r round(ds$lcr_hi)`: its division by a
+near-zero population-growth rate produces enormous, sign-flipping outliers. BpCR,
+by contrast, stays in a tight band with a standard deviation of about
+`r sprintf("%.3f", ds$bp_sd)`, roughly `r format(ds$ratio, big.mark=",")` times
+narrower. The two metrics describe the same underlying built-up and population
+data, yet one is dominated by an arithmetic artefact and the other is not.
+
+Sprawl is the global norm rather than the exception. BpCR is positive in
+`r sprintf("%.0f", ds$shr_cp)`% of country-periods, and
+`r ds$ctry_pos` of `r ds$ctry_tot` countries (`r ds$ctry_pct`%) have a positive
+average BpCR over the period, meaning built-up area per capita is rising: cities
+are consuming more land per resident. The median country-period BpCR is
+`r sprintf("%+.4f", ds$med)`, and the official LCRPGR exceeds one (its sprawl
+threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
+is the same under either metric; the difference is that BpCR delivers it without
+the numerical instability.
+
+Country trajectories make the contrast concrete (@fig-trends). For a set of
+regional representatives, the official LCRPGR swings erratically from one period
+to the next, crossing zero and spiking to large positive and negative values that
+are hard to read as land-use behaviour. The BpCR series for the same countries are
+smooth and interpretable: most drift gradually towards balance, while the
+fastest-urbanising economies show the strongest sprawl earlier in the period
+before easing. The same data, read through a stable metric, become legible.
+
+![Country trajectories for seven regional representatives, 1985--2020. (a) The
+official log-LCRPGR swings erratically and crosses its zero and unity reference
+lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
+the fastest-urbanising economies showing the strongest early sprawl before
+easing.](../04_outputs/figures/country_trends.png){#fig-trends width=100%}
 
 # Empirical Strategy {#sec-strategy}
 
