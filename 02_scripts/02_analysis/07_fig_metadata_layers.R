@@ -71,7 +71,7 @@ panel<-function(map,title,withleg=TRUE){
   body<-cowplot::ggdraw()+cowplot::draw_image(rm)
   if(withleg){
     row<-cowplot::plot_grid(body, leg_of(map), nrow=1, rel_widths=c(1,0.26))
-  } else row<-body
+  } else row<-cowplot::plot_grid(body, NULL, nrow=1, rel_widths=c(1,0.26))
   ttl<-cowplot::ggdraw()+cowplot::draw_label(title, fontfamily=ff, fontface="bold",
         size=15, x=0.01, hjust=0)
   cowplot::plot_grid(ttl, row, ncol=1, rel_heights=c(0.1,1))
