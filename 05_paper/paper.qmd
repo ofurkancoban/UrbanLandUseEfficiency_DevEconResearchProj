@@ -42,6 +42,9 @@ format:
     include-in-header:
       text: |
         \usepackage{makecell}
+        \usepackage{float}
+        \floatplacement{figure}{H}
+        \floatplacement{table}{H}
     journal:
       formatting: preprint      # preprint | review | doubleblind
       model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
