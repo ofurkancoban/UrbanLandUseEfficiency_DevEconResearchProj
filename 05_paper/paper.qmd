@@ -672,7 +672,11 @@ x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
 cat(x)
 ```
 
+\vspace{-1.0em}
+
+\footnotesize
 *Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns.
+\normalsize
 
 In the preferred Arellano-Bond specification the lagged term is large and
 significant ($\rho\approx 0.61$): about three-fifths of one period's BpCR persists
