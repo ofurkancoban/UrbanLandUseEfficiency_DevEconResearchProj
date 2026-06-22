@@ -251,6 +251,31 @@ the **United Nations**: GDP per capita in constant 2020 US dollars from UN SNAAM
 and net migration as a share of population from UN DESA World Population Prospects
 2024 [@unsd2025snaama; @undesa2024wpp].
 
+@tbl-data summarises the technical characteristics of each dataset.
+
+```{r tbl-data}
+#| label: tbl-data
+#| tbl-cap: "Dataset specifications. GHSL grids are distributed in the World Mollweide equal-area projection (ESRI:54009); built-up and population are aggregated at 100 m and the SMOD urban mask at 1 km. Vector and tabular sources are listed with their native form."
+data.frame(
+  Dataset    = c("GHS-BUILT-S R2023A","GHS-POP R2023A","GHS-SMOD R2023A",
+                 "GAUL 2024/2025","UN SNAAMA","UN DESA WPP 2024"),
+  Provider   = c("EC JRC","EC JRC","EC JRC","FAO","UN Stats","UN DESA"),
+  Type       = c("Raster","Raster","Raster","Vector","Tabular","Tabular"),
+  Resolution = c("100 m","100 m","1 km","Levels 0-2","Country-year","Country-year"),
+  CRS        = c("Mollweide (54009)","Mollweide (54009)","Mollweide (54009)",
+                 "WGS84 (EPSG:4326)","--","--"),
+  Coverage   = c("1975-2030, 5-yr","1975-2030, 5-yr","1975-2030, 5-yr",
+                 "Global","1970-2024","1950-2023"),
+  Variable   = c("Built-up area (m2/cell)","Population (persons/cell)",
+                 "Degree of Urbanisation (class 10-30)","Admin boundaries",
+                 "GDP p.c. (const. 2020 US$)","Net migration (CNMR /1000)"),
+  check.names = FALSE
+) |>
+  knitr::kable(format = "latex", booktabs = TRUE, escape = TRUE, linesep = "",
+               align = c("l","l","l","l","l","l","l")) |>
+  kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
+```
+
 ## Constructing the Panel Following the UN Metadata
 
 A central design choice is that we build the panel exactly as the SDG 11.3.1
