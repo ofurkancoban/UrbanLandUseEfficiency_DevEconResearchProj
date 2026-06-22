@@ -76,7 +76,7 @@ leg_of<-function(p) cowplot::get_legend(p+legtheme+theme(legend.position="right"
 
 panel<-function(map,title,withleg=TRUE){
   rm<-round_map(map)
-  body<-cowplot::ggdraw()+cowplot::draw_image(rm)
+  body<-cowplot::ggdraw()+cowplot::draw_image(rm, y=1, vjust=1, valign=1)
   # thin spacer column between map and legend so the legend is not stuck to it
   if(withleg){
     row<-cowplot::plot_grid(body, NULL, leg_of(map), nrow=1, rel_widths=c(1,0.05,0.22))
