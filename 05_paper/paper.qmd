@@ -565,11 +565,14 @@ difference is due to the dependent variable alone. The contrast is stark
 
 ```{r tbl-static}
 #| label: tbl-static
-#| tbl-cap: "Static two-way fixed-effects model, same sample and controls, with each metric as the dependent variable. Coefficient with significance stars; clustered standard errors in parentheses. *** p<0.01, ** p<0.05, * p<0.1."
-suppressMessages(library(fixest))
-sp <- subset(panel, year <= 2020 & !is.na(bpcr) & !is.na(lcrpgr_log) &
-             !is.na(ln_urban_density) & !is.na(urban_pop_share) &
-             !is.na(ln_gdp_pc) & !is.na(net_migr_pct))
+#| tbl-cap: "Static two-way fixed-effects model on the estimation sample (1985-2020), same sample and controls for both metrics. Coefficient with significance stars; clustered standard errors in parentheses. *** p<0.01, ** p<0.05, * p<0.1."
+suppressMessages({library(fixest); library(dplyr)})
+# same estimation sample as the dynamic model: complete cases with the lagged DV
+sp <- panel |>
+  filter(year <= 2020, !is.na(bpcr), !is.na(lcrpgr_log)) |>
+  arrange(iso3, year) |> group_by(iso3) |> mutate(bpcr_L = lag(bpcr)) |> ungroup() |>
+  filter(!is.na(ln_urban_density), !is.na(urban_pop_share),
+         !is.na(ln_gdp_pc), !is.na(net_migr_pct), !is.na(bpcr_L))
 ctrl <- "ln_urban_density + urban_pop_share + ln_gdp_pc + net_migr_pct"
 mL <- feols(as.formula(paste("lcrpgr_log ~", ctrl, "| iso3 + year")), sp, vcov = ~iso3)
 mB <- feols(as.formula(paste("bpcr ~",       ctrl, "| iso3 + year")), sp, vcov = ~iso3)
