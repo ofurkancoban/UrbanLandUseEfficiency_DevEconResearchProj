@@ -583,13 +583,13 @@ mL <- feols(as.formula(paste("lcrpgr_log ~", ctrl, "| iso3 + year")), sp, vcov =
 mB <- feols(as.formula(paste("bpcr ~",       ctrl, "| iso3 + year")), sp, vcov = ~iso3)
 star <- function(p) ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*","")))
 cell <- function(m,v){ ct<-coeftable(m); sprintf("\\makecell[c]{%+.4f%s \\\\ (%.4f)}", ct[v,1], star(ct[v,4]), ct[v,2]) }
-vars <- c(ln_urban_density="ln(Urban density)", urban_pop_share="Urban pop. share",
-          ln_gdp_pc="ln(GDP per capita)", net_migr_pct="Net migration (\\% pop)")
-body <- data.frame(Term=unname(vars),
+vars <- c(ln_urban_density="ln(Urban Density)", net_migr_pct="Net Migration (\\% Pop)",
+          ln_gdp_pc="ln(GDP per capita)", urban_pop_share="Urban Pop. Share")
+body <- data.frame(Variables=unname(vars),
                    `LCRPGR (log)`=sapply(names(vars), function(v) cell(mL,v)),
                    `BpCR`        =sapply(names(vars), function(v) cell(mB,v)),
                    check.names=FALSE, row.names=NULL)
-gof <- data.frame(Term=c("Observations","Within R$^2$","Country FE","Period FE"),
+gof <- data.frame(Variables=c("Observations","Within R$^2$","Country FE","Period FE"),
                   `LCRPGR (log)`=c(format(nobs(mL),big.mark=","), sprintf("%.4f",r2(mL)["wr2"]),"Yes","Yes"),
                   `BpCR`        =c(format(nobs(mB),big.mark=","), sprintf("%.4f",r2(mB)["wr2"]),"Yes","Yes"),
                   check.names=FALSE)
