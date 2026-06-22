@@ -132,7 +132,7 @@ data and Section 6 presents descriptive evidence. Section 7 details the empirica
 strategy and Section 8 reports the results, including robustness checks. Section 9
 discusses the findings and Section 10 concludes.
 
-# Background and related literature
+# Literature review
 
 ## Monitoring land-use efficiency: SDG 11.3.1
 
@@ -189,7 +189,13 @@ dynamic research design that corrects the bias of the lagged dependent variable;
 and global coverage of 193 United Nations member states observed at five-year
 intervals from 1985 to 2020.
 
-# The SDG 11.3.1 indicator and its limitations
+# Measurement framework
+
+This section sets out the conceptual core of the paper. We first define the
+official SDG 11.3.1 indicator and show why it is statistically unstable, and we
+then introduce the stable, log-based alternative used in the empirical analysis.
+
+## The SDG 11.3.1 indicator and its limitations
 
 Following the UN-Habitat metadata, the indicator divides an arithmetic land
 consumption rate by a logarithmic population growth rate:
@@ -208,7 +214,7 @@ so the ratio is not symmetric and does not aggregate cleanly over time
 [@nicolau2019lcrpgr]. The result is a metric whose tails are dominated by an
 arithmetic artefact rather than by real land-use behaviour.
 
-# A stable metric: the Built-up per Capita Rate (BpCR)
+## A stable metric: the Built-up per Capita Rate (BpCR)
 
 The UN-Habitat metadata itself lists built-up area per capita ($V/P$) as a
 secondary indicator. We build on it and measure its **log growth**:
