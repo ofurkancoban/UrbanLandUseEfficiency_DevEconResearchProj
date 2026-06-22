@@ -59,9 +59,8 @@ pb <- ggplot() + bg + geom_spatraster(data=built_p, alpha=0.85) + bnd + co +
                        name="Built-up\n(% of cell)") +
   labs(title="(b) GHS-BUILT-S: built-up surface") + theme_layer()
 pc <- ggplot() + bg + geom_spatraster(data=smod_f, alpha=0.75) + bnd + co +
-  scale_fill_manual(values=setNames(smod_col,smod_lev), breaks=smod_lev, labels=smod_lab,
-                    na.value="transparent", name="Degree of\nUrbanisation",
-                    na.translate=FALSE) +
+  scale_fill_manual(values=setNames(smod_col,smod_lev), breaks=smod_lev,
+                    na.value="transparent", name="SMOD", na.translate=FALSE) +
   labs(title="(c) GHS-SMOD: Degree of Urbanisation") + theme_layer()
 pd <- ggplot() + bg + geom_spatraster(data=urb_p, alpha=0.9) + bnd + co +
   scale_fill_viridis_c(option="inferno", limits=blim, na.value="transparent",
