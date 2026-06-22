@@ -258,17 +258,22 @@ metadata prescribes [@unhabitat2025metadata], so that our BpCR and the official
 LCRPGR are computed on identical inputs and the comparison is like-for-like. The
 construction follows the metadata stages.
 
-*Stage 0: define the analysis area.* The indicator is, by definition, measured
-inside cities rather than over whole national territories. We delineate the urban
-area with DEGURBA on the GHS-SMOD grid, classifying a cell as urban when its
-settlement code is at least 21 (cities and dense or semi-dense towns). All
-built-up and population quantities are then summed only over urban cells.
+*Stage 0: define the analysis area.* SDG 11.3.1 is, by construction, an urban
+(city-scale) indicator: it is measured inside cities rather than over whole
+national territories. We delineate the urban area with DEGURBA on the GHS-SMOD
+grid, classifying a cell as urban when its settlement code is at least 21 (urban
+centres and dense or semi-dense towns and their suburbs). All built-up and
+population quantities are measured only over these urban cells.
 
-*Stage 1: measure built-up area and population at two points in time.* For each
-country and each five-year period we record urban built-up area $V$ and urban
-population $P$ at the start and the end of the period. Following the metadata's
-aggregate-then-rate rule, components are summed to the national level first and
-the rates are formed afterwards; we never average ratios across sub-units.
+*Stage 1: measure built-up area and population at two points in time.* Our unit of
+analysis is the country, so we aggregate the urban cells to the national level.
+Crucially, we aggregate the *components*, not the metric: for each country and
+five-year period we sum urban built-up area $V$ and urban population $P$ over all
+urban cells to obtain national urban totals, and only then form the rates. This
+follows the metadata's aggregate-then-rate rule, which warns against averaging
+ratios across sub-units. Averaging city-level ratios would let a small town with a
+near-zero population denominator dominate the national figure; summing the
+components first avoids this and keeps the national rate well-defined.
 
 *Stage 2: form the rates and the indicators.* From these national totals we
 compute the Land Consumption Rate (arithmetic growth of built-up area per year)
@@ -281,19 +286,23 @@ urban density (urban population over urban land area).
 
 @fig-layers illustrates the construction for one example window, with each layer
 drawn semi-transparently over a satellite basemap. Panel (a) is the basemap for
-reference; panel (b) shows the raw GHS-BUILT-S surface; panel (c) the GHS-SMOD
-Degree of Urbanisation, which classifies each cell along a rural-to-urban
-gradient; and panel (d) the urban-masked built-up that actually enters the
-analysis, retaining built-up only in cells classified as urban (SMOD at least
-21). The same masking is applied to population, so that both components are
+reference; panel (b) shows the GHS-BUILT-S surface as the built-up share of each cell; panel
+(c) the GHS-SMOD Degree of Urbanisation, which classifies each cell from rural to
+urban centre; and panel (d) the urban-masked built-up that actually enters the
+analysis, retaining built-up only in cells classified as urban (SMOD at least 21). The same masking is applied to population, so that both components are
 measured on a consistent urban footprint.
 
 ![Building the analysis input following the SDG 11.3.1 metadata, for the
 Istanbul / Bosphorus window, with each layer overlaid semi-transparently on a
-satellite basemap. (a) Satellite basemap (Esri); (b) GHS-BUILT-S built-up
-surface; (c) GHS-SMOD Degree of Urbanisation; (d) urban-masked built-up retained
-for the analysis (cells with SMOD at least 21). The white line is the GAUL
-country boundary.](../04_outputs/figures/metadata_layers.png){#fig-layers width=85%}
+satellite basemap. (a) Satellite basemap (Esri) for reference. (b) GHS-BUILT-S
+built-up surface, shaded by the share of each 1 km cell that is built up (0 to
+about 50%). (c) GHS-SMOD Degree of Urbanisation, which classifies every cell from
+water and rural (blues and greens) through suburban and town classes to the urban
+centre (red); cells coded 21 or higher count as urban. (d) Urban-masked built-up,
+the input actually used: the built-up surface of panel (b) kept only where panel
+(c) is urban, on the same built-up colour scale. The white line is the GAUL
+country boundary (here the coastline).
+](../04_outputs/figures/metadata_layers.png){#fig-layers width=88%}
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
 member states at five-year epochs from 1985 to 2020 (@tbl-sample).
