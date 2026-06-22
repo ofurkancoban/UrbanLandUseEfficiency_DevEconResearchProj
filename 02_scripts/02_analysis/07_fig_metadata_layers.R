@@ -12,7 +12,7 @@ suppressMessages({library(here); library(terra); library(sf); library(ggplot2)
 sf::sf_use_s2(FALSE)
 
 utm <- "EPSG:32635"                                   # UTM 35N (metric, Istanbul)
-bb_ll <- st_bbox(c(xmin=28.85, xmax=29.25, ymin=40.92, ymax=41.18), crs = st_crs(4326))
+bb_ll <- st_bbox(c(xmin=28.60, xmax=29.50, ymin=40.80, ymax=41.30), crs = st_crs(4326))
 win_m <- st_transform(st_as_sfc(bb_ll), utm)
 ext_m <- ext(st_bbox(win_m)[c("xmin","xmax","ymin","ymax")])
 
