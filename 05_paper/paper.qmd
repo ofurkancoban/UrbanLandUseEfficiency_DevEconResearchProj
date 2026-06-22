@@ -596,7 +596,7 @@ gof <- data.frame(Variables=c("Observations","Within R$^2$","Country FE","Period
 nb <- nrow(body)
 knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l","c","c")) |>
-  kableExtra::kable_styling(latex_options="HOLD_position") |>
+  kableExtra::kable_styling(latex_options=c("HOLD_position","striped")) |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
                                  "Clustered (by country) standard errors in parentheses."),
@@ -644,7 +644,7 @@ knitr::kable(mc,
     format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", rep("c", ncol(mc) - 1))
 ) |>
-    kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down"))
+    kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down", "striped"))
 ```
 
 In the preferred Arellano-Bond specification the lagged term is large and
