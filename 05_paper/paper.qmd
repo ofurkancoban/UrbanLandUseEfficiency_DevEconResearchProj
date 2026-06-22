@@ -598,8 +598,9 @@ knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, lines
              align=c("l","c","c")) |>
   kableExtra::kable_styling(latex_options="HOLD_position") |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
-  kableExtra::footnote(general="*** p<0.01, ** p<0.05, * p<0.1. Clustered (by country) standard errors in parentheses.",
-                       general_title="", footnote_as_chunk=TRUE, escape=FALSE, threeparttable=TRUE)
+  kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
+                                 "Clustered (by country) standard errors in parentheses."),
+                       general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
 ```
 
 ```{r r2-inline}
