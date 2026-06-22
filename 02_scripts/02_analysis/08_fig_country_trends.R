@@ -43,5 +43,5 @@ fig <- pa + pb + plot_layout(guides="collect") &
   theme(legend.position="bottom") &
   guides(color=guide_legend(nrow=1, override.aes=list(linewidth=1.1)))
 out <- here("04_outputs/figures/country_trends.png")
-ggsave(out, fig, width=9.2, height=4.2, dpi=300, bg="white")
+ggsave(out, fig, width=9.2, height=3.3, dpi=300, bg="white")
 cat("wrote", out, "| rows:", nrow(d), "| countries:", n_distinct(d$country), "\n")
