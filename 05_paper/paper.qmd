@@ -289,7 +289,7 @@ analysis, retaining built-up only in cells classified as urban (SMOD at least
 measured on a consistent urban footprint.
 
 ![Building the analysis input following the SDG 11.3.1 metadata, for the
-Oldenburg / NW Germany window, with each layer overlaid semi-transparently on a
+Istanbul / Bosphorus window, with each layer overlaid semi-transparently on a
 satellite basemap. (a) Satellite basemap (Esri); (b) GHS-BUILT-S built-up
 surface; (c) GHS-SMOD Degree of Urbanisation; (d) urban-masked built-up retained
 for the analysis (cells with SMOD at least 21). The white line is the GAUL

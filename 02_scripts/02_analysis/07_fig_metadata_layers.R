@@ -2,7 +2,7 @@
 # 07_fig_metadata_layers.R
 # Step-by-step GIS visualisation of how the SDG 11.3.1 / BpCR inputs are built,
 # following the metadata stages, for the same window used in the deck data-sources
-# map (Oldenburg / NW Germany). 2x2 panels over a real satellite basemap:
+# map. 2x2 panels over a real satellite basemap (Istanbul / Bosphorus):
 #   (a) basemap, (b) GHS-BUILT-S, (c) GHS-SMOD (DEGURBA), (d) urban-masked built-up.
 # Layers are drawn semi-transparent over the basemap. Everything is reprojected to
 # UTM 32N so cells are square and the aspect ratio is geographically correct.
@@ -10,9 +10,10 @@
 # ============================================================================
 suppressMessages({library(here); library(terra); library(sf); library(ggplot2)
   library(tidyterra); library(patchwork); library(maptiles)}); setwd(here::here())
+sf::sf_use_s2(FALSE)
 
-utm <- "EPSG:25832"                                   # UTM 32N (metric, NW Germany)
-bb_ll <- st_bbox(c(xmin=8.00, xmax=8.50, ymin=53.02, ymax=53.28), crs = st_crs(4326))  # zoom on Oldenburg
+utm <- "EPSG:32635"                                   # UTM 35N (metric, Istanbul)
+bb_ll <- st_bbox(c(xmin=28.85, xmax=29.25, ymin=40.92, ymax=41.18), crs = st_crs(4326))  # Istanbul / Bosphorus
 win_m <- st_transform(st_as_sfc(bb_ll), utm)
 ext_m <- ext(st_bbox(win_m)[c("xmin","xmax","ymin","ymax")])
 
@@ -31,7 +32,7 @@ urb <- built; urb[smod_r < 21] <- NA
 bm <- get_tiles(win_m, provider = "Esri.WorldImagery", crop = TRUE, zoom = 12, cachedir = tempdir())
 
 gaul <- st_read(here("03_datasets/raw/GAUL_2025_L1/gaul_2025_l1.shp"), quiet = TRUE) |> st_make_valid()
-cty  <- gaul[gaul$iso3_code == "DEU", ] |> st_union() |> st_transform(utm) |>
+cty  <- gaul[gaul$iso3_code == "TUR", ] |> st_union() |> st_transform(utm) |>
   st_crop(st_bbox(win_m))
 
 base_t <- theme_void(base_size = 11) +
