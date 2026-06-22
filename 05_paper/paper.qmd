@@ -70,9 +70,12 @@ gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 
 The world is urbanising rapidly: by the middle of this century close to
 two-thirds of humanity will live in cities, and almost all of the projected
-growth in built-up land will occur in developing countries. For development
-policy the central question is not whether cities expand, but how efficiently
-they do so, that is, how much additional land each new urban resident consumes.
+growth in built-up land will occur in developing countries
+[@undesa2018wup]. The scale of expansion is striking: every year the world's
+built-up area grows by roughly the size of the Netherlands [@seto2012global].
+For development policy the central question is not whether cities expand, but how
+efficiently they do so, that is, how much additional land each new urban resident
+consumes.
 When built-up area grows in step with population, cities densify and remain
 compact; when it grows much faster than population, they sprawl. Sprawl is
 costly: it converts farmland irreversibly, locks settlements into car
@@ -81,8 +84,8 @@ and is associated with higher per-capita emissions [@seto2011meta;
 @oueslati2015sprawl]. Measuring land-use efficiency well is therefore a
 precondition for monitoring sustainable urbanisation.
 
-The international community monitors this through Sustainable Development Goal
-target 11.3, whose official indicator 11.3.1 is the ratio of the Land
+The United Nations monitors this through target 11.3 of its Sustainable
+Development Goals (SDGs), whose official indicator 11.3.1 is the ratio of the Land
 Consumption Rate to the Population Growth Rate (LCRPGR) [@unhabitat2025metadata].
 Because LCRPGR is the agreed global yardstick, its statistical properties are not
 a technical detail: they determine how every country's progress is judged and
