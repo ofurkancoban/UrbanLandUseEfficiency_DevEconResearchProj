@@ -23,10 +23,10 @@ bb_ll <- st_bbox(c(xmin=28.30, xmax=29.80, ymin=40.65, ymax=41.40), crs=st_crs(4
 win_m <- st_transform(st_as_sfc(bb_ll), utm); ext_m <- ext(st_bbox(win_m)[c("xmin","xmax","ymin","ymax")])
 aspect <- as.numeric((ext_m$xmax-ext_m$xmin)/(ext_m$ymax-ext_m$ymin))
 moll <- "ESRI:54009"
-prep <- function(f){ r<-rast(f); if(is.na(crs(r))||crs(r)=="") crs(r)<-moll
-  project(crop(r, ext(project(vect(win_m),moll))), utm) }
+prep <- function(f, method="bilinear"){ r<-rast(f); if(is.na(crs(r))||crs(r)=="") crs(r)<-moll
+  project(crop(r, ext(project(vect(win_m),moll))), utm, method=method) }
 built<-prep(built_tif<-here("03_datasets/raw/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")); names(built)<-"built"; built[built<=0]<-NA
-smod <-prep(smod_tif<-here("03_datasets/raw/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0.tif")); names(smod)<-"smod"
+smod <-prep(method="near", f=smod_tif<-here("03_datasets/raw/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0.tif")); names(smod)<-"smod"
 smod_r<-resample(smod,built,method="near"); urb<-built; urb[smod_r<21]<-NA
 to_pct<-function(r) r/1e6*100; built_p<-to_pct(built); urb_p<-to_pct(urb)
 blim<-c(0, as.numeric(global(built_p,"max",na.rm=TRUE)))
