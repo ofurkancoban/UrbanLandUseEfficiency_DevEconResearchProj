@@ -187,47 +187,48 @@ instability; it complements rather than contradicts the official indicator.
 
 # Literature Review
 
-The literature on urban land use splits into two strands, and this paper sits at
-their intersection: it brings the rigour of the measurement critique to the
-substantive drivers question.
+The literature on urban land use splits into two strands. One asks what *drives*
+urban expansion; the other scrutinises how land-use efficiency is *measured*. This
+paper sits at their intersection.
 
 ## Drivers of Urban Land Expansion
 
-A first strand asks why cities expand and what makes them sprawl. Global
-remote-sensing evidence shows that built-up area has grown faster than urban
-population almost everywhere over recent decades, so that land consumed per
-resident has been rising worldwide [@seto2011meta; @seto2012global]. This
-literature consistently identifies economic growth as a central driver: across
-countries, richer places have tended to expand their urban footprint more, a
-pattern echoed in city-level panel studies that link sprawl to rising income and
-population [@oueslati2015sprawl]. Forward-looking simulations project that the
-expansion will continue through the twenty-first century, with most new urban land
-added in today's developing regions [@gao2020]. This evidence is mostly
-cross-country and descriptive; it motivates the drivers we examine, namely income,
-migration, and the density of existing settlement, but it leaves open whether the
-same relationships hold within countries over time.
+@seto2011meta synthesise 326 remote-sensing studies of global urban land
+expansion between 1970 and 2000. They document that urban land has grown faster
+than urban population almost everywhere, and that the expansion is driven mainly
+by income in most regions and by population growth in India and Africa.
+@oueslati2015sprawl move from description to econometrics, estimating the
+determinants of sprawl on a panel of 282 European cities (1990, 2000, 2006)
+within a monocentric-city framework. They find that rising income and population
+both enlarge the urban footprint, and that cities keep spreading even where
+population is flat. Together these studies establish income and population as the
+leading drivers of urban land use, but they work mostly across cities or countries
+and at a single cross-section, leaving open whether the same relationships hold
+within a country as it develops over time.
 
 ## Measuring the Indicator: Data Sensitivity and Formulation Critiques
 
-A second, more recent strand turns the lens on the indicator itself. Estimates of
-land-use efficiency depend heavily on which built-up and population datasets are
-used, so a country's measured performance can change materially with the input
-data, which complicates comparison and calls for harmonised inputs
-[@Lu2026; @zhong2025]. The formulation of LCRPGR is also questioned:
-@nicolau2019lcrpgr show that the official ratio is sensitive to how its components
-are defined and that logarithmic, efficiency-based formulations behave more
-reliably. Together these studies establish that the choice of metric, not only the
-choice of data, can change the conclusions drawn about sustainable urbanisation.
+@nicolau2019lcrpgr assess the SDG 11.3.1 formula itself, comparing the official
+LCRPGR with a land-use-efficiency-derived alternative at the municipality level in
+mainland Portugal. They conclude that the LCRPGR formula is structurally unstable
+and that a logarithmic, efficiency-based alternative is more robust.
+@Lu2026 broaden the question to data sensitivity, evaluating land-use efficiency
+across six built-up and four population datasets for 176 countries over
+2000--2020. They show that efficiency estimates swing widely with the choice of
+dataset and argue that a log-based framework is needed for reliable monitoring.
+This strand establishes that the choice of metric, and not only the choice of
+data, can change the conclusions drawn about sustainable urbanisation.
 
 ## This Paper
 
-We connect the two strands. Taking the measurement critique seriously, we replace
-the unstable LCRPGR with the stable, logarithmic BpCR introduced in Section 2, and
-we then use it to revisit the drivers question with a design suited to panel data.
-Relative to the existing literature the contribution is threefold: a metric that
-is well-defined for every country-period; a within-country, dynamic design that
-corrects the bias of the lagged dependent variable; and global coverage of 193
-United Nations member states observed at five-year intervals from 1985 to 2020.
+Our contribution sits at the intersection of the two strands. On measurement, we
+adopt the log-based metric that both Nicolau and Lu and Weng recommend, in the
+form of BpCR. On method, we make it dynamic: a two-way fixed-effects panel with
+Arellano-Bond and Blundell-Bond GMM, estimated on 193 United Nations member states
+over 1985--2020, that measures the persistence (path-dependence) of per-capita
+land use. The result refines the drivers literature: while richer countries look
+more sprawled in the cross-section, within a country growing richer is associated
+with densification rather than sprawl.
 
 # Data
 
