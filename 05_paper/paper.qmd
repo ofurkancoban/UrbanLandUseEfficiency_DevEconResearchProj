@@ -132,6 +132,63 @@ data and Section 6 presents descriptive evidence. Section 7 details the empirica
 strategy and Section 8 reports the results, including robustness checks. Section 9
 discusses the findings and Section 10 concludes.
 
+# Background and related literature
+
+## Monitoring land-use efficiency: SDG 11.3.1
+
+Target 11.3 of the Sustainable Development Goals commits countries to
+"enhance inclusive and sustainable urbanization." Its headline indicator, 11.3.1,
+is custodian-monitored by UN-Habitat and defined as the ratio of the Land
+Consumption Rate to the Population Growth Rate (LCRPGR), with an accompanying set
+of secondary indicators such as built-up area per capita [@unhabitat2025metadata].
+The intuition is simple and appealing: a value near one means that built-up land
+and population grow at the same pace, so the city neither densifies nor sprawls;
+a value above one signals that land is being consumed faster than population
+grows. Because the indicator is reported globally and used to benchmark
+countries, a large applied literature has grown up around how to compute it
+consistently from Earth-observation data [@corbane2017lue; @schiavina2023smod].
+
+## Drivers of urban land expansion
+
+A first strand of research asks why cities expand and what makes them sprawl.
+Global remote-sensing evidence shows that built-up area has grown faster than
+urban population almost everywhere over recent decades, so that land consumed per
+resident has been rising worldwide [@seto2011meta; @seto2012global]. The same
+literature consistently identifies economic growth as a central driver: across
+countries, richer places tend to have expanded their urban footprint more, a
+pattern echoed in city-level panel studies that tie sprawl to rising income and
+population [@oueslati2015sprawl]. Forward-looking simulations project that this
+expansion will continue through the twenty-first century, with most new urban
+land added in today's developing regions [@gao2020]. This cross-country, mostly
+descriptive evidence motivates the drivers we examine, namely income, population
+pressure through migration, and the density of existing settlement, but it leaves
+open whether the same relationships hold within countries over time.
+
+## Measuring the indicator: data sensitivity and formulation critiques
+
+A second, more recent strand turns the lens on the indicator itself. Two concerns
+recur. The first is data sensitivity: estimates of land-use efficiency depend
+heavily on which built-up and population datasets are used, so that a country's
+measured performance can change materially with the input data, which complicates
+cross-country comparison and calls for harmonised, transparent inputs
+[@Lu2026; @zhong2025]. The second is the formulation of LCRPGR itself.
+@nicolau2019lcrpgr show, for the Portuguese case, that the official ratio is
+sensitive to how its components are defined and that logarithmic, efficiency-based
+formulations behave more reliably than the raw ratio. These critiques establish
+that the choice of metric, not only the choice of data, can change the
+conclusions drawn about sustainable urbanisation.
+
+## This paper
+
+This paper connects the two strands. We take the measurement critique seriously
+by replacing the unstable LCRPGR with a stable, logarithmic metric, and we then
+use that metric to revisit the drivers question with a research design suited to
+panel data. Relative to the existing literature, the contribution is threefold: a
+metric (BpCR) that is well-defined for every country-period; a within-country,
+dynamic research design that corrects the bias of the lagged dependent variable;
+and global coverage of 193 United Nations member states observed at five-year
+intervals from 1985 to 2020.
+
 # The SDG 11.3.1 indicator and its limitations
 
 Following the UN-Habitat metadata, the indicator divides an arithmetic land
@@ -167,21 +224,6 @@ means sprawl (more land per resident), $\text{BpCR}<0$ densification, and
 $\text{BpCR}=0$ land growing exactly in step with population. BpCR reproduces the
 policy signal of LCRPGR where the latter is well-behaved, but without the
 instability; it complements rather than contradicts the official indicator.
-
-# Related literature
-
-The empirical literature on urban land establishes two facts we build on.
-**Drivers.** Global remote-sensing meta-analyses find that built-up area has
-grown faster than urban population almost everywhere, with income a key driver
-across countries [@seto2011meta]; panel studies of European cities likewise tie
-sprawl to rising income and population [@oueslati2015sprawl]. **Measurement.**
-Work on the indicator itself shows the LCRPGR formula is structurally fragile and
-that log/efficiency-based alternatives are more robust [@nicolau2019lcrpgr], and
-that land-use-efficiency estimates swing widely with the choice of population
-dataset, calling for a more reliable framework [@Lu2026]. Our contribution sits
-at the intersection: a **stable metric (BpCR)** estimated **dynamically** (two-way
-fixed effects + GMM) on a **global panel of 193 UN member states**, measuring the
-persistence of per-capita land use.
 
 # Data
 
