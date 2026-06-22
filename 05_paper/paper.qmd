@@ -560,8 +560,13 @@ about 1,500 country-periods before the GMM transformations described above.
 
 We first compare the two metrics in the static (lag-free) two-way fixed-effects
 model, holding the data, controls, and fixed effects identical so that any
-difference is due to the dependent variable alone. The contrast is stark
-(@tbl-static).
+difference is due to the dependent variable alone. To keep every specification
+comparable, all models in this section, static and dynamic, are estimated on the
+common sample for which the lagged dependent variable and all four controls are
+available; the static models therefore report the same number of observations as
+the dynamic ones (1,499), so that differences across columns reflect the
+specification and not a change in the sample. The contrast between the metrics is
+stark (@tbl-static).
 
 ```{r tbl-static}
 #| label: tbl-static
