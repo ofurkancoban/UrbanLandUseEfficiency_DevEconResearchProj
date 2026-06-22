@@ -536,7 +536,7 @@ with a second, levels equation in which the lagged term is instrumented by its o
 past differences; this added moment information makes it more efficient when the
 series is persistent, as BpCR is. We treat **Arellano-Bond as the preferred
 specification** and report Blundell-Bond alongside it as a robustness comparison.
-Both are estimated in two steps with Windmeijer-corrected standard errors, and the
+Both are estimated in two steps with Windmeijer-corrected standard errors [@windmeijer2005], and the
 instrument set is collapsed to keep it from proliferating with the time dimension.
 
 The two estimators are run on different numbers of observations, which is
@@ -672,7 +672,7 @@ x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
 cat(x)
 ```
 
-*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Clustered/robust (Windmeijer) standard errors in parentheses.
+*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns.
 
 In the preferred Arellano-Bond specification the lagged term is large and
 significant ($\rho\approx 0.61$): about three-fifths of one period's BpCR persists
