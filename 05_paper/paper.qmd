@@ -390,6 +390,32 @@ threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
 is the same under either metric; the difference is that BpCR delivers it without
 the numerical instability.
 
+@tbl-desc reports summary statistics for the dependent variables and controls over
+the estimation window.
+
+```{r tbl-desc}
+#| label: tbl-desc
+#| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
+dd <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
+vars <- c(bpcr="BpCR", lcrpgr_log="LCRPGR (log)", ln_urban_density="ln(Urban density)",
+          urban_pop_share="Urban pop. share", ln_gdp_pc="ln(GDP per capita)",
+          net_migr_pct="Net migration (\\% pop)")
+rows <- lapply(names(vars), function(v){
+  x <- dd[[v]]
+  data.frame(Variable=vars[[v]], N=sum(!is.na(x)),
+             Mean=mean(x,na.rm=TRUE), SD=sd(x,na.rm=TRUE),
+             Min=min(x,na.rm=TRUE), Median=median(x,na.rm=TRUE), Max=max(x,na.rm=TRUE),
+             check.names=FALSE)
+})
+tab <- do.call(rbind, rows)
+num <- sapply(tab[,3:7], function(c) ifelse(abs(c)>=100, sprintf("%.0f",c), sprintf("%.3f",c)))
+tab[,3:7] <- num
+knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+             align=c("l","r","r","r","r","r","r"), row.names=FALSE) |>
+  kableExtra::kable_styling(latex_options=c("HOLD_position"), font_size=9)
+```
+
+
 Country trajectories make the contrast concrete (@fig-trends). For a set of
 regional representatives, the official LCRPGR swings erratically from one period
 to the next, crossing zero and spiking to large positive and negative values that
