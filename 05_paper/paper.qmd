@@ -71,18 +71,21 @@ gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 The world is urbanising rapidly: by the middle of this century close to
 two-thirds of humanity will live in cities, and almost all of the projected
 growth in built-up land will occur in developing countries
-[@undesa2018wup]. The scale of expansion is striking: every year the world's
+[@gao2020]. The scale of expansion is striking: every year the world's
 built-up area grows by roughly the size of the Netherlands [@seto2012global].
 For development policy the central question is not whether cities expand, but how
 efficiently they do so, that is, how much additional land each new urban resident
 consumes.
 When built-up area grows in step with population, cities densify and remain
-compact; when it grows much faster than population, they sprawl. Sprawl is
-costly: it converts farmland irreversibly, locks settlements into car
-dependence, raises the per-capita cost of infrastructure and public services,
-and is associated with higher per-capita emissions [@seto2011meta;
-@oueslati2015sprawl]. Measuring land-use efficiency well is therefore a
-precondition for monitoring sustainable urbanisation.
+compact; when it grows much faster than population, they sprawl. Sprawl carries real costs. Once farmland on the urban fringe is
+built over, it is effectively lost for good. Low-density, spread-out development
+makes people more dependent on cars, because homes, jobs, and services lie far
+apart. It also makes public infrastructure more expensive per resident, since the
+same roads, pipes, and power and transport networks must reach a smaller number
+of people over a larger area. And by encouraging longer car journeys and
+land-hungry construction, sprawl tends to raise greenhouse-gas emissions per
+person. Measuring land-use efficiency well is therefore a precondition for
+monitoring sustainable urbanisation.
 
 The United Nations monitors this through target 11.3 of its Sustainable
 Development Goals (SDGs), whose official indicator 11.3.1 is the ratio of the Land
