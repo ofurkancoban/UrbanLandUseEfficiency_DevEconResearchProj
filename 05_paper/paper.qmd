@@ -206,7 +206,7 @@ leading drivers of urban land use, but they work mostly across cities or countri
 and at a single cross-section, leaving open whether the same relationships hold
 within a country as it develops over time.
 
-## Measuring the Indicator: Data Sensitivity and Formulation Critiques
+## Critiques of the Indicator: Formula and Data
 
 @nicolau2019lcrpgr assess the SDG 11.3.1 formula itself, comparing the official
 LCRPGR with a land-use-efficiency-derived alternative at the municipality level in
