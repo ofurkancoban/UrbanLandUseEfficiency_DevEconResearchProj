@@ -431,8 +431,12 @@ before easing. The same data, read through a stable metric, become legible.
 
 # Empirical Strategy {#sec-strategy}
 
-**Research question.** What are the economic drivers of per-capita urban land use,
-and how persistent is it over time? We test five hypotheses (@tbl-hyp).
+**Research question.** We ask two linked questions. First, a substantive one: what
+economic and structural factors drive *within-country* changes in per-capita urban
+land use over time, and how persistent are those changes? Second, a measurement
+one: does the official SDG 11.3.1 indicator capture this reliably, or does the
+choice of metric change the conclusions? We formalise these in five hypotheses
+(@tbl-hyp).
 
 ```{r tbl-hyp}
 #| label: tbl-hyp
@@ -456,23 +460,75 @@ data.frame(
     kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
-We run **one specification** with each metric
-as the dependent variable, so the comparison is like-for-like:
+## Specification
+
+We estimate a single specification, run once with each metric as the dependent
+variable so that the comparison is strictly like-for-like:
 $$
 \text{Metric}_{i,t}=\rho\,\text{Metric}_{i,t-1}
  + \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t}
  + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t}
  + \mu_i + \delta_t + \varepsilon_{i,t},
 $$
-with country fixed effects $\mu_i$, period fixed effects $\delta_t$, and standard
-errors clustered by country. We proceed in two stages. **(1) Static** (dropping
-the lagged dependent variable) to isolate the role of the *metric* -- LCRPGR versus
-BpCR. **(2) Dynamic** (adding the lagged DV) to capture path-dependence. Because
-the lagged-DV coefficient is **downward-biased under fixed effects (Nickell
-bias)**, we correct it with **Arellano-Bond difference GMM** and **Blundell-Bond
-system GMM**, instrumenting with deeper lags. Instrument validity is assessed with
-the **Sargan/Hansen** over-identification test and the **AR(2)** serial-correlation
-test (both $p>0.10$ indicating validity).
+where $\text{Metric}$ is either LCRPGR or BpCR for country $i$ in period $t$. The
+country fixed effects $\mu_i$ absorb all time-invariant national characteristics
+(geography, institutions, the initial level of urbanisation), so identification
+comes from changes *within* a country over time rather than from comparisons
+*between* countries. The period fixed effects $\delta_t$ absorb global shocks
+common to all countries in a given epoch (technology, the global business cycle,
+and any epoch-specific features of the satellite record). Standard errors are
+clustered by country to allow for serial correlation within a country's series.
+Each control maps to a hypothesis: urban density to H2, GDP per capita to H3, net
+migration to H4, and the lagged dependent variable to H5; H1 concerns the metric
+itself and is addressed by comparing the LCRPGR and BpCR runs.
+
+## Two Stages: Static and Dynamic
+
+We proceed in two stages. In the **static** stage we drop the lagged dependent
+variable and estimate the two-way fixed-effects model with each metric. This
+isolates the role of the *metric*: with the data, controls, and fixed effects held
+identical, any difference between the LCRPGR and BpCR results is attributable to
+the dependent variable alone (H1). In the **dynamic** stage we add the lagged
+dependent variable to measure path-dependence (H5), that is, the extent to which a
+country's per-capita land use in one period carries into the next.
+
+## Dynamic-Panel Estimation and the Nickell Bias
+
+Adding a lagged dependent variable to a fixed-effects model introduces a
+well-known problem. The within (demeaning) transformation that removes $\mu_i$
+makes the transformed lagged regressor mechanically correlated with the
+transformed error, biasing the estimate of $\rho$ downward; the bias is of order
+$1/T$ and is therefore substantial in a panel with only eight periods such as
+ours. To correct it we use generalised method of moments (GMM) estimators
+designed for dynamic panels.
+
+The **Arellano-Bond** (difference) estimator first-differences the equation to
+eliminate the country fixed effects and instruments the differenced lagged term
+with deeper lags in levels. The **Blundell-Bond** (system) estimator augments this
+with a second, levels equation in which the lagged term is instrumented by its own
+past differences; this added moment information makes it more efficient when the
+series is persistent, as BpCR is. We treat **Arellano-Bond as the preferred
+specification** and report Blundell-Bond alongside it as a robustness comparison.
+Both are estimated in two steps with Windmeijer-corrected standard errors, and the
+instrument set is collapsed to keep it from proliferating with the time dimension.
+
+The two GMM estimators are run on different numbers of observations, and the
+difference is mechanical rather than a data discrepancy. The Arellano-Bond
+estimator works only with the *differenced* equation, and differencing consumes
+the first available period for each country (a difference needs both $t$ and
+$t-1$), leaving 1,351 observations. The Blundell-Bond estimator stacks **two**
+equations, the differenced equation *and* the levels equation, so its observation
+count combines both and recovers the first-period information that differencing
+discards; this is why it reports 2,895 observations, roughly twice as many. The
+larger figure reflects the system estimator's additional moment conditions, not a
+larger underlying sample.
+
+Instrument validity is assessed with the **Sargan/Hansen** test of
+over-identifying restrictions and the **AR(2)** test for second-order serial
+correlation in the differenced residuals; in both, a $p$-value above 0.10
+indicates that the instruments are valid. The estimation uses complete cases
+(observations with the lagged dependent variable and all four controls present),
+about 1,500 country-periods before the GMM transformations described above.
 
 # Results {#sec-results}
 
