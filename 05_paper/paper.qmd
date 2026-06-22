@@ -390,9 +390,6 @@ threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
 is the same under either metric; the difference is that BpCR delivers it without
 the numerical instability.
 
-@tbl-desc reports summary statistics for the dependent variables and controls over
-the estimation window.
-
 ```{r tbl-desc}
 #| label: tbl-desc
 #| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
@@ -415,6 +412,14 @@ knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
   kableExtra::kable_styling(latex_options=c("HOLD_position"), font_size=9)
 ```
 
+@tbl-desc reports summary statistics for the dependent variables and controls over
+the estimation window.
+
+![Country trajectories for seven regional representatives, 1985--2020. (a) The
+official log-LCRPGR swings erratically and crosses its zero and unity reference
+lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
+the fastest-urbanising economies showing the strongest early sprawl before
+easing.](../04_outputs/figures/country_trends.png){#fig-trends width=100%}
 
 Country trajectories make the contrast concrete (@fig-trends). For a set of
 regional representatives, the official LCRPGR swings erratically from one period
@@ -423,12 +428,6 @@ are hard to read as land-use behaviour. The BpCR series for the same countries a
 smooth and interpretable: most drift gradually towards balance, while the
 fastest-urbanising economies show the strongest sprawl earlier in the period
 before easing. The same data, read through a stable metric, become legible.
-
-![Country trajectories for seven regional representatives, 1985--2020. (a) The
-official log-LCRPGR swings erratically and crosses its zero and unity reference
-lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
-the fastest-urbanising economies showing the strongest early sprawl before
-easing.](../04_outputs/figures/country_trends.png){#fig-trends width=100%}
 
 # Empirical Strategy {#sec-strategy}
 
