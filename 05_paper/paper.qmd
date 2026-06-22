@@ -582,21 +582,27 @@ ctrl <- "ln_urban_density + urban_pop_share + ln_gdp_pc + net_migr_pct"
 mL <- feols(as.formula(paste("lcrpgr_log ~", ctrl, "| iso3 + year")), sp, vcov = ~iso3)
 mB <- feols(as.formula(paste("bpcr ~",       ctrl, "| iso3 + year")), sp, vcov = ~iso3)
 star <- function(p) ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*","")))
-cell <- function(m,v){ ct<-coeftable(m); sprintf("\\makecell[c]{%+.4f%s \\\\ (%.4f)}", ct[v,1], star(ct[v,4]), ct[v,2]) }
+est <- function(m,v){ ct<-coeftable(m); sprintf("%+.4f%s", ct[v,1], star(ct[v,4])) }
+sev <- function(m,v){ ct<-coeftable(m); sprintf("(%.4f)", ct[v,2]) }
 vars <- c(ln_urban_density="ln(Urban Density)", net_migr_pct="Net Migration (\\% Pop)",
           ln_gdp_pc="ln(GDP per capita)", urban_pop_share="Urban Pop. Share")
-body <- data.frame(Variables=unname(vars),
-                   `LCRPGR (log)`=sapply(names(vars), function(v) cell(mL,v)),
-                   `BpCR`        =sapply(names(vars), function(v) cell(mB,v)),
-                   check.names=FALSE, row.names=NULL)
+# two physical rows per variable (estimate, then SE) so zebra shading fills cleanly
+body <- do.call(rbind, lapply(names(vars), function(v) data.frame(
+  Variables=c(vars[[v]], ""),
+  `LCRPGR (log)`=c(est(mL,v), sev(mL,v)),
+  `BpCR`        =c(est(mB,v), sev(mB,v)),
+  check.names=FALSE, row.names=NULL)))
 gof <- data.frame(Variables=c("Observations","Within R$^2$","Country FE","Period FE"),
                   `LCRPGR (log)`=c(format(nobs(mL),big.mark=","), sprintf("%.4f",r2(mL)["wr2"]),"Yes","Yes"),
                   `BpCR`        =c(format(nobs(mB),big.mark=","), sprintf("%.4f",r2(mB)["wr2"]),"Yes","Yes"),
                   check.names=FALSE)
-nb <- nrow(body)
+nb <- nrow(body); nv <- length(vars)
+coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2*k-1, 2*k)))
+gof_grey  <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
 knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l","c","c")) |>
-  kableExtra::kable_styling(latex_options=c("HOLD_position","striped")) |>
+  kableExtra::kable_styling(latex_options="HOLD_position") |>
+  kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
                                  "Clustered (by country) standard errors in parentheses."),
@@ -624,27 +630,39 @@ the relationships can be detected at all.
 
 ```{r gmm-table}
 #| label: tbl-gmm
-#| tbl-cap: "Final dynamic-panel model: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM. Coefficient with significance stars on top, clustered/robust standard error in parentheses below. *** p<0.01, ** p<0.05, * p<0.1."
+#| tbl-cap: "Final dynamic-panel model: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM. Estimate with significance stars on top, clustered/robust standard error in parentheses below."
 if (!requireNamespace("kableExtra", quietly = TRUE)) install.packages("kableExtra")
 mc <- as.data.frame(gmm$main_combo, stringsAsFactors = FALSE)
-# coefficient cells look like "X***<br>(se)" -> stacked \makecell{X*** \\ (se)}
-to_cell <- function(x) {
-    ifelse(
-        grepl("<br>", x, fixed = TRUE),
-        paste0("\\makecell[c]{", sub("<br>", " \\\\ ", x, fixed = TRUE), "}"),
-        x
-    )
+names(mc)[1] <- "Variables"
+ncoef <- 5L                                   # first 5 rows are coefficients
+# split each coefficient row "coef<br>(se)" into two physical rows (est, se)
+split_two <- function(row){
+  est <- se <- row
+  for (j in 2:length(row)){
+    x <- row[[j]]
+    if (grepl("<br>", x, fixed=TRUE)){
+      est[[j]] <- sub("<br>.*$","",x); se[[j]] <- sub("^.*<br>","",x)
+    } else { est[[j]] <- x; se[[j]] <- "" }
+  }
+  est[[1]] <- row[[1]]; se[[1]] <- ""
+  rbind(est, se)
 }
-for (j in 2:ncol(mc)) mc[[j]] <- to_cell(mc[[j]])
-names(mc)[1] <- ""
-esc <- function(x) gsub("%", "\\%", x, fixed = TRUE) # literal % -> \% (LaTeX)
-names(mc) <- esc(names(mc))
-mc[[1]] <- esc(mc[[1]]) # escape % in row labels too
-knitr::kable(mc,
-    format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
-    align = c("l", rep("c", ncol(mc) - 1))
-) |>
-    kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down", "striped"))
+coef_long <- do.call(rbind, lapply(seq_len(ncoef), function(i) split_two(mc[i,])))
+gof <- mc[(ncoef+1):nrow(mc), ]
+tab <- rbind(coef_long, gof)
+esc <- function(x) gsub("%", "\\%", x, fixed = TRUE)
+names(tab) <- esc(names(tab)); tab[[1]] <- esc(tab[[1]])
+nb <- nrow(coef_long)
+coef_grey <- as.vector(sapply(which(seq_len(ncoef) %% 2 == 1), function(k) c(2*k-1, 2*k)))
+gof_grey  <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
+knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+             align=c("l", rep("c", ncol(tab)-1)), row.names=FALSE) |>
+  kableExtra::kable_styling(latex_options=c("HOLD_position","scale_down")) |>
+  kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
+  kableExtra::row_spec(nb, hline_after=TRUE) |>
+  kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
+                                 "Clustered/robust (Windmeijer) standard errors in parentheses."),
+                       general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
 ```
 
 In the preferred Arellano-Bond specification the lagged term is large and
