@@ -660,6 +660,8 @@ knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
   kableExtra::kable_styling(latex_options=c("HOLD_position","scale_down")) |>
   kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
+  kableExtra::column_spec(6, border_right=TRUE) |>
+  kableExtra::add_header_above(c(" "=1, "Fixed Effects (stepwise)"=5, "GMM (Bias-Corrected)"=2)) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
                                  "Clustered/robust (Windmeijer) standard errors in parentheses."),
                        general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
