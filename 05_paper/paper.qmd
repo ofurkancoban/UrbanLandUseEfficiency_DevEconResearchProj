@@ -472,16 +472,21 @@ data.frame(
 
 ## Specification
 
-We estimate a single specification, run once with each metric as the dependent
-variable so that the comparison is strictly like-for-like:
+Our analysis is built around a single equation, estimated in two nested forms and,
+in each form, run once with each metric as the dependent variable so that the
+comparison is strictly like-for-like:
 $$
 \text{Metric}_{i,t}=\rho\,\text{Metric}_{i,t-1}
  + \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t}
  + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t}
  + \mu_i + \delta_t + \varepsilon_{i,t},
 $$
-where $\text{Metric}$ is either LCRPGR or BpCR for country $i$ in period $t$. The
-country fixed effects $\mu_i$ absorb all time-invariant national characteristics
+where $\text{Metric}$ is either LCRPGR or BpCR for country $i$ in period $t$. We
+estimate two nested versions of this equation. The **static** form imposes
+$\rho = 0$, dropping the lagged dependent variable, and serves to compare the two
+metrics on an equal footing (@sec-results); the **dynamic** form estimates $\rho$
+freely to capture path-dependence and is corrected for the resulting bias as
+described below. The country fixed effects $\mu_i$ absorb all time-invariant national characteristics
 (geography, institutions, the initial level of urbanisation), so identification
 comes from changes *within* a country over time rather than from comparisons
 *between* countries. The period fixed effects $\delta_t$ absorb global shocks
