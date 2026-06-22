@@ -343,18 +343,11 @@ layers: the urban population share (urban population over total population) and
 urban density (urban population over urban land area).
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
-member states at five-year epochs from 1985 to 2020 (@tbl-sample). @tbl-sample reports the panel coverage, that is, all country-periods with an observed BpCR. The dynamic regressions in @sec-results use the subset of these with the lagged dependent variable and all four controls present (complete-case estimation), which reduces the sample to roughly 1,500 country-period observations.
-
-```{r sample-size}
-#| label: tbl-sample
-#| tbl-cap: "Panel coverage (observed epochs, 1985-2020; modelled 2025/2030 projections and the pre-1985 epoch excluded)."
-samp <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
-data.frame(
-    Quantity = c("Countries", "Five-year periods", "Country-period observations"),
-    Value = c(length(unique(samp$iso3)), length(unique(samp$year)), nrow(samp))
-) |>
-    knitr::kable()
-```
+member states across eight five-year epochs from 1985 to 2020, giving 1,538
+country-periods with an observed BpCR. The dynamic regressions in @sec-results use
+the subset with the lagged dependent variable and all four controls present
+(complete-case estimation), which reduces the sample to roughly 1,500
+country-period observations.
 
 # Descriptive Statistics {#sec-descriptive}
 
