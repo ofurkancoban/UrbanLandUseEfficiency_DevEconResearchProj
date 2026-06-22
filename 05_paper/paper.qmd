@@ -556,14 +556,58 @@ about 1,500 country-periods before the GMM transformations described above.
 
 # Results {#sec-results}
 
-**The metric matters.** On identical data, the static LCRPGR specification is
-contaminated by its unstable tails, while the BpCR specification is well-behaved;
-the two diverge precisely where $\text{PGR}$ is small, confirming that LCRPGR's
-extremes are an arithmetic artefact rather than a behavioural signal.
+## The Metric Matters
 
-**The final dynamic model.** @tbl-gmm reports the preferred specification: a
-fixed-effects stepwise build-up alongside the Arellano-Bond and Blundell-Bond GMM
-estimates.
+We first compare the two metrics in the static (lag-free) two-way fixed-effects
+model, holding the data, controls, and fixed effects identical so that any
+difference is due to the dependent variable alone. The contrast is stark
+(@tbl-static).
+
+```{r tbl-static}
+#| label: tbl-static
+#| tbl-cap: "Static two-way fixed-effects model, same sample and controls, with each metric as the dependent variable. Coefficient with significance stars; clustered standard errors in parentheses. *** p<0.01, ** p<0.05, * p<0.1."
+suppressMessages(library(fixest))
+sp <- subset(panel, year <= 2020 & !is.na(bpcr) & !is.na(lcrpgr_log) &
+             !is.na(ln_urban_density) & !is.na(urban_pop_share) &
+             !is.na(ln_gdp_pc) & !is.na(net_migr_pct))
+ctrl <- "ln_urban_density + urban_pop_share + ln_gdp_pc + net_migr_pct"
+mL <- feols(as.formula(paste("lcrpgr_log ~", ctrl, "| iso3 + year")), sp, vcov = ~iso3)
+mB <- feols(as.formula(paste("bpcr ~",       ctrl, "| iso3 + year")), sp, vcov = ~iso3)
+star <- function(p) ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*","")))
+cell <- function(m,v){ ct<-coeftable(m); sprintf("\\makecell[c]{%+.4f%s \\\\ (%.4f)}", ct[v,1], star(ct[v,4]), ct[v,2]) }
+vars <- c(ln_urban_density="ln(Urban density)", urban_pop_share="Urban pop. share",
+          ln_gdp_pc="ln(GDP per capita)", net_migr_pct="Net migration (\\% pop)")
+body <- data.frame(Term=unname(vars),
+                   `LCRPGR (log)`=sapply(names(vars), function(v) cell(mL,v)),
+                   `BpCR`        =sapply(names(vars), function(v) cell(mB,v)),
+                   check.names=FALSE, row.names=NULL)
+gof <- data.frame(Term=c("Within R$^2$","Observations","Country FE","Period FE"),
+                  `LCRPGR (log)`=c(sprintf("%.4f",r2(mL)["wr2"]), format(nobs(mL),big.mark=","),"Yes","Yes"),
+                  `BpCR`        =c(sprintf("%.4f",r2(mB)["wr2"]), format(nobs(mB),big.mark=","),"Yes","Yes"),
+                  check.names=FALSE)
+knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+             align=c("l","c","c")) |>
+  kableExtra::kable_styling(latex_options="HOLD_position")
+```
+
+```{r r2-inline}
+#| include: false
+r2L <- round(r2(mL)["wr2"], 4); r2B <- round(r2(mB)["wr2"], 4)
+r2ratio <- round(r2(mB)["wr2"] / r2(mL)["wr2"])
+```
+
+With the official LCRPGR as the dependent variable, the model is essentially
+uninformative: the within-country $R^2$ is only `r sprintf("%.3f", r2L)` and not a
+single control is statistically significant, because the metric's arithmetic
+tail outliers swamp any systematic variation. Replacing the dependent variable
+with BpCR, and changing nothing else, raises the within-country $R^2$ to
+`r sprintf("%.3f", r2B)`, roughly `r r2ratio` times higher, and the coefficients
+become significant and correctly signed: denser cities, richer countries, and
+higher in-migration are all associated with less land per capita. This is the
+clearest evidence for H1: the choice of metric, not the data, determines whether
+the relationships can be detected at all.
+
+## The Final Dynamic Model
 
 ```{r gmm-table}
 #| label: tbl-gmm
@@ -590,16 +634,38 @@ knitr::kable(mc,
     kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down"))
 ```
 
-In the Arellano-Bond specification the lagged term is large and significant
-($\rho\approx 0.61$): roughly 60% of last period's BpCR persists, and the GMM
-$\rho$ is about three times the FE estimate, exactly as the Nickell bias predicts,
-confirming **strong path-dependence** in per-capita land use. Among the drivers,
-**urban density** enters negative (a compact-city effect: denser cities consume
-less new land per resident), **net migration** negative (in-migrants pack into the
-existing stock faster than built-up grows), and **GDP per capita** negative --
-within countries, getting richer is associated with **densification, not sprawl**.
-The level of urbanisation (urban population share) is insignificant once the rest
-is controlled, suggesting that urban **form**, not stage, drives land use.
+In the preferred Arellano-Bond specification the lagged term is large and
+significant ($\rho\approx 0.61$): about three-fifths of one period's BpCR persists
+into the next. The GMM estimate is roughly three times the fixed-effects estimate
+($\rho\approx 0.23$), exactly the direction the Nickell bias predicts, and
+confirms **strong path-dependence** in per-capita land use (H5). Among the
+drivers, **urban density** enters negative and highly significant, a compact-city
+effect (H2); **net migration** is negative, consistent with in-migrants being
+absorbed into the existing stock (H4); and **GDP per capita** is negative and
+significant, so that within countries, getting richer is associated with
+**densification rather than sprawl** (H3). The urban population share is
+insignificant once the rest is controlled, suggesting that urban *form*, not the
+stage of urbanisation, drives land use.
+
+As anticipated in @sec-strategy, the two GMM estimators report different
+observation counts: the Arellano-Bond (difference) estimator uses 1,351
+observations, while the Blundell-Bond (system) estimator reports 2,895. The
+difference is purely mechanical: the system estimator stacks the differenced and
+levels equations and so recovers the first-period information that differencing
+discards, roughly doubling the count, rather than drawing on any additional data.
+Both estimators pass the diagnostic tests: the Sargan/Hansen test does not reject
+the over-identifying restrictions and the AR(2) test finds no second-order serial
+correlation (both $p>0.10$), supporting the validity of the instruments. The
+Blundell-Bond estimates are close to Arellano-Bond in sign and significance,
+indicating the findings are not an artefact of the chosen estimator.
+
+## Hypotheses
+
+Taken together, the results support all five hypotheses. The metric comparison
+supports **H1** (BpCR is the more reliable, better-fitting metric); the dynamic
+model supports **H2** (density reduces land per capita), **H3** (income reduces
+it, within countries), **H4** (in-migration densifies), and **H5** (per-capita
+land use is strongly path-dependent).
 
 # Robustness {#sec-robustness}
 
