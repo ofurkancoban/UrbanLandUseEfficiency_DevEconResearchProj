@@ -43,6 +43,8 @@ format:
       text: |
         \usepackage{makecell}
         \usepackage{float}
+        \setlength{\bibsep}{0pt plus 0.2ex}
+        \renewcommand{\bibfont}{\small}
         \floatplacement{figure}{H}
         \floatplacement{table}{H}
     journal:
@@ -791,14 +793,26 @@ stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 
 # Conclusion {#sec-conclusion}
 
-The official SDG 11.3.1 indicator is statistically unstable by construction. The
-Built-up per Capita Rate is a drop-in, log-based alternative that is finite,
-symmetric, and interpretable for every country-period, and it reproduces the
-policy signal without the instability. Estimated dynamically on a global panel,
-per-capita urban land use is strongly path-dependent and, within countries,
-declines with density, in-migration, and income. The contribution is as much
-**methodological** -- a stable metric and a bias-corrected dynamic estimator -- as
-substantive, and it complements rather than overturns the existing literature.
+Urban sprawl is real and measurable: across 1985--2020, built-up area per capita
+rose in roughly three out of five country-periods and in about two-thirds of
+countries on average. The difficulty is not the phenomenon but the yardstick. The
+official SDG 11.3.1 indicator, LCRPGR, is unstable by construction, dividing an
+arithmetic numerator by a near-zero denominator and producing sign-flipping
+outliers exactly where land-use efficiency matters most. We proposed a simple,
+log-based alternative, the Built-up per Capita Rate, which is finite, symmetric,
+and interpretable for every country-period and reproduces the policy signal
+without the instability; on identical data, replacing LCRPGR with BpCR raises the
+within-country explanatory power roughly twenty-fold.
+
+Using the stable metric on a dynamic panel of 193 United Nations member states, we
+find that per-capita urban land use is strongly path-dependent and that, within
+countries, it declines with urban density, net in-migration, and income, so that
+economic growth over time is accompanied by densification rather than sprawl, a
+within-country pattern that complements the cross-sectional literature. The
+contribution is as much methodological as substantive: a stable metric paired with
+a bias-corrected dynamic estimator. For monitoring sustainable urbanisation, the
+choice of metric is not a technicality but a precondition for drawing the right
+conclusions.
 
 # References {.unnumbered}
 
