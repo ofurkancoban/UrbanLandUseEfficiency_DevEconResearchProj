@@ -678,18 +678,45 @@ cat(x)
 *Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns.
 \normalsize
 
-In the preferred Arellano-Bond specification the lagged term is large and
-significant ($\rho\approx 0.61$): about three-fifths of one period's BpCR persists
-into the next. The GMM estimate is roughly three times the fixed-effects estimate
-($\rho\approx 0.23$), exactly the direction the Nickell bias predicts, and
-confirms **strong path-dependence** in per-capita land use (H5). Among the
-drivers, **urban density** enters negative and highly significant, a compact-city
-effect (H2); **net migration** is negative, consistent with in-migrants being
-absorbed into the existing stock (H4); and **GDP per capita** is negative and
-significant, so that within countries, getting richer is associated with
-**densification rather than sprawl** (H3). The urban population share is
-insignificant once the rest is controlled, suggesting that urban *form*, not the
-stage of urbanisation, drives land use.
+Throughout, recall that the dependent variable BpCR is an annual logarithmic
+growth rate of built-up area per capita, so a coefficient measures the change in
+that growth rate, and the coefficients on the logged regressors are
+semi-elasticities.
+
+*Path-dependence (H5).* In the preferred Arellano-Bond specification the lagged
+term is large and highly significant, $\rho = 0.61$: about three-fifths of a
+country's per-capita land-use growth in one period carries into the next, and more
+than a third still remains two periods later ($0.61^2 \approx 0.37$).
+The GMM estimate is nearly three times the fixed-effects estimate ($\rho = 0.23$),
+exactly the direction and magnitude the Nickell bias predicts, which is why the
+naive fixed-effects estimate understates persistence. Sprawl, once underway, is
+sticky: the long-lived building stock, road network, and zoning entrench a
+trajectory rather than resetting each period.
+
+*Urban density (H2).* The coefficient on log urban density is $-0.052$ and highly
+significant: holding income and migration fixed, a 10% higher urban density is
+associated with roughly $0.005$ lower annual BpCR, which is sizeable against a
+median BpCR of about $0.004$. This is the compact-city mechanism, where
+already-dense settlement accommodates new residents by building up rather than
+out.
+
+*Income (H3).* Log GDP per capita enters negative and significant at $-0.014$:
+within a country, a doubling of income is associated with about $0.010$ lower
+annual BpCR. This is the paper's central substantive result. In the cross-section,
+richer countries look more sprawled; but over time, as a given country grows
+richer, its per-capita land use falls, consistent with rising income funding
+infill and vertical development and tighter land regulation. Growth and sprawl are
+not the same thing.
+
+*Net migration (H4).* Net migration is negative and marginally significant
+($-0.0005$): each additional percentage point of net in-migration is associated
+with slightly lower per-capita land use, consistent with in-migrants being
+absorbed into the existing urban stock faster than the built-up footprint expands.
+
+*Urban population share.* The level of urbanisation is insignificant once the
+other drivers are controlled, indicating that what matters is the urban *form*
+(how densely a country builds) rather than the *stage* of urbanisation (how urban
+it already is).
 
 As anticipated in @sec-strategy, the two GMM estimators report different
 observation counts: the Arellano-Bond (difference) estimator uses 1,351
