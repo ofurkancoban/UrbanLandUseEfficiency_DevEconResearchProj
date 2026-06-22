@@ -313,7 +313,7 @@ layers: the urban population share (urban population over total population) and
 urban density (urban population over urban land area).
 
 @fig-layers illustrates the construction for one example window, with each layer
-drawn semi-transparently over a satellite basemap. Panel (a) is the basemap for
+drawn over a satellite basemap. Panel (a) is the basemap for
 reference; panel (b) shows the GHS-BUILT-S surface as the built-up share of each cell; panel
 (c) the GHS-SMOD Degree of Urbanisation, which classifies each cell from rural to
 urban centre; and panel (d) the urban-masked built-up that actually enters the
