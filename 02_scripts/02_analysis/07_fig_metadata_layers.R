@@ -12,7 +12,7 @@ suppressMessages({library(here); library(terra); library(sf); library(ggplot2)
 sf::sf_use_s2(FALSE)
 
 utm <- "EPSG:32635"                                   # UTM 35N (metric, Istanbul)
-bb_ll <- st_bbox(c(xmin=28.60, xmax=29.50, ymin=40.80, ymax=41.30), crs = st_crs(4326))
+bb_ll <- st_bbox(c(xmin=28.30, xmax=29.80, ymin=40.65, ymax=41.40), crs = st_crs(4326))
 win_m <- st_transform(st_as_sfc(bb_ll), utm)
 ext_m <- ext(st_bbox(win_m)[c("xmin","xmax","ymin","ymax")])
 
@@ -50,7 +50,7 @@ theme_layer <- function() theme_void(base_size = 12) +
         legend.key.height=unit(0.42,"cm"), legend.key.width=unit(0.32,"cm"),
         legend.title=element_text(size=8.5, face="bold"), legend.text=element_text(size=7.5))
 co  <- coord_sf(crs = utm, expand = FALSE, xlim=c(ext_m$xmin,ext_m$xmax), ylim=c(ext_m$ymin,ext_m$ymax))
-bnd <- geom_sf(data = cty, fill=NA, color="white", linewidth=0.5, inherit.aes=FALSE)
+bnd <- geom_sf(data = cty, fill=NA, color="#00E5FF", linewidth=0.5, inherit.aes=FALSE)
 bg  <- geom_spatraster_rgb(data = bm)
 
 pa <- ggplot() + bg + bnd + co + labs(title="(a) Satellite basemap (reference)") + theme_layer()
