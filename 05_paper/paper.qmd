@@ -127,14 +127,15 @@ countries, denser cities, net in-migration, and higher income are all associated
 with less land consumed per resident, indicating that, over time, economic growth
 is accompanied by densification rather than sprawl.
 
-The remainder of the paper is organised as follows. Section 2 reviews the
-indicator and the related literature. Section 3 sets out the structural
-limitations of LCRPGR, and Section 4 introduces BpCR. Section 5 describes the
-data and Section 6 presents descriptive evidence. Section 7 details the empirical
-strategy and Section 8 reports the results, including robustness checks. Section 9
-discusses the findings and Section 10 concludes.
+The remainder of the paper is organised as follows. @sec-measurement sets out the
+SDG 11.3.1 indicator, its structural limitations, and the BpCR alternative.
+@sec-literature reviews the related literature. @sec-data describes the data and
+@sec-descriptive presents descriptive evidence. @sec-strategy details the
+empirical strategy, @sec-results reports the results, and @sec-robustness gives
+robustness checks. @sec-discussion discusses the findings and @sec-conclusion
+concludes.
 
-# Measurement Framework
+# Measurement Framework {#sec-measurement}
 
 This section sets out the conceptual core of the paper. We first define the
 official SDG 11.3.1 indicator and show why it is statistically unstable, and we
@@ -187,7 +188,7 @@ $\text{BpCR}=0$ land growing exactly in step with population. BpCR reproduces th
 policy signal of LCRPGR where the latter is well-behaved, but without the
 instability; it complements rather than contradicts the official indicator.
 
-# Literature Review
+# Literature Review {#sec-literature}
 
 The literature on urban land use splits into two strands. One asks what *drives*
 urban expansion; the other scrutinises how land-use efficiency is *measured*. This
@@ -232,7 +233,7 @@ land use. The result refines the drivers literature: while richer countries look
 more sprawled in the cross-section, within a country growing richer is associated
 with densification rather than sprawl.
 
-# Data
+# Data {#sec-data}
 
 ## Data Sources
 
@@ -259,23 +260,33 @@ and net migration as a share of population from UN DESA World Population Prospec
 #| label: tbl-data
 #| tbl-cap: "Dataset specifications. GHSL grids are distributed in the World Mollweide equal-area projection (ESRI:54009); built-up and population are aggregated at 100 m and the SMOD urban mask at 1 km. Vector and tabular sources are listed with their native form."
 data.frame(
-  Dataset    = c("GHS-BUILT-S R2023A","GHS-POP R2023A","GHS-SMOD R2023A",
-                 "GAUL 2024/2025","UN SNAAMA","UN DESA WPP 2024"),
-  Provider   = c("EC JRC","EC JRC","EC JRC","FAO","UN Stats","UN DESA"),
-  Type       = c("Raster","Raster","Raster","Vector","Tabular","Tabular"),
-  Resolution = c("100 m","100 m","1 km","Levels 0-2","Country-year","Country-year"),
-  CRS        = c("Mollweide (54009)","Mollweide (54009)","Mollweide (54009)",
-                 "WGS84 (EPSG:4326)","--","--"),
-  Coverage   = c("1975-2030, 5-yr","1975-2030, 5-yr","1975-2030, 5-yr",
-                 "Global","1970-2024","1950-2023"),
-  Variable   = c("Built-up area (m2/cell)","Population (persons/cell)",
-                 "Degree of Urbanisation (class 10-30)","Admin boundaries",
-                 "GDP p.c. (const. 2020 US$)","Net migration (CNMR /1000)"),
-  check.names = FALSE
+    Dataset = c(
+        "GHS-BUILT-S R2023A", "GHS-POP R2023A", "GHS-SMOD R2023A",
+        "GAUL 2024/2025", "UN SNAAMA", "UN DESA WPP 2024"
+    ),
+    Provider = c("EC JRC", "EC JRC", "EC JRC", "FAO", "UN Stats", "UN DESA"),
+    Type = c("Raster", "Raster", "Raster", "Vector", "Tabular", "Tabular"),
+    Resolution = c("100 m", "100 m", "1 km", "Levels 0-2", "Country-year", "Country-year"),
+    CRS = c(
+        "Mollweide (54009)", "Mollweide (54009)", "Mollweide (54009)",
+        "WGS84 (EPSG:4326)", "--", "--"
+    ),
+    Coverage = c(
+        "1975-2030, 5-yr", "1975-2030, 5-yr", "1975-2030, 5-yr",
+        "Global", "1970-2024", "1950-2023"
+    ),
+    Variable = c(
+        "Built-up area (m2/cell)", "Population (persons/cell)",
+        "Degree of Urbanisation (class 10-30)", "Admin boundaries",
+        "GDP p.c. (const. 2020 US$)", "Net migration (CNMR /1000)"
+    ),
+    check.names = FALSE
 ) |>
-  knitr::kable(format = "latex", booktabs = TRUE, escape = TRUE, linesep = "",
-               align = c("l","l","l","l","l","l","l")) |>
-  kableExtra::kable_styling(latex_options = c("HOLD_position","scale_down"))
+    knitr::kable(
+        format = "latex", booktabs = TRUE, escape = TRUE, linesep = "",
+        align = c("l", "l", "l", "l", "l", "l", "l")
+    ) |>
+    kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down"))
 ```
 
 ## Constructing the Panel Following the UN Metadata
@@ -327,7 +338,7 @@ compute the Land Consumption Rate (arithmetic growth of built-up area per year)
 and the Population Growth Rate (logarithmic growth of population per year), their
 ratio LCRPGR, and the built-up-per-capita level. From the same totals we also
 compute BpCR as the logarithmic growth of built-up area per capita, as defined in
-Section 2. Two additional urban controls are derived from the same GHSL/SMOD
+@sec-measurement. Two additional urban controls are derived from the same GHSL/SMOD
 layers: the urban population share (urban population over total population) and
 urban density (urban population over urban land area).
 
@@ -346,7 +357,7 @@ data.frame(
     knitr::kable()
 ```
 
-# Descriptive Statistics
+# Descriptive Statistics {#sec-descriptive}
 
 Across 1985–2020 a clear majority of countries record $\text{BpCR}>0$: built-up
 area is expanding faster than urban population for most of the world, i.e. sprawl
@@ -360,7 +371,7 @@ sprawl.
 <!-- TODO: insert global BpCR distribution figure and the regional-trend figure
 from 04_outputs/figures/ once finalised. -->
 
-# Empirical Strategy
+# Empirical Strategy {#sec-strategy}
 
 **Research question.** What are the economic drivers of per-capita urban land use,
 and how persistent is it over time? We test five hypotheses (@tbl-hyp).
@@ -405,7 +416,7 @@ system GMM**, instrumenting with deeper lags. Instrument validity is assessed wi
 the **Sargan/Hansen** over-identification test and the **AR(2)** serial-correlation
 test (both $p>0.10$ indicating validity).
 
-# Results
+# Results {#sec-results}
 
 **The metric matters.** On identical data, the static LCRPGR specification is
 contaminated by its unstable tails, while the BpCR specification is well-behaved;
@@ -452,7 +463,7 @@ within countries, getting richer is associated with **densification, not sprawl*
 The level of urbanisation (urban population share) is insignificant once the rest
 is controlled, suggesting that urban **form**, not stage, drives land use.
 
-# Robustness
+# Robustness {#sec-robustness}
 
 The findings are stable across a 2000–2020 subsample, a restriction to
 shrinking-population countries, and alternative instrument depths; the Sargan and
@@ -460,7 +471,7 @@ AR(2) diagnostics pass throughout, supporting instrument validity.
 
 <!-- TODO: tabulate the 2000-2020 and shrinking-population robustness results. -->
 
-# Discussion
+# Discussion {#sec-discussion}
 
 The within-country result that income is associated with densification may appear
 to contradict the cross-sectional literature in which richer countries have
@@ -470,7 +481,7 @@ income over time is associated with denser, not more sprawling, urban land use.
 Measuring this distinction requires a metric that is stable within country-period --
 which BpCR provides and LCRPGR does not.
 
-# Conclusion
+# Conclusion {#sec-conclusion}
 
 The official SDG 11.3.1 indicator is statistically unstable by construction. The
 Built-up per Capita Rate is a drop-in, log-based alternative that is finite,
