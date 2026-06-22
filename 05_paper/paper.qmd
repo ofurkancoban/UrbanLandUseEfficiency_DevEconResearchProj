@@ -347,12 +347,11 @@ member states at five-year epochs from 1985 to 2020 (@tbl-sample).
 
 ```{r sample-size}
 #| label: tbl-sample
-#| tbl-cap: "Estimation sample"
-n_ctry <- length(unique(panel$iso3))
-n_obs <- sum(!is.na(panel$bpcr))
+#| tbl-cap: "Estimation sample (observed epochs, 1985-2020; modelled 2025/2030 projections and the pre-1985 epoch excluded)."
+samp <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
 data.frame(
-    Quantity = c("Countries", "Country-period observations"),
-    Value = c(n_ctry, n_obs)
+    Quantity = c("Countries", "Five-year periods", "Country-period observations"),
+    Value = c(length(unique(samp$iso3)), length(unique(samp$year)), nrow(samp))
 ) |>
     knitr::kable()
 ```
