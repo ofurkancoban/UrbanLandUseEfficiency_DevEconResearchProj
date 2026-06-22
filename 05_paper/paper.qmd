@@ -630,6 +630,7 @@ the relationships can be detected at all.
 
 ```{r gmm-table}
 #| label: tbl-gmm
+#| results: asis
 #| tbl-cap: "Final dynamic-panel model: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM. Estimate with significance stars on top, clustered/robust standard error in parentheses below."
 if (!requireNamespace("kableExtra", quietly = TRUE)) install.packages("kableExtra")
 mc <- as.data.frame(gmm$main_combo, stringsAsFactors = FALSE)
@@ -655,19 +656,20 @@ names(tab) <- esc(names(tab)); tab[[1]] <- esc(tab[[1]])
 nb <- nrow(coef_long)
 coef_grey <- as.vector(sapply(which(seq_len(ncoef) %% 2 == 1), function(k) c(2*k-1, 2*k)))
 gof_grey  <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
-knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+kbl <- knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l", rep("c", ncol(tab)-1)), row.names=FALSE) |>
   kableExtra::kable_styling(latex_options=c("HOLD_position","scale_down")) |>
   kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
-  kableExtra::row_spec(nb + 4, hline_after=TRUE) |>
   kableExtra::column_spec(6, border_right=TRUE) |>
   kableExtra::add_header_above(c(" "=1, "Fixed Effects (stepwise)"=5, "GMM (Bias-Corrected)"=2)) |>
-  kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR"=7)) |>
-  kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
-                                 "Clustered/robust (Windmeijer) standard errors in parentheses."),
-                       general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
+  kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR"=7))
+x <- as.character(kbl)
+x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
+cat(x)
 ```
+
+*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Clustered/robust (Windmeijer) standard errors in parentheses.
 
 In the preferred Arellano-Bond specification the lagged term is large and
 significant ($\rho\approx 0.61$): about three-fifths of one period's BpCR persists
