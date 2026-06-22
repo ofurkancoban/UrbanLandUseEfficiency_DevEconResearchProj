@@ -12,7 +12,7 @@ suppressMessages({library(here); library(terra); library(sf); library(ggplot2)
   library(tidyterra); library(patchwork); library(maptiles)}); setwd(here::here())
 
 utm <- "EPSG:25832"                                   # UTM 32N (metric, NW Germany)
-bb_ll <- st_bbox(c(xmin=7.5, xmax=9.0, ymin=52.8, ymax=53.6), crs = st_crs(4326))
+bb_ll <- st_bbox(c(xmin=8.00, xmax=8.50, ymin=53.02, ymax=53.28), crs = st_crs(4326))  # zoom on Oldenburg
 win_m <- st_transform(st_as_sfc(bb_ll), utm)
 ext_m <- ext(st_bbox(win_m)[c("xmin","xmax","ymin","ymax")])
 
@@ -28,7 +28,7 @@ smod_r <- resample(smod, built, method = "near")
 urb <- built; urb[smod_r < 21] <- NA
 
 # real satellite basemap for the window
-bm <- get_tiles(win_m, provider = "Esri.WorldImagery", crop = TRUE, zoom = 10, cachedir = tempdir())
+bm <- get_tiles(win_m, provider = "Esri.WorldImagery", crop = TRUE, zoom = 12, cachedir = tempdir())
 
 gaul <- st_read(here("03_datasets/raw/GAUL_2025_L1/gaul_2025_l1.shp"), quiet = TRUE) |> st_make_valid()
 cty  <- gaul[gaul$iso3_code == "DEU", ] |> st_union() |> st_transform(utm) |>
