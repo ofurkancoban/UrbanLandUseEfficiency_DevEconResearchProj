@@ -77,12 +77,14 @@ leg_of<-function(p) cowplot::get_legend(p+legtheme+theme(legend.position="right"
 panel<-function(map,title,withleg=TRUE){
   rm<-round_map(map)
   body<-cowplot::ggdraw()+cowplot::draw_image(rm)
+  # thin spacer column between map and legend so the legend is not stuck to it
   if(withleg){
-    row<-cowplot::plot_grid(body, leg_of(map), nrow=1, rel_widths=c(1,0.26))
-  } else row<-cowplot::plot_grid(body, NULL, nrow=1, rel_widths=c(1,0.26))
+    row<-cowplot::plot_grid(body, NULL, leg_of(map), nrow=1, rel_widths=c(1,0.05,0.22))
+  } else row<-cowplot::plot_grid(body, NULL, nrow=1, rel_widths=c(1,0.27))
+  # title close to the map (small row, label near its bottom edge)
   ttl<-cowplot::ggdraw()+cowplot::draw_label(title, fontfamily=ff, fontface="bold",
-        size=15, x=0.01, hjust=0)
-  cowplot::plot_grid(ttl, row, ncol=1, rel_heights=c(0.1,1))
+        size=15, x=0.01, hjust=0, y=0.15, vjust=0)
+  cowplot::plot_grid(ttl, row, ncol=1, rel_heights=c(0.06,1))
 }
 P <- list(
   panel(map_a,"(a) Satellite Basemap (Reference)", withleg=FALSE),
