@@ -21,15 +21,16 @@ showtext_auto(); showtext_opts(dpi=300); ff <- "lmroman"
 utm <- "EPSG:32635"
 bb_ll <- st_bbox(c(xmin=28.30, xmax=29.80, ymin=40.65, ymax=41.40), crs=st_crs(4326))
 win_m <- st_transform(st_as_sfc(bb_ll), utm); ext_m <- ext(st_bbox(win_m)[c("xmin","xmax","ymin","ymax")])
+win_buf <- st_buffer(win_m, 20000)   # 20 km buffer so layers overfill the frame
 aspect <- as.numeric((ext_m$xmax-ext_m$xmin)/(ext_m$ymax-ext_m$ymin))
 moll <- "ESRI:54009"
 prep <- function(f, method="bilinear"){ r<-rast(f); if(is.na(crs(r))||crs(r)=="") crs(r)<-moll
-  project(crop(r, ext(project(vect(win_m),moll))), utm, method=method) }
+  project(crop(r, ext(project(vect(win_buf),moll))), utm, method=method) }
 built<-prep(built_tif<-here("03_datasets/raw/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")); names(built)<-"built"; built[built<=0]<-NA
 # project SMOD onto the SAME grid as built-up (fine template) so it aligns exactly
 smod_tif <- here("03_datasets/raw/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0.tif")
 smod_src <- rast(smod_tif); if(is.na(crs(smod_src))||crs(smod_src)=="") crs(smod_src)<-moll
-smod_src <- crop(smod_src, ext(project(vect(win_m),moll)))
+smod_src <- crop(smod_src, ext(project(vect(win_buf),moll)))
 tmpl <- disagg(built, fact=4)                      # 250 m UTM template from built-up
 smod <- project(smod_src, tmpl, method="near"); names(smod)<-"smod"
 smod_r<-resample(smod,built,method="near"); urb<-built; urb[smod_r<21]<-NA
