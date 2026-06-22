@@ -132,13 +132,13 @@ data and Section 6 presents descriptive evidence. Section 7 details the empirica
 strategy and Section 8 reports the results, including robustness checks. Section 9
 discusses the findings and Section 10 concludes.
 
-# Measurement framework
+# Measurement Framework
 
 This section sets out the conceptual core of the paper. We first define the
 official SDG 11.3.1 indicator and show why it is statistically unstable, and we
 then introduce the stable, log-based alternative used in the empirical analysis.
 
-## The SDG 11.3.1 indicator and its limitations
+## The SDG 11.3.1 Indicator and Its Limitations
 
 Following the UN-Habitat metadata, the indicator divides an arithmetic land
 consumption rate by a logarithmic population growth rate:
@@ -147,8 +147,15 @@ $$
 \text{LCR}=\frac{V_t-V_{t-z}}{V_{t-z}}\cdot\frac{1}{z},\qquad
 \text{PGR}=\frac{\ln(P_t/P_{t-z})}{z},
 $$
-where $V$ is built-up area, $P$ population, and $z$ the period length. Two
-structural problems follow. **(1) Division by a near-zero denominator.** When
+where the symbols are defined as follows: $V_t$ is the urban built-up area (in
+square kilometres) at the end of the period and $V_{t-z}$ the built-up area at the
+start; $P_t$ and $P_{t-z}$ are the corresponding urban populations; $z$ is the
+length of the period in years; $\ln(\cdot)$ denotes the natural logarithm; and the
+subscript $i$ indexes the country. The Land Consumption Rate $(\text{LCR})$ is thus
+the arithmetic growth of built-up area, expressed per year, and the Population
+Growth Rate $(\text{PGR})$ is the logarithmic (continuous) growth of population per
+year; the indicator $\text{LCRPGR}$ is their ratio. Two structural problems
+follow. **(1) Division by a near-zero denominator.** When
 population is roughly stable ($\text{PGR}\approx 0$) the ratio diverges towards
 $\pm\infty$ and flips sign, so small, ordinary demographic differences produce
 wild, uninterpretable values. **(2) Arithmetic-versus-logarithmic asymmetry.**
@@ -157,7 +164,7 @@ so the ratio is not symmetric and does not aggregate cleanly over time
 [@nicolau2019lcrpgr]. The result is a metric whose tails are dominated by an
 arithmetic artefact rather than by real land-use behaviour.
 
-## A stable metric: the Built-up per Capita Rate (BpCR)
+## A Stable Metric: The Built-up per Capita Rate (BpCR)
 
 The UN-Habitat metadata itself lists built-up area per capita ($V/P$) as a
 secondary indicator. We build on it and measure its **log growth**:
@@ -174,13 +181,13 @@ $\text{BpCR}=0$ land growing exactly in step with population. BpCR reproduces th
 policy signal of LCRPGR where the latter is well-behaved, but without the
 instability; it complements rather than contradicts the official indicator.
 
-# Literature review
+# Literature Review
 
 The literature on urban land use splits into two strands, and this paper sits at
 their intersection: it brings the rigour of the measurement critique to the
 substantive drivers question.
 
-## Drivers of urban land expansion
+## Drivers of Urban Land Expansion
 
 A first strand asks why cities expand and what makes them sprawl. Global
 remote-sensing evidence shows that built-up area has grown faster than urban
@@ -196,7 +203,7 @@ cross-country and descriptive; it motivates the drivers we examine, namely incom
 migration, and the density of existing settlement, but it leaves open whether the
 same relationships hold within countries over time.
 
-## Measuring the indicator: data sensitivity and formulation critiques
+## Measuring the Indicator: Data Sensitivity and Formulation Critiques
 
 A second, more recent strand turns the lens on the indicator itself. Estimates of
 land-use efficiency depend heavily on which built-up and population datasets are
@@ -208,7 +215,7 @@ are defined and that logarithmic, efficiency-based formulations behave more
 reliably. Together these studies establish that the choice of metric, not only the
 choice of data, can change the conclusions drawn about sustainable urbanisation.
 
-## This paper
+## This Paper
 
 We connect the two strands. Taking the measurement critique seriously, we replace
 the unstable LCRPGR with the stable, logarithmic BpCR introduced in Section 2, and
@@ -242,7 +249,7 @@ data.frame(
     knitr::kable()
 ```
 
-# Descriptive statistics
+# Descriptive Statistics
 
 Across 1985–2020 a clear majority of countries record $\text{BpCR}>0$: built-up
 area is expanding faster than urban population for most of the world, i.e. sprawl
@@ -256,7 +263,7 @@ sprawl.
 <!-- TODO: insert global BpCR distribution figure and the regional-trend figure
 from 04_outputs/figures/ once finalised. -->
 
-# Empirical strategy
+# Empirical Strategy
 
 **Research question.** What are the economic drivers of per-capita urban land use,
 and how persistent is it over time? We test five hypotheses (@tbl-hyp).
