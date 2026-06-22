@@ -68,7 +68,6 @@ panel <- read_csv(here("03_datasets/processed/reg_panel_urban.csv"),
 gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
 ```
 
-
 # Introduction
 
 The world is urbanising rapidly: by the middle of this century close to
@@ -286,6 +285,26 @@ metadata prescribes [@unhabitat2025metadata], so that our BpCR and the official
 LCRPGR are computed on identical inputs and the comparison is like-for-like. The
 construction follows the metadata stages.
 
+@fig-layers illustrates the construction for one example window, with each layer
+drawn over a satellite basemap. Panel (a) is the basemap for
+reference; panel (b) shows the GHS-BUILT-S surface as the built-up share of each cell; panel
+(c) the GHS-SMOD Degree of Urbanisation, which classifies each cell from rural to
+urban centre; and panel (d) the urban-masked built-up that actually enters the
+analysis, retaining built-up only in cells classified as urban (SMOD at least 21). The same masking is applied to population, so that both components are
+measured on a consistent urban footprint.
+
+![Building the analysis input following the SDG 11.3.1 metadata, for the
+Istanbul / Bosphorus window, with each layer overlaid semi-transparently on a
+satellite basemap. (a) Satellite basemap (Esri) for reference. (b) GHS-BUILT-S
+built-up surface, shaded by the share of each 1 km cell that is built up (0 to
+about 50%). (c) GHS-SMOD Degree of Urbanisation, which classifies every cell from
+water and rural (blues and greens) through suburban and town classes to the urban
+centre (red); cells coded 21 or higher count as urban. (d) Urban-masked built-up,
+the input actually used: the built-up surface of panel (b) kept only where panel
+(c) is urban, on the same built-up colour scale. The gold line is the GAUL
+country boundary (here the coastline).
+](../04_outputs/figures/metadata_layers.png){#fig-layers width=88%}
+
 *Analysis area.* SDG 11.3.1 is, by construction, an urban
 (city-scale) indicator: it is measured inside cities rather than over whole
 national territories. We delineate the urban area with DEGURBA on the GHS-SMOD
@@ -311,26 +330,6 @@ compute BpCR as the logarithmic growth of built-up area per capita, as defined i
 Section 2. Two additional urban controls are derived from the same GHSL/SMOD
 layers: the urban population share (urban population over total population) and
 urban density (urban population over urban land area).
-
-@fig-layers illustrates the construction for one example window, with each layer
-drawn over a satellite basemap. Panel (a) is the basemap for
-reference; panel (b) shows the GHS-BUILT-S surface as the built-up share of each cell; panel
-(c) the GHS-SMOD Degree of Urbanisation, which classifies each cell from rural to
-urban centre; and panel (d) the urban-masked built-up that actually enters the
-analysis, retaining built-up only in cells classified as urban (SMOD at least 21). The same masking is applied to population, so that both components are
-measured on a consistent urban footprint.
-
-![Building the analysis input following the SDG 11.3.1 metadata, for the
-Istanbul / Bosphorus window, with each layer overlaid semi-transparently on a
-satellite basemap. (a) Satellite basemap (Esri) for reference. (b) GHS-BUILT-S
-built-up surface, shaded by the share of each 1 km cell that is built up (0 to
-about 50%). (c) GHS-SMOD Degree of Urbanisation, which classifies every cell from
-water and rural (blues and greens) through suburban and town classes to the urban
-centre (red); cells coded 21 or higher count as urban. (d) Urban-masked built-up,
-the input actually used: the built-up surface of panel (b) kept only where panel
-(c) is urban, on the same built-up colour scale. The gold line is the GAUL
-country boundary (here the coastline).
-](../04_outputs/figures/metadata_layers.png){#fig-layers width=88%}
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
 member states at five-year epochs from 1985 to 2020 (@tbl-sample).
