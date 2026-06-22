@@ -131,9 +131,8 @@ The remainder of the paper is organised as follows. @sec-measurement sets out th
 SDG 11.3.1 indicator, its structural limitations, and the BpCR alternative.
 @sec-literature reviews the related literature. @sec-data describes the data and
 @sec-descriptive presents descriptive evidence. @sec-strategy details the
-empirical strategy, @sec-results reports the results, and @sec-robustness gives
-robustness checks. @sec-discussion discusses the findings and @sec-conclusion
-concludes.
+empirical strategy and @sec-results reports the results. @sec-discussion discusses
+the findings and @sec-conclusion concludes.
 
 # Measurement Framework {#sec-measurement}
 
@@ -737,14 +736,6 @@ supports **H1** (BpCR is the more reliable, better-fitting metric); the dynamic
 model supports **H2** (density reduces land per capita), **H3** (income reduces
 it, within countries), **H4** (in-migration densifies), and **H5** (per-capita
 land use is strongly path-dependent).
-
-# Robustness {#sec-robustness}
-
-The findings are stable across a 2000–2020 subsample, a restriction to
-shrinking-population countries, and alternative instrument depths; the Sargan and
-AR(2) diagnostics pass throughout, supporting instrument validity.
-
-<!-- TODO: tabulate the 2000-2020 and shrinking-population robustness results. -->
 
 # Discussion {#sec-discussion}
 
