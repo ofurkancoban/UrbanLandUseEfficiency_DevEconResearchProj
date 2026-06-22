@@ -573,7 +573,7 @@ stark (@tbl-static).
 
 ```{r tbl-static}
 #| label: tbl-static
-#| tbl-cap: "Static two-way fixed-effects model on the estimation sample (1985-2020), same sample and controls for both metrics. Coefficient with significance stars; clustered standard errors in parentheses."
+#| tbl-cap: "Static two-way fixed-effects model on the estimation sample (1985-2020), same sample and controls for both metrics."
 suppressMessages({library(fixest); library(dplyr)})
 # same estimation sample as the dynamic model: complete cases with the lagged DV
 sp <- panel |>
@@ -634,7 +634,7 @@ the relationships can be detected at all.
 ```{r gmm-table}
 #| label: tbl-gmm
 #| results: asis
-#| tbl-cap: "Final dynamic-panel model: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM. Estimate with significance stars on top, clustered/robust standard error in parentheses below."
+#| tbl-cap: "Final dynamic-panel model: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM."
 if (!requireNamespace("kableExtra", quietly = TRUE)) install.packages("kableExtra")
 mc <- as.data.frame(gmm$main_combo, stringsAsFactors = FALSE)
 names(mc)[1] <- "Variables"
