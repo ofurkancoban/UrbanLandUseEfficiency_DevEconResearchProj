@@ -93,5 +93,5 @@ P <- list(
   panel(map_d,"(d) Urban-Masked Built-up (Analysis Input)"))
 fig<-cowplot::plot_grid(plotlist=P, nrow=2, ncol=2)
 out<-here("04_outputs/figures/metadata_layers.png")
-cowplot::save_plot(out, fig, base_width=9.6, base_height=2*9.6/2/aspect+1.4, bg="white")
+cowplot::save_plot(out, fig, base_width=9.6, base_height=2*(9.6/2*(1/1.27)/aspect)+0.9, bg="white")
 cat("wrote", out, "\n")
