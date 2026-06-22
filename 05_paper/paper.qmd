@@ -96,22 +96,18 @@ Development Goals (SDGs), whose official indicator 11.3.1 is the ratio of the La
 Consumption Rate to the Population Growth Rate (LCRPGR) [@unhabitat2025metadata].
 Because LCRPGR is the agreed global yardstick, its statistical properties are not
 a technical detail: they determine how every country's progress is judged and
-compared. Yet the indicator is fragile by construction. It divides an arithmetic
-land-consumption rate by a logarithmic population-growth rate, so it is
-internally inconsistent; and because the population-growth rate sits in the
-denominator, the ratio diverges towards plus or minus infinity and changes sign
-whenever population is roughly stable. In exactly the countries where land-use
-efficiency matters most for policy, the official metric becomes uninformative.
+compared. Yet the indicator is fragile by construction: because the population-growth rate
+sits in the denominator, the ratio diverges and flips sign whenever population is
+roughly stable, so in exactly the countries where land-use efficiency matters most
+for policy it becomes uninformative.
 
 This paper makes three contributions. First, it documents, on a harmonised global
 dataset, that LCRPGR is statistically unstable and that its instability is
 concentrated where population growth is near zero. Second, it proposes a simple,
-log-based alternative, the Built-up per Capita Rate (BpCR), defined as the
-logarithmic growth rate of built-up area per capita. BpCR is the difference of
-two logarithmic growth rates, which makes it finite for every country-period,
-symmetric between densification and sprawl, additively decomposable, and directly
-interpretable; it reproduces the policy signal of LCRPGR where the latter is
-well-behaved, and so complements rather than replaces the official indicator.
+log-based alternative, the Built-up per Capita Rate (BpCR), the logarithmic growth
+rate of built-up area per capita. As the difference of two logarithmic growth
+rates it is finite for every country-period and directly interpretable, and it
+reproduces the policy signal of LCRPGR where the latter is well-behaved.
 Third, using the stable metric, the paper estimates the economic and structural
 drivers of per-capita urban land use on a panel of 193 United Nations member
 states observed at five-year intervals between 1985 and 2020.
@@ -148,15 +144,14 @@ Following the UN-Habitat metadata [@unhabitat2025metadata], the official
 indicator divides an arithmetic land consumption rate by a logarithmic
 population growth rate:
 $$
-\text{LCRPGR} = \frac{\text{LCR}}{\text{PGR}},\qquad
-\text{LCR}=\frac{V_t-V_{t-z}}{V_{t-z}}\cdot\frac{1}{z},\qquad
-\text{PGR}=\frac{\ln(P_t/P_{t-z})}{z},
+\text{LCRPGR}_i = \frac{\text{LCR}_i}{\text{PGR}_i},\qquad
+\text{LCR}_i=\frac{V_{i,t}-V_{i,t-z}}{V_{i,t-z}}\cdot\frac{1}{z},\qquad
+\text{PGR}_i=\frac{\ln(P_{i,t}/P_{i,t-z})}{z},
 $$
-where the symbols are defined as follows: $V_t$ is the urban built-up area (in
-square kilometres) at the end of the period and $V_{t-z}$ the built-up area at the
-start; $P_t$ and $P_{t-z}$ are the corresponding urban populations; $z$ is the
-length of the period in years; $\ln(\cdot)$ denotes the natural logarithm; and the
-subscript $i$ indexes the country. The Land Consumption Rate $(\text{LCR})$ is thus
+where, for country $i$, $V_{i,t}$ is the urban built-up area (in
+square kilometres) at the end of the period and $V_{i,t-z}$ the built-up area at the
+start; $P_{i,t}$ and $P_{i,t-z}$ are the corresponding urban populations; $z$ is the
+length of the period in years; $\ln(\cdot)$ denotes the natural logarithm. The Land Consumption Rate $(\text{LCR})$ is thus
 the arithmetic growth of built-up area, expressed per year, and the Population
 Growth Rate $(\text{PGR})$ is the logarithmic (continuous) growth of population per
 year; the indicator $\text{LCRPGR}$ is their ratio. Two structural problems
@@ -229,10 +224,8 @@ Our contribution sits at the intersection of the two strands. On measurement, we
 adopt the log-based metric that both @nicolau2019lcrpgr and @Lu2026 recommend, in
 the form of BpCR. On method, we make it dynamic: a two-way fixed-effects panel with
 Arellano-Bond and Blundell-Bond GMM, estimated on 193 United Nations member states
-over 1985--2020, that measures the persistence (path-dependence) of per-capita
-land use. The result refines the drivers literature: while richer countries look
-more sprawled in the cross-section, within a country growing richer is associated
-with densification rather than sprawl.
+over 1985--2020, that measures the persistence of per-capita
+land use and its economic drivers.
 
 # Data {#sec-data}
 
@@ -306,7 +299,7 @@ analysis, retaining built-up only in cells classified as urban (SMOD at least 21
 measured on a consistent urban footprint.
 
 ![Building the analysis input following the SDG 11.3.1 metadata, for the
-Istanbul / Bosphorus window, with each layer overlaid semi-transparently on a
+Istanbul / Bosphorus window, with each layer drawn over a
 satellite basemap. (a) Satellite basemap (Esri) for reference. (b) GHS-BUILT-S
 built-up surface, shaded by the share of each 1 km cell that is built up (0 to
 about 50%). (c) GHS-SMOD Degree of Urbanisation, which classifies every cell from
@@ -405,9 +398,9 @@ the numerical instability.
 #| label: tbl-desc
 #| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
 dd <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
-vars <- c(bpcr="BpCR", lcrpgr_log="LCRPGR (log)", ln_urban_density="ln(Urban density)",
-          urban_pop_share="Urban pop. share", ln_gdp_pc="ln(GDP per capita)",
-          net_migr_pct="Net migration (\\% pop)")
+vars <- c(bpcr="BpCR", lcrpgr_log="LCRPGR (log)", ln_urban_density="ln(Urban Density)",
+          urban_pop_share="Urban Pop. Share", ln_gdp_pc="ln(GDP per capita)",
+          net_migr_pct="Net Migration (\\% Pop)")
 rows <- lapply(names(vars), function(v){
   x <- dd[[v]]
   data.frame(Variable=vars[[v]], N=sum(!is.na(x)),
@@ -719,13 +712,10 @@ other drivers are controlled, indicating that what matters is the urban *form*
 (how densely a country builds) rather than the *stage* of urbanisation (how urban
 it already is).
 
-As anticipated in @sec-strategy, the two GMM estimators report different
-observation counts: the Arellano-Bond (difference) estimator uses 1,351
-observations, while the Blundell-Bond (system) estimator reports 2,895. The
-difference is purely mechanical: the system estimator stacks the differenced and
-levels equations and so recovers the first-period information that differencing
-discards, roughly doubling the count, rather than drawing on any additional data.
-Both estimators pass the diagnostic tests: the Sargan/Hansen test does not reject
+As explained in @sec-strategy, the two estimators report different observation
+counts (1,351 for Arellano-Bond, 2,895 for Blundell-Bond) only because the system
+estimator stacks two equations, not because it uses more data. Both estimators
+pass the diagnostic tests: the Sargan/Hansen test does not reject
 the over-identifying restrictions and the AR(2) test finds no second-order serial
 correlation (both $p>0.10$), supporting the validity of the instruments. The
 Blundell-Bond estimates are close to Arellano-Bond in sign and significance,
