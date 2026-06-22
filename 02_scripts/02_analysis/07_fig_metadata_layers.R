@@ -49,7 +49,7 @@ legtheme<-theme_void(base_family=ff)+theme(
 map_a<-ggplot()+bg+bnd+co+maptheme
 map_b<-ggplot()+bg+geom_spatraster(data=built_p,alpha=0.85)+bnd+co+
   scale_fill_viridis_c(option="inferno",limits=blim,na.value="transparent",name="Built-up\n(% of cell)")+maptheme
-map_c<-ggplot()+bg+geom_spatraster(data=as.factor(smod),alpha=0.78)+bnd+co+
+map_c<-ggplot()+bg+geom_spatraster(data=as.factor(smod),alpha=1)+bnd+co+
   scale_fill_manual(values=setNames(smod_col,smod_lev),breaks=smod_lev,limits=smod_lev,drop=FALSE,
                     na.value="transparent",name="SMOD",na.translate=FALSE)+maptheme
 map_d<-ggplot()+bg+geom_spatraster(data=urb_p,alpha=0.92)+bnd+co+
