@@ -286,14 +286,14 @@ metadata prescribes [@unhabitat2025metadata], so that our BpCR and the official
 LCRPGR are computed on identical inputs and the comparison is like-for-like. The
 construction follows the metadata stages.
 
-*Step 1: define the analysis area.* SDG 11.3.1 is, by construction, an urban
+*Analysis area.* SDG 11.3.1 is, by construction, an urban
 (city-scale) indicator: it is measured inside cities rather than over whole
 national territories. We delineate the urban area with DEGURBA on the GHS-SMOD
 grid, classifying a cell as urban when its settlement code is at least 21 (urban
 centres and dense or semi-dense towns and their suburbs). All built-up and
 population quantities are measured only over these urban cells.
 
-*Step 2: measure built-up area and population at two points in time.* Our unit of
+*Components and aggregation.* Our unit of
 analysis is the country, so we aggregate the urban cells to the national level.
 Crucially, we aggregate the *components*, not the metric: for each country and
 five-year period we sum urban built-up area $V$ and urban population $P$ over all
@@ -303,7 +303,7 @@ ratios across sub-units. Averaging city-level ratios would let a small town with
 near-zero population denominator dominate the national figure; summing the
 components first avoids this and keeps the national rate well-defined.
 
-*Step 3: form the rates and the indicators.* From these national totals we
+*Rates and indicators.* From these national totals we
 compute the Land Consumption Rate (arithmetic growth of built-up area per year)
 and the Population Growth Rate (logarithmic growth of population per year), their
 ratio LCRPGR, and the built-up-per-capita level. From the same totals we also
