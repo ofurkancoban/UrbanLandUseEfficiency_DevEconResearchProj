@@ -50,14 +50,14 @@ theme_layer <- function() theme_void(base_size = 12, base_family = "serif") +
         legend.key.height=unit(0.42,"cm"), legend.key.width=unit(0.32,"cm"),
         legend.title=element_text(size=8.5, face="bold"), legend.text=element_text(size=7.5))
 co  <- coord_sf(crs = utm, expand = FALSE, xlim=c(ext_m$xmin,ext_m$xmax), ylim=c(ext_m$ymin,ext_m$ymax))
-bnd <- geom_sf(data = cty, fill=NA, color="#03738C", linewidth=0.6, inherit.aes=FALSE)
+bnd <- geom_sf(data = cty, fill=NA, color="#FFD700", linewidth=0.6, inherit.aes=FALSE)
 bg  <- geom_spatraster_rgb(data = bm)
 
-pa <- ggplot() + bg + bnd + co + labs(title="(a) Satellite basemap (reference)") + theme_layer()
+pa <- ggplot() + bg + bnd + co + labs(title="(a) Satellite Basemap (Reference)") + theme_layer()
 pb <- ggplot() + bg + geom_spatraster(data=built_p, alpha=0.85) + bnd + co +
   scale_fill_viridis_c(option="inferno", limits=blim, na.value="transparent",
                        name="Built-up\n(% of cell)") +
-  labs(title="(b) GHS-BUILT-S: built-up surface") + theme_layer()
+  labs(title="(b) GHS-BUILT-S: Built-up Surface") + theme_layer()
 pc <- ggplot() + bg + geom_spatraster(data=smod_f, alpha=0.75) + bnd + co +
   scale_fill_manual(values=setNames(smod_col,smod_lev), breaks=smod_lev,
                     limits=smod_lev, drop=FALSE,
@@ -66,7 +66,7 @@ pc <- ggplot() + bg + geom_spatraster(data=smod_f, alpha=0.75) + bnd + co +
 pd <- ggplot() + bg + geom_spatraster(data=urb_p, alpha=0.9) + bnd + co +
   scale_fill_viridis_c(option="inferno", limits=blim, na.value="transparent",
                        name="Built-up\n(% of cell)") +
-  labs(title="(d) Urban-masked built-up (analysis input)") + theme_layer()
+  labs(title="(d) Urban-Masked Built-up (Analysis Input)") + theme_layer()
 
 fig <- (pa | pb) / (pc | pd) +
   plot_annotation(theme = theme(plot.background = element_rect(fill="white", color=NA)))
