@@ -42,7 +42,9 @@ maptheme<-theme_void()+theme(legend.position="none",plot.margin=margin(0,0,0,0))
 legtheme<-theme_void(base_family=ff)+theme(
   legend.title=element_text(family=ff,size=11,face="bold"),
   legend.text=element_text(family=ff,size=10),
-  legend.key.height=unit(0.55,"cm"),legend.key.width=unit(0.4,"cm"))
+  legend.key.height=unit(0.55,"cm"),legend.key.width=unit(0.4,"cm"),
+  legend.justification="left", legend.box.just="left",
+  legend.margin=margin(0,0,0,2), legend.box.margin=margin(0,0,0,0))
 
 map_a<-ggplot()+bg+bnd+co+maptheme
 map_b<-ggplot()+bg+geom_spatraster(data=built_p,alpha=0.85)+bnd+co+
