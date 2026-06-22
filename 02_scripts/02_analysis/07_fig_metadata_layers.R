@@ -43,14 +43,14 @@ smod_lab <- c("Water","Very low rural","Low rural","Rural cluster",
 smod_col <- c("#9ecae1","#e5f5b8","#c7e29a","#7bb661","#ffe34d","#f0a23c","#c5562b","#d7191c")
 smod_f <- as.factor(smod); 
 
-theme_layer <- function() theme_void(base_size = 12) +
+theme_layer <- function() theme_void(base_size = 12, base_family = "serif") +
   theme(plot.title = element_text(face="bold", size=11.5, hjust=0, margin=margin(b=3)),
         panel.border = element_rect(color="grey30", fill=NA, linewidth=0.4),
         plot.margin = margin(5,5,5,5),
         legend.key.height=unit(0.42,"cm"), legend.key.width=unit(0.32,"cm"),
         legend.title=element_text(size=8.5, face="bold"), legend.text=element_text(size=7.5))
 co  <- coord_sf(crs = utm, expand = FALSE, xlim=c(ext_m$xmin,ext_m$xmax), ylim=c(ext_m$ymin,ext_m$ymax))
-bnd <- geom_sf(data = cty, fill=NA, color="#FFD700", linewidth=0.6, inherit.aes=FALSE)
+bnd <- geom_sf(data = cty, fill=NA, color="#03738C", linewidth=0.6, inherit.aes=FALSE)
 bg  <- geom_spatraster_rgb(data = bm)
 
 pa <- ggplot() + bg + bnd + co + labs(title="(a) Satellite basemap (reference)") + theme_layer()

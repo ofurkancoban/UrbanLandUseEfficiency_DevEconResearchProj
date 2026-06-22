@@ -300,7 +300,7 @@ about 50%). (c) GHS-SMOD Degree of Urbanisation, which classifies every cell fro
 water and rural (blues and greens) through suburban and town classes to the urban
 centre (red); cells coded 21 or higher count as urban. (d) Urban-masked built-up,
 the input actually used: the built-up surface of panel (b) kept only where panel
-(c) is urban, on the same built-up colour scale. The gold line is the GAUL
+(c) is urban, on the same built-up colour scale. The teal line is the GAUL
 country boundary (here the coastline).
 ](../04_outputs/figures/metadata_layers.png){#fig-layers width=88%}
 
