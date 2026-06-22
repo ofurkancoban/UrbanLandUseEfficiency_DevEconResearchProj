@@ -478,9 +478,23 @@ comes from changes *within* a country over time rather than from comparisons
 common to all countries in a given epoch (technology, the global business cycle,
 and any epoch-specific features of the satellite record). Standard errors are
 clustered by country to allow for serial correlation within a country's series.
-Each control maps to a hypothesis: urban density to H2, GDP per capita to H3, net
-migration to H4, and the lagged dependent variable to H5; H1 concerns the metric
-itself and is addressed by comparing the LCRPGR and BpCR runs.
+The four regressors are chosen because each has a clear theoretical link to how
+much land a city consumes per resident. **Urban density** captures the
+compact-city mechanism: where settlement is already dense there is both less room
+and less need to expand outward, so additional residents are accommodated within
+the existing footprint, implying less new land per capita (H2). **GDP per capita**
+has an ambiguous sign a priori. Across countries, higher income has historically
+gone with more sprawl, through larger homes and car-based mobility; but within a
+country, rising income can also fund vertical and infill construction,
+redevelopment, and stronger land-use regulation, which densify rather than expand
+the footprint. Our within-country design tests which force dominates over time
+(H3). **Net migration** proxies population pressure: in-migrants typically settle
+in the existing urban stock, so housing demand is absorbed by densification faster
+than the built-up area grows (H4). Finally, the **lagged dependent variable**
+captures path-dependence: the building stock, road network, and zoning that shape
+land use are long-lived, so a country's per-capita land use tends to persist from
+one period to the next (H5). H1 concerns the metric itself and is addressed by
+comparing the LCRPGR and BpCR runs.
 
 ## Two Stages: Static and Dynamic
 
