@@ -472,27 +472,40 @@ data.frame(
 
 ## Specification
 
-Our analysis is built around a single equation, estimated in two nested forms and,
-in each form, run once with each metric as the dependent variable so that the
-comparison is strictly like-for-like:
+We proceed in two stages, each with its own specification. In the **static** stage
+we compare the two metrics on an equal footing. For each metric
+$M \in \{\text{LCRPGR}, \text{BpCR}\}$ we estimate a two-way fixed-effects model
+without dynamics:
 $$
-\text{Metric}_{i,t}=\rho\,\text{Metric}_{i,t-1}
+M_{i,t} = \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t}
+ + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t}
+ + \mu_i + \delta_t + \varepsilon_{i,t}.
+$$ {#eq-static}
+Because the data, controls, and fixed effects are held identical, any difference
+between the LCRPGR and BpCR estimates of @eq-static is attributable to the metric
+alone (H1).
+
+In the **dynamic** stage, having established BpCR as the usable metric, we add its
+own lag to measure path-dependence, so the dependent variable is now specifically
+BpCR:
+$$
+\text{BpCR}_{i,t} = \rho\,\text{BpCR}_{i,t-1}
  + \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t}
  + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t}
- + \mu_i + \delta_t + \varepsilon_{i,t},
-$$
-where $\text{Metric}$ is either LCRPGR or BpCR for country $i$ in period $t$. We
-estimate two nested versions of this equation. The **static** form imposes
-$\rho = 0$, dropping the lagged dependent variable, and serves to compare the two
-metrics on an equal footing (@sec-results); the **dynamic** form estimates $\rho$
-freely to capture path-dependence and is corrected for the resulting bias as
-described below. The country fixed effects $\mu_i$ absorb all time-invariant national characteristics
-(geography, institutions, the initial level of urbanisation), so identification
-comes from changes *within* a country over time rather than from comparisons
-*between* countries. The period fixed effects $\delta_t$ absorb global shocks
-common to all countries in a given epoch (technology, the global business cycle,
-and any epoch-specific features of the satellite record). Standard errors are
-clustered by country to allow for serial correlation within a country's series.
+ + \mu_i + \delta_t + \varepsilon_{i,t}.
+$$ {#eq-dynamic}
+The coefficient $\rho$ measures how strongly a country's per-capita land use
+persists from one period to the next (H5).
+
+In both specifications the country fixed effects $\mu_i$ absorb all time-invariant
+national characteristics (geography, institutions, the initial level of
+urbanisation), so identification comes from changes *within* a country over time
+rather than from comparisons *between* countries. The period fixed effects
+$\delta_t$ absorb global shocks common to all countries in a given epoch
+(technology, the global business cycle, and any epoch-specific features of the
+satellite record). Standard errors are clustered by country to allow for serial
+correlation within a country's series.
+
 The four regressors are chosen because each has a clear theoretical link to how
 much land a city consumes per resident. **Urban density** captures the
 compact-city mechanism: where settlement is already dense there is both less room
@@ -510,16 +523,6 @@ captures path-dependence: the building stock, road network, and zoning that shap
 land use are long-lived, so a country's per-capita land use tends to persist from
 one period to the next (H5). H1 concerns the metric itself and is addressed by
 comparing the LCRPGR and BpCR runs.
-
-## Two Stages: Static and Dynamic
-
-We proceed in two stages. In the **static** stage we drop the lagged dependent
-variable and estimate the two-way fixed-effects model with each metric. This
-isolates the role of the *metric*: with the data, controls, and fixed effects held
-identical, any difference between the LCRPGR and BpCR results is attributable to
-the dependent variable alone (H1). In the **dynamic** stage we add the lagged
-dependent variable to measure path-dependence (H5), that is, the extent to which a
-country's per-capita land use in one period carries into the next.
 
 ## Dynamic-Panel Estimation and the Nickell Bias
 
