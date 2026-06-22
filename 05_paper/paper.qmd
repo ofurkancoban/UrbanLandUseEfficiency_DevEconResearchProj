@@ -739,13 +739,55 @@ land use is strongly path-dependent).
 
 # Discussion {#sec-discussion}
 
-The within-country result that income is associated with densification may appear
-to contradict the cross-sectional literature in which richer countries have
-historically sprawled. The two are complementary: *across* countries, higher
-income has coincided with more sprawl historically, but *within* a country, rising
-income over time is associated with denser, not more sprawling, urban land use.
-Measuring this distinction requires a metric that is stable within country-period --
-which BpCR provides and LCRPGR does not.
+## Interpretation and Relation to the Literature
+
+The headline result is that, *within* a country, higher income is associated with
+*less* land consumed per urban resident. At first glance this seems to contradict
+the established literature, in which richer countries are typically the more
+sprawled ones. The two findings are complementary rather than conflicting because
+they operate on different margins. *Across* countries, and at a single point in
+time, higher income has historically coincided with larger urban footprints,
+through bigger dwellings and car-based mobility; this is the cross-sectional
+pattern documented by @seto2011meta and @oueslati2015sprawl. *Within* a country
+over time, however, growing richer is associated with densification, as rising
+income funds infill and vertical construction, redevelopment, and tighter
+land-use regulation. Our country fixed effects hold national characteristics
+constant and so isolate this second, within-country margin, which cross-sectional
+designs cannot recover. We therefore extend, rather than overturn, the drivers
+literature: income and density still shape urban land use, but the sign of the
+income relationship depends on whether one compares countries or follows a single
+country over time.
+
+The results also bear directly on the measurement debate. @nicolau2019lcrpgr argue
+on formal grounds that the official LCRPGR ratio is unstable, and @Lu2026 show that
+land-use-efficiency estimates are highly sensitive to the underlying data. Our
+analysis supplies a complementary, empirical demonstration on a single harmonised
+dataset: holding the data and specification fixed and changing only the dependent
+variable, the within $R^2$ rises roughly twenty-fold when LCRPGR is replaced with
+BpCR, and coefficients that are uninformative under LCRPGR become significant and
+interpretable. The choice of metric, and not only the choice of data, can
+determine the conclusions one draws about sustainable urbanisation.
+
+## Limitations and Future Research
+
+Several caveats apply. First, the estimates are associations, not causal effects.
+The dynamic-panel GMM corrects the bias of the lagged dependent variable and the
+country and period fixed effects absorb a large class of confounders, but the
+design falls short of a research design that would identify causal effects, and
+the controls may still be correlated with omitted determinants of land use.
+Second, the panel is observed at five-year epochs, so it captures medium-run
+trajectories rather than short-run adjustment. Third, the analysis area is defined
+by the Degree of Urbanisation at a fixed threshold (GHS-SMOD of at least 21);
+plausible alternative thresholds would shift the urban boundary and could affect
+the levels, if not the within-country patterns. Fourth, the built-up and
+population layers are satellite-based estimates and the economic controls are
+national aggregates, both of which carry measurement error. Finally, the
+within-country estimates are averages across a very heterogeneous set of
+countries, so the common slope may mask differences between, for example, mature
+and rapidly urbanising economies. These limitations point to natural extensions:
+a sub-national analysis exploiting the ADM1 detail already in the data, designs
+aimed at causal identification, and an assessment of BpCR as a practical,
+stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 
 # Conclusion {#sec-conclusion}
 
