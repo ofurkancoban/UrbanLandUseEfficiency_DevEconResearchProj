@@ -556,7 +556,7 @@ about 1,500 country-periods before the GMM transformations described above.
 
 # Results {#sec-results}
 
-## The Metric Matters
+## The Metric Matters: LCRPGR vs. BpCR
 
 We first compare the two metrics in the static (lag-free) two-way fixed-effects
 model, holding the data, controls, and fixed effects identical so that any
@@ -570,7 +570,7 @@ stark (@tbl-static).
 
 ```{r tbl-static}
 #| label: tbl-static
-#| tbl-cap: "Static two-way fixed-effects model on the estimation sample (1985-2020), same sample and controls for both metrics. Coefficient with significance stars; clustered standard errors in parentheses. *** p<0.01, ** p<0.05, * p<0.1."
+#| tbl-cap: "Static two-way fixed-effects model on the estimation sample (1985-2020), same sample and controls for both metrics. Coefficient with significance stars; clustered standard errors in parentheses."
 suppressMessages({library(fixest); library(dplyr)})
 # same estimation sample as the dynamic model: complete cases with the lagged DV
 sp <- panel |>
@@ -589,13 +589,17 @@ body <- data.frame(Term=unname(vars),
                    `LCRPGR (log)`=sapply(names(vars), function(v) cell(mL,v)),
                    `BpCR`        =sapply(names(vars), function(v) cell(mB,v)),
                    check.names=FALSE, row.names=NULL)
-gof <- data.frame(Term=c("Within R$^2$","Observations","Country FE","Period FE"),
-                  `LCRPGR (log)`=c(sprintf("%.4f",r2(mL)["wr2"]), format(nobs(mL),big.mark=","),"Yes","Yes"),
-                  `BpCR`        =c(sprintf("%.4f",r2(mB)["wr2"]), format(nobs(mB),big.mark=","),"Yes","Yes"),
+gof <- data.frame(Term=c("Observations","Within R$^2$","Country FE","Period FE"),
+                  `LCRPGR (log)`=c(format(nobs(mL),big.mark=","), sprintf("%.4f",r2(mL)["wr2"]),"Yes","Yes"),
+                  `BpCR`        =c(format(nobs(mB),big.mark=","), sprintf("%.4f",r2(mB)["wr2"]),"Yes","Yes"),
                   check.names=FALSE)
+nb <- nrow(body)
 knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l","c","c")) |>
-  kableExtra::kable_styling(latex_options="HOLD_position")
+  kableExtra::kable_styling(latex_options="HOLD_position") |>
+  kableExtra::row_spec(nb, hline_after=TRUE) |>
+  kableExtra::footnote(general="*** p<0.01, ** p<0.05, * p<0.1. Clustered (by country) standard errors in parentheses.",
+                       general_title="", footnote_as_chunk=TRUE, escape=FALSE, threeparttable=TRUE)
 ```
 
 ```{r r2-inline}
