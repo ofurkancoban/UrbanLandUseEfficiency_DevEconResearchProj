@@ -536,16 +536,16 @@ specification** and report Blundell-Bond alongside it as a robustness comparison
 Both are estimated in two steps with Windmeijer-corrected standard errors, and the
 instrument set is collapsed to keep it from proliferating with the time dimension.
 
-The two GMM estimators are run on different numbers of observations, and the
-difference is mechanical rather than a data discrepancy. The Arellano-Bond
-estimator works only with the *differenced* equation, and differencing consumes
-the first available period for each country (a difference needs both $t$ and
-$t-1$), leaving 1,351 observations. The Blundell-Bond estimator stacks **two**
-equations, the differenced equation *and* the levels equation, so its observation
-count combines both and recovers the first-period information that differencing
-discards; this is why it reports 2,895 observations, roughly twice as many. The
-larger figure reflects the system estimator's additional moment conditions, not a
-larger underlying sample.
+The two estimators are run on different numbers of observations, which is
+mechanical rather than a data discrepancy. The Arellano-Bond estimator uses only
+the *differenced* equation, and differencing consumes the first available period
+for each country (a difference needs both $t$ and $t-1$). The Blundell-Bond
+estimator instead stacks **two** equations, the differenced equation *and* the
+levels equation, so its observation count combines both and recovers the
+first-period information that differencing discards, leaving it with roughly twice
+as many observations. The larger count reflects the system estimator's additional
+moment conditions, not a larger underlying sample; the exact figures are reported
+with the results in @sec-results.
 
 Instrument validity is assessed with the **Sargan/Hansen** test of
 over-identifying restrictions and the **AR(2)** test for second-order serial
