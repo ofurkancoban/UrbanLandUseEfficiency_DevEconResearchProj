@@ -338,9 +338,19 @@ compute the Land Consumption Rate (arithmetic growth of built-up area per year)
 and the Population Growth Rate (logarithmic growth of population per year), their
 ratio LCRPGR, and the built-up-per-capita level. From the same totals we also
 compute BpCR as the logarithmic growth of built-up area per capita, as defined in
-@sec-measurement. Two additional urban controls are derived from the same GHSL/SMOD
-layers: the urban population share (urban population over total population) and
-urban density (urban population over urban land area).
+@sec-measurement.
+
+*Control variables.* The two urban controls are our own calculations from the same
+GHSL/SMOD layers, not external series. Urban land area is the area of the cells
+classified as urban (GHS-SMOD code at least 21), aggregated to the national level
+from the SMOD grid; **urban density** is then national urban population divided by
+this urban land area, and we use it in logs. **Urban population share** is national
+urban population (over urban cells) divided by national total population (over the
+whole territory). The remaining two controls come directly from international
+sources rather than being constructed here: **GDP per capita** (constant 2020 US
+dollars, in logs) from UN SNAAMA, and **net migration** as a share of population
+from UN DESA World Population Prospects 2024. All variables are aligned to the same
+country-period grid as the built-up and population components.
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
 member states across eight five-year epochs from 1985 to 2020, giving 1,538
