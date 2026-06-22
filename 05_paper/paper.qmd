@@ -232,7 +232,7 @@ with densification rather than sprawl.
 
 # Data
 
-## Sources
+## Data Sources
 
 The empirical analysis draws on three official, global data providers, the same
 sources used in international SDG monitoring. Built-up area, population, and the
@@ -278,6 +278,19 @@ compute BpCR as the logarithmic growth of built-up area per capita, as defined i
 Section 2. Two additional urban controls are derived from the same GHSL/SMOD
 layers: the urban population share (urban population over total population) and
 urban density (urban population over urban land area).
+
+@fig-layers illustrates the construction for one example window. Panel (a) shows
+the raw GHS-BUILT-S surface; panel (b) the GHS-SMOD Degree of Urbanisation, which
+classifies each cell along a rural-to-urban gradient; and panel (c) the
+urban-masked built-up that actually enters the analysis, retaining built-up only
+in cells classified as urban (SMOD at least 21). The same masking is applied to
+population, so that both components are measured on a consistent urban footprint.
+
+![Building the analysis input following the SDG 11.3.1 metadata, for the
+Oldenburg / NW Germany window. (a) GHS-BUILT-S built-up surface; (b) GHS-SMOD
+Degree of Urbanisation; (c) urban-masked built-up retained for the analysis
+(cells with SMOD at least 21). The grey line is the GAUL country boundary.
+](../04_outputs/figures/metadata_layers.png){#fig-layers width=100%}
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
 member states at five-year epochs from 1985 to 2020 (@tbl-sample).
