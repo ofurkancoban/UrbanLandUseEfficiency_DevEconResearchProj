@@ -3,7 +3,7 @@
 # Static two-panel country-trend figure for the paper: official log-LCRPGR (left)
 # vs BpCR (right) for seven regional representatives, 1985-2020. Shows LCRPGR's
 # erratic swings against BpCR's smooth, interpretable series.
-# Output: 04_outputs/figures/country_trends.png
+# Output: 04_outputs/figures/country_trends.pdf (vector) + .png (600 dpi)
 # ============================================================================
 suppressMessages({library(here); library(readr); library(dplyr); library(tidyr)
   library(ggplot2); library(showtext); library(sysfonts)}); setwd(here::here())
@@ -42,6 +42,8 @@ library(patchwork)
 fig <- pa + pb + plot_layout(guides="collect") &
   theme(legend.position="bottom") &
   guides(color=guide_legend(nrow=1, override.aes=list(linewidth=1.1)))
-out <- here("04_outputs/figures/country_trends.png")
-ggsave(out, fig, width=9.0, height=2.6, dpi=300, bg="white")
+out <- here("04_outputs/figures/country_trends.pdf")
+ggsave(out, fig, width=9.0, height=3.3, device=cairo_pdf, bg="white")
+# high-res PNG fallback as well
+ggsave(here("04_outputs/figures/country_trends.png"), fig, width=9.0, height=3.3, dpi=600, bg="white")
 cat("wrote", out, "| rows:", nrow(d), "| countries:", n_distinct(d$country), "\n")

@@ -431,7 +431,7 @@ before easing. The same data, read through a stable metric, become legible.
 official log-LCRPGR swings erratically and crosses its zero and unity reference
 lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
 the fastest-urbanising economies showing the strongest early sprawl before
-easing.](../04_outputs/figures/country_trends.png){#fig-trends width=92%}
+easing.](../04_outputs/figures/country_trends.pdf){#fig-trends width=92%}
 
 # Empirical Strategy {#sec-strategy}
 
