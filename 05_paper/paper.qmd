@@ -394,6 +394,20 @@ threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
 is the same under either metric; the difference is that BpCR delivers it without
 the numerical instability.
 
+![Country trajectories for seven regional representatives, 1985--2020. (a) The
+official log-LCRPGR swings erratically and crosses its zero and unity reference
+lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
+the fastest-urbanising economies showing the strongest early sprawl before
+easing.](../04_outputs/figures/country_trends.png){#fig-trends width=92%}
+
+Country trajectories make the contrast concrete (@fig-trends). For a set of
+regional representatives, the official LCRPGR swings erratically from one period
+to the next, crossing zero and spiking to large positive and negative values that
+are hard to read as land-use behaviour. The BpCR series for the same countries are
+smooth and interpretable: most drift gradually towards balance, while the
+fastest-urbanising economies show the strongest sprawl earlier in the period
+before easing. The same data, read through a stable metric, become legible.
+
 ```{r tbl-desc}
 #| label: tbl-desc
 #| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
@@ -419,20 +433,6 @@ knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
 @tbl-desc reports summary statistics for the dependent variables and controls over
 the full 1985--2020 sample.
 
-![Country trajectories for seven regional representatives, 1985--2020. (a) The
-official log-LCRPGR swings erratically and crosses its zero and unity reference
-lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
-the fastest-urbanising economies showing the strongest early sprawl before
-easing.](../04_outputs/figures/country_trends.png){#fig-trends width=100%}
-
-Country trajectories make the contrast concrete (@fig-trends). For a set of
-regional representatives, the official LCRPGR swings erratically from one period
-to the next, crossing zero and spiking to large positive and negative values that
-are hard to read as land-use behaviour. The BpCR series for the same countries are
-smooth and interpretable: most drift gradually towards balance, while the
-fastest-urbanising economies show the strongest sprawl earlier in the period
-before easing. The same data, read through a stable metric, become legible.
-
 # Empirical Strategy {#sec-strategy}
 
 **Research question.** We ask two linked questions. First, a substantive one: what
@@ -454,7 +454,7 @@ data.frame(
         "Net in-migration densifies cities",
         "Per-capita land use is path-dependent"
     ),
-    Expected = c("better fit", "$-$", "$-$", "$-$", "$+$"),
+    Expected = c("Better Fit", "$-$", "$-$", "$-$", "$+$"),
     check.names = FALSE
 ) |>
     knitr::kable(
