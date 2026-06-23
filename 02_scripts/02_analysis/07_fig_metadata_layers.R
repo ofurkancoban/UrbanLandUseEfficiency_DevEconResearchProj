@@ -36,7 +36,7 @@ smod <- project(smod_src, tmpl, method="near"); names(smod)<-"smod"
 smod_r<-resample(smod,built,method="near"); urb<-built; urb[smod_r<21]<-NA
 to_pct<-function(r) r/1e6*100; built_p<-to_pct(built); urb_p<-to_pct(urb)
 blim<-c(0, as.numeric(global(built_p,"max",na.rm=TRUE)))
-bm<-get_tiles(win_m, provider="Esri.WorldImagery", crop=TRUE, zoom=11, cachedir=tempdir())
+bm<-get_tiles(win_m, provider="Esri.WorldImagery", crop=TRUE, zoom=12, cachedir=tempdir())
 gaul<-st_read(here("03_datasets/raw/GAUL_2025_L1/gaul_2025_l1.shp"),quiet=TRUE)|>st_make_valid()
 cty<-gaul[gaul$iso3_code=="TUR",]|>st_union()|>st_transform(utm)|>st_crop(st_bbox(win_m))
 smod_lev<-c("10","11","12","13","21","22","23","30")
@@ -62,9 +62,9 @@ map_d<-ggplot()+bg+geom_spatraster(data=urb_p,alpha=0.92)+bnd+co+
   scale_fill_viridis_c(option="inferno",limits=blim,na.value="transparent",name="Built-up\n(% of cell)")+maptheme
 
 # round + frame the MAP only, via a grid roundrect mask in magick
-MW<-1200; MH<-round(MW/aspect); rad<-40
+MW<-2400; MH<-round(MW/aspect); rad<-80
 round_map<-function(p){
-  pf<-tempfile(fileext=".png"); ggsave(pf,p,width=MW/150,height=MH/150,dpi=150,bg="white")
+  pf<-tempfile(fileext=".png"); ggsave(pf,p,width=MW/300,height=MH/300,dpi=300,bg="white")
   mk<-tempfile(fileext=".png"); png(mk,width=MW,height=MH,bg="transparent")
   grid.draw(roundrectGrob(r=unit(rad,"pt"),gp=gpar(fill="white",col=NA))); dev.off()
   fr<-tempfile(fileext=".png"); png(fr,width=MW,height=MH,bg="transparent")
@@ -93,5 +93,5 @@ P <- list(
   panel(map_d,"(d) Urban-Masked Built-up (Analysis Input)"))
 fig<-cowplot::plot_grid(plotlist=P, nrow=2, ncol=2)
 out<-here("04_outputs/figures/metadata_layers.png")
-cowplot::save_plot(out, fig, base_width=9.6, base_height=2*(9.6/2*(1/1.27)/aspect)+0.9, bg="white")
+cowplot::save_plot(out, fig, base_width=9.6, base_height=2*(9.6/2*(1/1.27)/aspect)+0.9, dpi=600, bg="white")
 cat("wrote", out, "\n")
