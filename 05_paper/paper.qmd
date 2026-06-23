@@ -781,7 +781,7 @@ knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, lines
   kableExtra::row_spec(nb, hline_after=TRUE) |>
   kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR"=3)) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
-                                 "Standard errors clustered by country, in parentheses."),
+                                 "Standard errors are clustered at the country level, in parentheses, to robustify against potential serial correlation within subgroups."),
                        general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
 ```
 
