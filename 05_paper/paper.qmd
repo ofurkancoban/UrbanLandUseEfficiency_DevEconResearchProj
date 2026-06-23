@@ -347,7 +347,8 @@ compute BpCR as the logarithmic growth of built-up area per capita, as defined i
 GHSL/SMOD layers, not external series. Urban land area is the area of the cells
 classified as urban (GHS-SMOD code at least 21), aggregated to the national level
 from the SMOD grid; **urban density** is then national urban population divided by
-this urban land area, and we use it in logs. **Urban population share** is national
+this urban land area (which is distinct from, and about ten times larger than, the
+built-up surface that enters the dependent variable), and we use it in logs. **Urban population share** is national
 urban population (over urban cells) divided by national total population (over the
 whole territory). The remaining two controls come directly from international
 sources rather than being constructed here: **GDP per capita** (constant 2020 US
@@ -508,7 +509,7 @@ The four regressors are chosen because each has a clear theoretical link to how
 much land a city consumes per resident. **Urban density** captures the
 compact-city mechanism: where settlement is already dense there is both less room
 and less need to expand outward, so additional residents are accommodated within
-the existing footprint, implying less new land per capita (H2). **GDP per capita**
+the existing footprint, implying less new land per capita (H2).^[Although both the dependent variable and this control involve urban population, they are not mechanically linked: the dependent variable is the growth rate of built-up surface per capita, whereas the control is the level of population per unit of urban land area, and built-up surface is only about a tenth of urban land area. The two are therefore far from collinear, and the two-way fixed effects further absorb persistent cross-country scale differences.] **GDP per capita**
 has an ambiguous sign a priori. Across countries, higher income has historically
 gone with more sprawl, through larger homes and car-based mobility; but within a
 country, rising income can also fund vertical and infill construction,
