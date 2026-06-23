@@ -598,7 +598,7 @@ coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2*k-1,
 gof_grey  <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
 knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l","c","c")) |>
-  kableExtra::kable_styling(latex_options="HOLD_position") |>
+  kableExtra::kable_styling(latex_options="HOLD_position", font_size=9) |>
   kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
