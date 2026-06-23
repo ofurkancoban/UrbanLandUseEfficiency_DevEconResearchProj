@@ -43,7 +43,7 @@ fig <- pa + pb + plot_layout(guides="collect") &
   theme(legend.position="bottom") &
   guides(color=guide_legend(nrow=1, override.aes=list(linewidth=1.1)))
 out <- here("04_outputs/figures/country_trends.pdf")
-ggsave(out, fig, width=9.0, height=3.3, device=cairo_pdf, bg="white")
+ggsave(out, fig, width=9.0, height=2.8, device=cairo_pdf, bg="white")
 # high-res PNG fallback as well
-ggsave(here("04_outputs/figures/country_trends.png"), fig, width=9.0, height=3.3, dpi=600, bg="white")
+ggsave(here("04_outputs/figures/country_trends.png"), fig, width=9.0, height=2.8, dpi=600, bg="white")
 cat("wrote", out, "| rows:", nrow(d), "| countries:", n_distinct(d$country), "\n")

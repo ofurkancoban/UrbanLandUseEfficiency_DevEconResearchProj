@@ -44,9 +44,12 @@ format:
         \usepackage{makecell}
         \usepackage{float}
         \setlength{\bibsep}{0pt plus 0.2ex}
-        \renewcommand{\bibfont}{\small}
+        \renewcommand{\bibfont}{\footnotesize}
         \floatplacement{figure}{H}
         \floatplacement{table}{H}
+        \setlength{\floatsep}{6pt plus 2pt minus 2pt}
+        \setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
+        \setlength{\intextsep}{6pt plus 2pt minus 2pt}
     journal:
       formatting: preprint      # preprint | review | doubleblind
       model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
@@ -80,16 +83,12 @@ built-up area grows by roughly the size of the Netherlands [@seto2012global].
 For development policy the central question is not whether cities expand, but how
 efficiently they do so, that is, how much additional land each new urban resident
 consumes.
-When built-up area grows in step with population, cities densify and remain
-compact; when it grows much faster than population, they sprawl. Sprawl carries real costs. Once farmland on the urban fringe is
-built over, it is effectively lost for good. Low-density, spread-out development
-makes people more dependent on cars, because homes, jobs, and services lie far
-apart. It also makes public infrastructure more expensive per resident, since the
-same roads, pipes, and power and transport networks must reach a smaller number
-of people over a larger area. And by encouraging longer car journeys and
-land-hungry construction, sprawl tends to raise greenhouse-gas emissions per
-person. Measuring land-use efficiency well is therefore a precondition for
-monitoring sustainable urbanisation.
+When built-up area grows in step with population, cities stay compact; when it
+grows much faster, they sprawl. Sprawl is costly: it paves over fringe farmland for
+good, locks residents into car dependence as homes, jobs, and services spread
+apart, raises the per-resident cost of infrastructure that must reach fewer people
+over more ground, and lifts per-capita emissions. Measuring land-use efficiency
+well is therefore a precondition for monitoring sustainable urbanisation.
 
 The United Nations monitors this through target 11.3 of its Sustainable
 Development Goals (SDGs), whose official indicator 11.3.1 is the ratio of the Land
@@ -272,7 +271,7 @@ and net migration as a share of population from UN DESA World Population Prospec
 
 ```{r tbl-data}
 #| label: tbl-data
-#| tbl-cap: "Dataset specifications. GHSL grids are distributed in the World Mollweide equal-area projection (ESRI:54009); built-up and population are aggregated at 100 m and the SMOD urban mask at 1 km. Vector and tabular sources are listed with their native form."
+#| tbl-cap: "Dataset specifications. GHSL grids use the World Mollweide projection (ESRI:54009); built-up and population at 100 m, the SMOD urban mask at 1 km. Vector and tabular sources show their native form."
 data.frame(
     Dataset = c(
         "GHS-BUILT-S R2023A", "GHS-POP R2023A", "GHS-SMOD R2023A",
@@ -318,54 +317,41 @@ urban centre; and panel (d) the urban-masked built-up that actually enters the
 analysis, retaining built-up only in cells classified as urban (SMOD at least 21). The same masking is applied to population, so that both components are
 measured on a consistent urban footprint.
 
-![Building the analysis input following the SDG 11.3.1 metadata, for the
-Istanbul / Bosphorus window, with each layer drawn over a
-satellite basemap. (a) Satellite basemap (Esri) for reference. (b) GHS-BUILT-S
-built-up surface, shaded by the share of each 1 km cell that is built up (0 to
-about 50%). (c) GHS-SMOD Degree of Urbanisation, which classifies every cell from
-water and rural (blues and greens) through suburban and town classes to the urban
-centre (red); cells coded 21 or higher count as urban. (d) Urban-masked built-up,
-the input actually used: the built-up surface of panel (b) kept only where panel
-(c) is urban, on the same built-up colour scale. The gold line is the GAUL
-country boundary (here the coastline).
-](../04_outputs/figures/metadata_layers.png){#fig-layers width=88%}
+![Building the analysis input following the SDG 11.3.1 metadata (Istanbul /
+Bosphorus window), each layer drawn over an Esri satellite basemap. (a) Basemap.
+(b) GHS-BUILT-S built-up surface (share of each 1 km cell built up). (c) GHS-SMOD
+Degree of Urbanisation; cells coded 21 or higher count as urban. (d) Urban-masked
+built-up, the input actually used: panel (b) kept only where panel (c) is urban.
+The gold line is the GAUL country boundary.
+](../04_outputs/figures/metadata_layers.png){#fig-layers width=74%}
 
-*Analysis area.* SDG 11.3.1 is, by construction, an urban
-(city-scale) indicator: it is measured inside cities rather than over whole
-national territories. We delineate the urban area with DEGURBA on the GHS-SMOD
-grid, classifying a cell as urban when its settlement code is at least 21 (urban
-centres and dense or semi-dense towns and their suburbs). All built-up and
-population quantities are measured only over these urban cells.
+*Analysis area.* SDG 11.3.1 is an urban (city-scale) indicator, measured inside
+cities rather than over whole national territories. We delineate the urban area
+with DEGURBA on the GHS-SMOD grid (a cell is urban when its settlement code is at
+least 21, that is, urban centres and dense or semi-dense towns and suburbs) and
+measure all built-up and population quantities only over these urban cells.
 
-*Components and aggregation.* Our unit of
-analysis is the country, so we aggregate the urban cells to the national level.
-Crucially, we aggregate the *components*, not the metric: for each country and
-five-year period we sum urban built-up area $V$ and urban population $P$ over all
-urban cells to obtain national urban totals, and only then form the rates. This
-follows the metadata's aggregate-then-rate rule, which warns against averaging
-ratios across sub-units. Averaging city-level ratios would let a small town with a
-near-zero population denominator dominate the national figure; summing the
-components first avoids this and keeps the national rate well-defined.
+*Components and aggregation.* Our unit of analysis is the country, so we aggregate
+the urban cells to the national level, aggregating the *components* rather than the
+metric: for each country-period we sum urban built-up area $V$ and urban population
+$P$ before forming any rate. This follows the metadata's aggregate-then-rate rule;
+averaging city-level ratios would let a small town with a near-zero population
+denominator dominate the national figure, whereas summing components first keeps
+the national rate well-defined.
 
-*Rates and indicators.* From these national totals we
-compute the Land Consumption Rate (arithmetic growth of built-up area per year)
-and the Population Growth Rate (logarithmic growth of population per year), their
-ratio LCRPGR, and the built-up-per-capita level. From the same totals we also
-compute BpCR as the logarithmic growth of built-up area per capita, as defined in
-@sec-measurement.
+*Rates and indicators.* From these national totals we form the Land Consumption
+Rate (arithmetic growth of built-up area), the Population Growth Rate (logarithmic
+growth of population), their ratio LCRPGR, the built-up-per-capita level, and BpCR
+as the logarithmic growth of built-up area per capita (@sec-measurement).
 
-*Control variables.* The two urban controls are our own calculations from the same
-GHSL/SMOD layers, not external series. Urban land area is the area of the cells
-classified as urban (GHS-SMOD code at least 21), aggregated to the national level
-from the SMOD grid; **urban density** is then national urban population divided by
-this urban land area (which is distinct from, and about ten times larger than, the
-built-up surface that enters the dependent variable), and we use it in logs. **Urban population share** is national
-urban population (over urban cells) divided by national total population (over the
-whole territory). The remaining two controls come directly from international
-sources rather than being constructed here: **GDP per capita** (constant 2020 US
-dollars, in logs) from UN SNAAMA, and **net migration** as a share of population
-from UN DESA World Population Prospects 2024. All variables are aligned to the same
-country-period grid as the built-up and population components.
+*Control variables.* The two urban controls are computed from the same GHSL/SMOD
+layers. **Urban density** is national urban population divided by urban land area,
+the area of urban cells (distinct from, and about ten times larger than, the
+built-up surface in the dependent variable), used in logs. **Urban population
+share** is urban population divided by national total population. The remaining
+controls come from international sources: **GDP per capita** (constant 2020 US
+dollars, logs) from UN SNAAMA and **net migration** (share of population) from UN
+DESA WPP 2024. All variables align to the same country-period grid.
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
 member states across eight five-year epochs from 1985 to 2020, giving 1,538
@@ -448,10 +434,10 @@ smooth and interpretable: most drift gradually towards balance, while the
 fastest-urbanising economies show the strongest sprawl earlier in the period
 before easing. The same data, read through a stable metric, become legible.
 
-![Country trajectories for seven regional representatives, 1985--2020. (a) LCRPGR (log) swings erratically and crosses its zero and unity reference
-lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
-the fastest-urbanising economies showing the strongest early sprawl before
-easing.](../04_outputs/figures/country_trends.pdf){#fig-trends width=92%}
+![Country trajectories for seven regional representatives, 1985--2020. (a) LCRPGR
+(log) swings erratically across its zero and unity reference lines; (b) BpCR is
+smooth on the same data, with the fastest-urbanising economies showing the
+strongest early sprawl.](../04_outputs/figures/country_trends.pdf){#fig-trends width=88%}
 
 # Empirical Strategy {#sec-strategy}
 
@@ -553,13 +539,11 @@ specification** and report Blundell-Bond alongside it as a robustness comparison
 Both are estimated in two steps with Windmeijer-corrected standard errors [@windmeijer2005], and the
 instrument matrix is collapsed (one column per lag distance) to keep the instrument count from proliferating with the time dimension.
 
-The two estimators draw on the estimation sample differently. The Arellano-Bond
-estimator uses the differenced equation alone, and differencing costs the first
-usable period for each country, so it is estimated on fewer observations than the
-within model. The Blundell-Bond estimator adds a second, levels equation, which
-recovers that first period and, more importantly, contributes additional moment
-conditions (and hence more instruments) rather than a larger sample. The exact
-observation and instrument counts are reported with the results in @sec-results.
+The two estimators draw on the sample differently: Arellano-Bond uses the
+differenced equation alone, so differencing costs the first usable period per
+country, while Blundell-Bond adds a levels equation that recovers it and, more
+importantly, contributes extra moment conditions rather than a larger sample. The
+exact counts are reported with the results in @sec-results.
 
 Instrument validity is assessed with the **Sargan/Hansen** test of
 over-identifying restrictions and the **AR(2)** test for second-order serial
@@ -713,11 +697,10 @@ out.
 
 *Income (H3).* Log GDP per capita enters negative and significant at $-0.014$:
 within a country, a doubling of income is associated with about $0.010$ lower
-annual BpCR. This is the paper's central substantive result. In the cross-section,
-richer countries look more sprawled; but over time, as a given country grows
+annual BpCR. This is the paper's central substantive result: over time, as a country grows
 richer, its per-capita land use falls, consistent with rising income funding
-infill and vertical development and tighter land regulation. Growth and sprawl are
-not the same thing.
+infill, vertical development, and tighter land regulation. We return to the
+contrast with the cross-section in @sec-discussion.
 
 *Net migration (H4).* Net migration is negative and marginally significant
 ($-0.0005$): each additional percentage point of net in-migration is associated
@@ -729,17 +712,13 @@ other drivers are controlled, indicating that what matters is the urban *form*
 (how densely a country builds) rather than the *stage* of urbanisation (how urban
 it already is).
 
-As reported in @tbl-gmm, the Arellano-Bond differenced equation uses 1,351
-observations and the Blundell-Bond system estimator 1,544: differencing costs the
-first usable period for each country, which the level equation in the system
-estimator restores, a gap of one period per country (193) rather than a doubling
-of the sample. The system estimator's substantive addition is moment conditions,
-reflected in its larger instrument count (21 versus 15 collapsed instruments). Both estimators
-pass the diagnostic tests: the Sargan/Hansen test does not reject
-the over-identifying restrictions and the AR(2) test finds no second-order serial
-correlation (both $p>0.10$), supporting the validity of the instruments. The
-Blundell-Bond estimates are close to Arellano-Bond in sign and significance,
-indicating the findings are not an artefact of the chosen estimator.
+The two estimators use 1,351 (Arellano-Bond) and 1,544 (Blundell-Bond)
+observations and 15 versus 21 instruments, the one-period and moment-condition
+differences anticipated in @sec-strategy. Both pass the diagnostic tests: the
+Sargan/Hansen test does not reject the over-identifying restrictions and the AR(2)
+test finds no second-order serial correlation (both $p>0.10$). The Blundell-Bond
+estimates are close to Arellano-Bond in sign and significance, so the findings are
+not an artefact of the chosen estimator.
 
 ## Heterogeneity by Development Group
 
@@ -753,7 +732,7 @@ deep-lag instruments to be reliable.
 
 ```{r tbl-hetero}
 #| label: tbl-hetero
-#| tbl-cap: "Heterogeneity: static two-way fixed-effects BpCR model estimated separately by United Nations development group, on the same estimation sample as the static comparison."
+#| tbl-cap: "Heterogeneity: static two-way fixed-effects BpCR model by United Nations development group (same estimation sample as Table 4)."
 suppressMessages({library(fixest); library(dplyr)})
 sph <- panel |>
   filter(year <= 2020, !is.na(bpcr), !is.na(lcrpgr_log)) |>
@@ -891,8 +870,7 @@ within-country explanatory power roughly twenty-fold.
 Using the stable metric on a dynamic panel of 193 United Nations member states, we
 find that per-capita urban land use is strongly path-dependent and that, within
 countries, it declines with urban density, net in-migration, and income, so that
-economic growth over time is accompanied by densification rather than sprawl, a
-within-country pattern that complements the cross-sectional literature. The
+economic growth over time is accompanied by densification rather than sprawl. The
 contribution is as much methodological as substantive: a stable metric paired with
 a bias-corrected dynamic estimator. For monitoring sustainable urbanisation, the
 choice of metric is not a technicality but a precondition for drawing the right
