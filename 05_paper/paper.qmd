@@ -255,7 +255,7 @@ Agriculture Organization [@gaul2024], which provide UN-validated, politically
 neutral country boundaries with global coverage. Socio-economic controls come from
 the **United Nations**: GDP per capita in constant 2020 US dollars from UN SNAAMA
 and net migration as a share of population from UN DESA World Population Prospects
-2024 [@unsd2025snaama; @undesa2024wpp].
+2024 [@unsd2025snaama; @undesa2024wpp]. For the heterogeneity analysis we classify countries into United Nations development groups, developed economies, developing economies, and least-developed countries (LDCs), using the UN M49 regional classification together with the UN Committee for Development Policy LDC list (obtained through the `countrycode` R package).
 
 @tbl-data summarises the technical characteristics of each dataset.
 
@@ -265,23 +265,23 @@ and net migration as a share of population from UN DESA World Population Prospec
 data.frame(
     Dataset = c(
         "GHS-BUILT-S R2023A", "GHS-POP R2023A", "GHS-SMOD R2023A",
-        "GAUL 2024/2025", "UN SNAAMA", "UN DESA WPP 2024"
+        "GAUL 2024/2025", "UN SNAAMA", "UN DESA WPP 2024", "UN M49 / CDP"
     ),
-    Provider = c("EC JRC", "EC JRC", "EC JRC", "FAO", "UN Stats", "UN DESA"),
-    Type = c("Raster", "Raster", "Raster", "Vector", "Tabular", "Tabular"),
-    Resolution = c("100 m", "100 m", "1 km", "Levels 0-2", "Country-year", "Country-year"),
+    Provider = c("EC JRC", "EC JRC", "EC JRC", "FAO", "UN Stats", "UN DESA", "UN"),
+    Type = c("Raster", "Raster", "Raster", "Vector", "Tabular", "Tabular", "Classification"),
+    Resolution = c("100 m", "100 m", "1 km", "Levels 0-2", "Country-year", "Country-year", "Country"),
     CRS = c(
         "Mollweide (54009)", "Mollweide (54009)", "Mollweide (54009)",
-        "WGS84 (EPSG:4326)", "--", "--"
+        "WGS84 (EPSG:4326)", "--", "--", "--"
     ),
     Years = c(
         "1975-2030, 5-yr", "1975-2030, 5-yr", "1975-2030, 5-yr",
-        "2024/2025", "1970-2024", "1950-2023"
+        "2024/2025", "1970-2024", "1950-2023", "2024"
     ),
     Variable = c(
         "Built-up area (m2/cell)", "Population (persons/cell)",
         "Degree of Urbanisation (class 10-30)", "Admin boundaries",
-        "GDP p.c. (const. 2020 US$)", "Net migration (CNMR /1000)"
+        "GDP p.c. (const. 2020 US$)", "Net migration (CNMR /1000)", "Development group"
     ),
     check.names = FALSE
 ) |>
@@ -731,6 +731,75 @@ correlation (both $p>0.10$), supporting the validity of the instruments. The
 Blundell-Bond estimates are close to Arellano-Bond in sign and significance,
 indicating the findings are not an artefact of the chosen estimator.
 
+## Heterogeneity by Development Group
+
+The pooled model imposes a common slope on a very heterogeneous set of countries:
+the response of urban land use to income need not be the same in Germany as in
+Nigeria. @tbl-hetero relaxes this by estimating the BpCR two-way fixed-effects
+model separately for the three United Nations development groups, on the same
+estimation sample as @tbl-static. We use the static fixed-effects estimator rather
+than GMM here because the subgroups (44 to 101 countries) are too small for the
+deep-lag instruments to be reliable.
+
+```{r tbl-hetero}
+#| label: tbl-hetero
+#| tbl-cap: "Heterogeneity: static two-way fixed-effects BpCR model estimated separately by United Nations development group, on the same estimation sample as the static comparison."
+suppressMessages({library(fixest); library(dplyr)})
+sph <- panel |>
+  filter(year <= 2020, !is.na(bpcr), !is.na(lcrpgr_log)) |>
+  arrange(iso3, year) |> group_by(iso3) |> mutate(bpcr_L = lag(bpcr)) |> ungroup() |>
+  filter(!is.na(ln_urban_density), !is.na(urban_pop_share), !is.na(ln_gdp_pc),
+         !is.na(net_migr_pct), !is.na(bpcr_L), !is.na(income_group))
+ctrl <- "ln_urban_density + urban_pop_share + ln_gdp_pc + net_migr_pct"
+fit <- function(g) feols(as.formula(paste("bpcr ~", ctrl, "| iso3 + year")),
+                         filter(sph, income_group == g), vcov = ~iso3)
+m1 <- fit("Developed"); m2 <- fit("Developing"); m3 <- fit("LDC")
+star <- function(p) ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*","")))
+est <- function(m,v){ ct<-coeftable(m); sprintf("%+.4f%s", ct[v,1], star(ct[v,4])) }
+sev <- function(m,v){ ct<-coeftable(m); sprintf("(%.4f)", ct[v,2]) }
+nC  <- function(g) as.character(n_distinct(filter(sph, income_group==g)$iso3))
+vars <- c(ln_urban_density="ln(Urban Density)", net_migr_pct="Net Migration (\\% Pop)",
+          ln_gdp_pc="ln(GDP per capita)", urban_pop_share="Urban Pop. Share")
+body <- do.call(rbind, lapply(names(vars), function(v) data.frame(
+  Variables=c(vars[[v]], ""),
+  `Developed`  = c(est(m1,v), sev(m1,v)),
+  `Developing` = c(est(m2,v), sev(m2,v)),
+  `LDC`        = c(est(m3,v), sev(m3,v)),
+  check.names=FALSE, row.names=NULL)))
+gof <- data.frame(Variables=c("Observations","Within R$^2$","Countries","Country FE","Period FE"),
+  `Developed`  = c(format(nobs(m1),big.mark=","), sprintf("%.4f",r2(m1)["wr2"]), nC("Developed"),"Yes","Yes"),
+  `Developing` = c(format(nobs(m2),big.mark=","), sprintf("%.4f",r2(m2)["wr2"]), nC("Developing"),"Yes","Yes"),
+  `LDC`        = c(format(nobs(m3),big.mark=","), sprintf("%.4f",r2(m3)["wr2"]), nC("LDC"),"Yes","Yes"),
+  check.names=FALSE)
+nb <- nrow(body); nv <- length(vars)
+coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2*k-1, 2*k)))
+gof_grey  <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
+knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+             align=c("l","c","c","c")) |>
+  kableExtra::kable_styling(latex_options="HOLD_position", font_size=9) |>
+  kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
+  kableExtra::row_spec(nb, hline_after=TRUE) |>
+  kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR"=3)) |>
+  kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
+                                 "Standard errors clustered by country, in parentheses."),
+                       general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
+```
+
+Three patterns stand out. First, the compact-city effect of density is present in
+every group but strengthens markedly from the developed (about $-0.015$) through
+the developing ($-0.018$) to the least-developed countries ($-0.031$): where
+cities are still forming, denser settlement absorbs new residents most strongly.
+Second, the income-densification result, the paper's central finding, carries its
+expected negative sign in all three groups, so it is not a rich-country artefact;
+it is estimated most precisely in the developed and developing groups (significant
+at the 5\% level) and is larger but noisier in the small least-developed subsample
+(significant only at the 10\% level). Third, net migration densifies in the
+developed and developing groups but is insignificant, and wrongly signed, for the
+least-developed countries, consistent with international migration mattering little
+there relative to the internal rural-to-urban flows that our national measure
+cannot capture.
+
+
 ## Hypotheses
 
 Taken together, the results support all five hypotheses. The metric comparison
@@ -783,10 +852,11 @@ by the Degree of Urbanisation at a fixed threshold (GHS-SMOD of at least 21);
 plausible alternative thresholds would shift the urban boundary and could affect
 the levels, if not the within-country patterns. Fourth, the built-up and
 population layers are satellite-based estimates and the economic controls are
-national aggregates, both of which carry measurement error. In particular, net migration is measured at the national level and so reflects international migration only: it does not capture internal rural-to-urban migration, which is often the dominant demographic driver of urban expansion in developing countries, so the migration channel we estimate is likely understated. Finally, the
-within-country estimates are averages across a very heterogeneous set of
-countries, so the common slope may mask differences between, for example, mature
-and rapidly urbanising economies. These limitations point to natural extensions:
+national aggregates, both of which carry measurement error. In particular, net migration is measured at the national level and so reflects international migration only: it does not capture internal rural-to-urban migration, which is often the dominant demographic driver of urban expansion in developing countries, so the migration channel we estimate is likely understated. Finally, the pooled
+specification imposes a common slope; the development-group analysis in
+@tbl-hetero shows that the income and density relationships, although consistent in
+sign, vary in strength across groups, and a finer treatment of cross-country
+heterogeneity remains for future work. These limitations point to natural extensions:
 a sub-national analysis exploiting the ADM1 detail already in the data, which would also allow internal rural-to-urban migration to be measured directly; designs
 aimed at causal identification, and an assessment of BpCR as a practical,
 stable complement to LCRPGR in official SDG 11.3.1 monitoring.
