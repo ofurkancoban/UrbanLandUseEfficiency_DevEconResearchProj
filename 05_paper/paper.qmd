@@ -535,13 +535,13 @@ designed for dynamic panels.
 
 The **Arellano-Bond** (difference) estimator first-differences the equation to
 eliminate the country fixed effects and instruments the differenced lagged term
-with deeper lags in levels. The **Blundell-Bond** (system) estimator augments this
+with deeper lags in levels (lags two to five of BpCR). The **Blundell-Bond** (system) estimator augments this
 with a second, levels equation in which the lagged term is instrumented by its own
 past differences; this added moment information makes it more efficient when the
 series is persistent, as BpCR is. We treat **Arellano-Bond as the preferred
 specification** and report Blundell-Bond alongside it as a robustness comparison.
 Both are estimated in two steps with Windmeijer-corrected standard errors [@windmeijer2005], and the
-instrument set is collapsed to keep it from proliferating with the time dimension.
+instrument matrix is collapsed (one column per lag distance) to keep the instrument count from proliferating with the time dimension.
 
 The two estimators draw on the estimation sample differently. The Arellano-Bond
 estimator uses the differenced equation alone, and differencing costs the first
@@ -676,7 +676,7 @@ cat(x)
 \vspace{-1.0em}
 
 \footnotesize
-*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns.
+*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 5 of BpCR, with the instrument matrix collapsed.
 \normalsize
 
 Throughout, recall that the dependent variable BpCR is an annual logarithmic
