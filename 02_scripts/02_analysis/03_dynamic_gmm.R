@@ -105,12 +105,14 @@ build_combo <- function(d, instr) {
     `Base` = fe_col(b1), `+ Density` = fe_col(b2), `+ Net Migr.` = fe_col(b3),
     `+ GDP` = fe_col(b4), `+ Urban %` = fe_col(b5),
     `Arellano-Bond` = ab$coef, `Blundell-Bond` = bb$coef)
-  nC <- format(nobs(b1), big.mark = ",")   # common estimation sample (same for FE and both GMM estimators)
+  # per-equation observation counts: AB = differenced obs; BB = level-equation obs
+  ab_obs <- ab$nobs                 # difference equation (loses first period per country)
+  bb_obs <- bb$nobs - ab$nobs       # level equation of the system estimator (recovers it)
   fed <- function(m) c(format(nobs(m), big.mark = ","), fmt_w(unname(r2(m)["wr2"])), "Yes", "Yes", "–", "–", "–")
   diag <- tibble(Term = c("Observations", "Within R²", "Country FE", "Period FE", "Instruments", "Sargan (p)", "AR(2) (p)"),
     `Base` = fed(b1), `+ Density` = fed(b2), `+ Net Migr.` = fed(b3), `+ GDP` = fed(b4), `+ Urban %` = fed(b5),
-    `Arellano-Bond` = c(nC, "–", "Yes", "Yes", as.character(ab$ninst), fmt_p(ab$sargan), fmt_p(ab$ar2)),
-    `Blundell-Bond` = c(nC, "–", "Yes", "Yes", as.character(bb$ninst), fmt_p(bb$sargan), fmt_p(bb$ar2)))
+    `Arellano-Bond` = c(format(ab_obs, big.mark = ","), "–", "Yes", "Yes", as.character(ab$ninst), fmt_p(ab$sargan), fmt_p(ab$ar2)),
+    `Blundell-Bond` = c(format(bb_obs, big.mark = ","), "–", "Yes", "Yes", as.character(bb$ninst), fmt_p(bb$sargan), fmt_p(bb$ar2)))
   bind_rows(body, diag)
 }
 
