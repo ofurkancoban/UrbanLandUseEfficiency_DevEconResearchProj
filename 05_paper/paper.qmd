@@ -783,11 +783,11 @@ by the Degree of Urbanisation at a fixed threshold (GHS-SMOD of at least 21);
 plausible alternative thresholds would shift the urban boundary and could affect
 the levels, if not the within-country patterns. Fourth, the built-up and
 population layers are satellite-based estimates and the economic controls are
-national aggregates, both of which carry measurement error. Finally, the
+national aggregates, both of which carry measurement error. In particular, net migration is measured at the national level and so reflects international migration only: it does not capture internal rural-to-urban migration, which is often the dominant demographic driver of urban expansion in developing countries, so the migration channel we estimate is likely understated. Finally, the
 within-country estimates are averages across a very heterogeneous set of
 countries, so the common slope may mask differences between, for example, mature
 and rapidly urbanising economies. These limitations point to natural extensions:
-a sub-national analysis exploiting the ADM1 detail already in the data, designs
+a sub-national analysis exploiting the ADM1 detail already in the data, which would also allow internal rural-to-urban migration to be measured directly; designs
 aimed at causal identification, and an assessment of BpCR as a practical,
 stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 
