@@ -43,6 +43,7 @@ format:
       text: |
         \usepackage{makecell}
         \usepackage{float}
+        \geometry{top=3cm,bottom=3cm}
         \setlength{\bibsep}{0pt plus 0.2ex}
         \renewcommand{\bibfont}{\footnotesize}
         \floatplacement{figure}{H}
