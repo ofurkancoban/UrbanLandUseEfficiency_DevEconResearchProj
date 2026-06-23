@@ -310,14 +310,6 @@ metadata prescribes [@unhabitat2025metadata], so that our BpCR and the official
 LCRPGR are computed on identical inputs and the comparison is like-for-like. The
 construction follows the metadata stages.
 
-@fig-layers illustrates the construction for one example window, with each layer
-drawn over a satellite basemap. Panel (a) is the basemap for
-reference; panel (b) shows the GHS-BUILT-S surface as the built-up share of each cell; panel
-(c) the GHS-SMOD Degree of Urbanisation, which classifies each cell from rural to
-urban centre; and panel (d) the urban-masked built-up that actually enters the
-analysis, retaining built-up only in cells classified as urban (SMOD at least 21). The same masking is applied to population, so that both components are
-measured on a consistent urban footprint.
-
 ![Building the analysis input following the SDG 11.3.1 metadata (Istanbul /
 Bosphorus window), each layer drawn over an Esri satellite basemap. (a) Basemap.
 (b) GHS-BUILT-S built-up surface (share of each 1 km cell built up). (c) GHS-SMOD
@@ -326,6 +318,13 @@ built-up, the input actually used: panel (b) kept only where panel (c) is urban.
 The gold line is the GAUL country boundary.
 ](../04_outputs/figures/metadata_layers.png){#fig-layers width=74%}
 
+@fig-layers illustrates the construction for one example window, with each layer
+drawn over a satellite basemap. Panel (a) is the basemap for
+reference; panel (b) shows the GHS-BUILT-S surface as the built-up share of each cell; panel
+(c) the GHS-SMOD Degree of Urbanisation, which classifies each cell from rural to
+urban centre; and panel (d) the urban-masked built-up that actually enters the
+analysis, retaining built-up only in cells classified as urban (SMOD at least 21). The same masking is applied to population, so that both components are
+measured on a consistent urban footprint.
 *Analysis area.* SDG 11.3.1 is an urban (city-scale) indicator, measured inside
 cities rather than over whole national territories. We delineate the urban area
 with DEGURBA on the GHS-SMOD grid (a cell is urban when its settlement code is at
