@@ -173,8 +173,17 @@ time. Following @Lu2026, we turn it into a trend by taking its annual growth in
 logarithmic form:
 $$
 \text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_{i,t}/P_{i,t}}{V_{i,t-z}/P_{i,t-z}}\right)
-= \text{LCR}_{i,\log}-\text{PGR}_{i,\log}.
+= \text{LCR}_{i,\log}-\text{PGR}_{i,\log},
 $$
+where $\text{LCR}_{i,\log}=\frac{1}{z}\ln(V_{i,t}/V_{i,t-z})$ and
+$\text{PGR}_{i,\log}=\frac{1}{z}\ln(P_{i,t}/P_{i,t-z})$ are the logarithmic growth
+rates of built-up area and population. Here $\text{PGR}_{i,\log}$ is identical to
+the PGR of the official indicator above, which is already logarithmic, whereas
+$\text{LCR}_{i,\log}$ is the logarithmic counterpart of the arithmetic
+$\text{LCR}_i$ in that indicator. Replacing the arithmetic LCR with its
+logarithmic form is precisely what removes the arithmetic-versus-logarithmic
+asymmetry that destabilises LCRPGR.
+
 Because BpCR is the **difference of two logarithmic growth rates**, it is
 (i) finite and well-defined for every country-period (no division by ~0),
 (ii) symmetric (densification and sprawl are mirror images around zero),
