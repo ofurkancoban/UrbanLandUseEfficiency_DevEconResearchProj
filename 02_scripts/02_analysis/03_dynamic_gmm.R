@@ -89,7 +89,8 @@ gmm_col <- function(d, instr, tr) {
              data = pd, effect = "twoways", model = "twosteps", transformation = tr, collapse = TRUE)
   s  <- summary(m, robust = TRUE); cf <- s$coefficients
   list(coef = vapply(terms_keep, function(v) fc(cf[v, 1], cf[v, 2], cf[v, 4]), character(1)),
-       nobs = sum(lengths(m$residuals)), sargan = s$sargan$p.value, ar2 = s$m2$p.value)
+       nobs = sum(lengths(m$residuals)), ninst = ncol(m$W[[1]]),
+       sargan = s$sargan$p.value, ar2 = s$m2$p.value)
 }
 build_combo <- function(d, instr) {
   d2 <- filter(d, !is.na(bpcr_L))
@@ -104,11 +105,12 @@ build_combo <- function(d, instr) {
     `Base` = fe_col(b1), `+ Density` = fe_col(b2), `+ Net Migr.` = fe_col(b3),
     `+ GDP` = fe_col(b4), `+ Urban %` = fe_col(b5),
     `Arellano-Bond` = ab$coef, `Blundell-Bond` = bb$coef)
-  fed <- function(m) c(format(nobs(m), big.mark = ","), fmt_w(unname(r2(m)["wr2"])), "Yes", "Yes", "–", "–")
-  diag <- tibble(Term = c("Observations", "Within R²", "Country FE", "Period FE", "Sargan (p)", "AR(2) (p)"),
+  nC <- format(nobs(b1), big.mark = ",")   # common estimation sample (same for FE and both GMM estimators)
+  fed <- function(m) c(format(nobs(m), big.mark = ","), fmt_w(unname(r2(m)["wr2"])), "Yes", "Yes", "–", "–", "–")
+  diag <- tibble(Term = c("Observations", "Within R²", "Country FE", "Period FE", "Instruments", "Sargan (p)", "AR(2) (p)"),
     `Base` = fed(b1), `+ Density` = fed(b2), `+ Net Migr.` = fed(b3), `+ GDP` = fed(b4), `+ Urban %` = fed(b5),
-    `Arellano-Bond` = c(format(ab$nobs, big.mark = ","), "–", "Yes", "Yes", fmt_p(ab$sargan), fmt_p(ab$ar2)),
-    `Blundell-Bond` = c(format(bb$nobs, big.mark = ","), "–", "Yes", "Yes", fmt_p(bb$sargan), fmt_p(bb$ar2)))
+    `Arellano-Bond` = c(nC, "–", "Yes", "Yes", as.character(ab$ninst), fmt_p(ab$sargan), fmt_p(ab$ar2)),
+    `Blundell-Bond` = c(nC, "–", "Yes", "Yes", as.character(bb$ninst), fmt_p(bb$sargan), fmt_p(bb$ar2)))
   bind_rows(body, diag)
 }
 

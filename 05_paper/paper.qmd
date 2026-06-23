@@ -542,16 +542,13 @@ specification** and report Blundell-Bond alongside it as a robustness comparison
 Both are estimated in two steps with Windmeijer-corrected standard errors [@windmeijer2005], and the
 instrument set is collapsed to keep it from proliferating with the time dimension.
 
-The two estimators are run on different numbers of observations, which is
-mechanical rather than a data discrepancy. The Arellano-Bond estimator uses only
-the *differenced* equation, and differencing consumes the first available period
-for each country (a difference needs both $t$ and $t-1$). The Blundell-Bond
-estimator instead stacks **two** equations, the differenced equation *and* the
-levels equation, so its observation count combines both and recovers the
-first-period information that differencing discards, leaving it with roughly twice
-as many observations. The larger count reflects the system estimator's additional
-moment conditions, not a larger underlying sample; the exact figures are reported
-with the results in @sec-results.
+Both estimators are identified on the **same** estimation sample; what
+distinguishes them is the set of moment conditions, not the number of
+observations. The Arellano-Bond estimator uses the differenced equation alone,
+instrumented by deeper lags in levels. The Blundell-Bond estimator adds a second,
+levels equation, which contributes additional moment conditions, and therefore
+more instruments, rather than additional data. The instrument counts for each
+estimator are reported with the results in @sec-results.
 
 Instrument validity is assessed with the **Sargan/Hansen** test of
 over-identifying restrictions and the **AR(2)** test for second-order serial
@@ -721,9 +718,10 @@ other drivers are controlled, indicating that what matters is the urban *form*
 (how densely a country builds) rather than the *stage* of urbanisation (how urban
 it already is).
 
-As explained in @sec-strategy, the two estimators report different observation
-counts (1,351 for Arellano-Bond, 2,895 for Blundell-Bond) only because the system
-estimator stacks two equations, not because it uses more data. Both estimators
+As reported in @tbl-gmm, both estimators are identified on the same
+1,499-observation sample; the system estimator (Blundell-Bond) adds the level
+moment conditions, so it uses more instruments (21 versus 15 collapsed
+instruments) rather than more data. Both estimators
 pass the diagnostic tests: the Sargan/Hansen test does not reject
 the over-identifying restrictions and the AR(2) test finds no second-order serial
 correlation (both $p>0.10$), supporting the validity of the instruments. The
