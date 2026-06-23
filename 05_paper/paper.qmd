@@ -573,7 +573,7 @@ about 1,500 country-periods before the GMM transformations described above.
 ## The Metric Matters: LCRPGR vs. BpCR
 
 We first compare the two metrics in the static (lag-free) two-way fixed-effects
-model, holding the data, controls, and fixed effects identical so that any
+model of @eq-static, holding the data, controls, and fixed effects identical so that any
 difference is due to the dependent variable alone. To keep every specification
 comparable, all models in this section, static and dynamic, are estimated on the
 common sample for which the lagged dependent variable and all four controls are
@@ -694,7 +694,7 @@ growth rate of built-up area per capita, so a coefficient measures the change in
 that growth rate, and the coefficients on the logged regressors are
 semi-elasticities.
 
-*Path-dependence (H5).* In the preferred Arellano-Bond specification the lagged
+*Path-dependence (H5).* In the preferred Arellano-Bond estimate of @eq-dynamic, the lagged
 term is large and highly significant, $\rho = 0.61$: about three-fifths of a
 country's per-capita land-use growth in one period carries into the next, and more
 than a third still remains two periods later ($0.61^2 \approx 0.37$).
@@ -745,8 +745,8 @@ indicating the findings are not an artefact of the chosen estimator.
 
 The pooled model imposes a common slope on a very heterogeneous set of countries:
 the response of urban land use to income need not be the same in Germany as in
-Nigeria. @tbl-hetero relaxes this by estimating the BpCR two-way fixed-effects
-model separately for the three United Nations development groups, on the same
+Nigeria. @tbl-hetero relaxes this by estimating the static model of @eq-static
+separately for the three United Nations development groups, on the same
 estimation sample as @tbl-static. We use the static fixed-effects estimator rather
 than GMM here because the subgroups (44 to 101 countries) are too small for the
 deep-lag instruments to be reliable.
