@@ -374,6 +374,31 @@ ds$ctry_pos <- sum(cm$bpcr > 0); ds$ctry_tot <- nrow(cm)
 ds$ctry_pct <- round(100 * ds$ctry_pos / ds$ctry_tot)
 ```
 
+```{r tbl-desc}
+#| label: tbl-desc
+#| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
+dd <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
+vars <- c(bpcr="BpCR", lcrpgr_log="LCRPGR (log)", ln_urban_density="ln(Urban Density)",
+          urban_pop_share="Urban Pop. Share", ln_gdp_pc="ln(GDP per capita)",
+          net_migr_pct="Net Migration (\\% Pop)")
+rows <- lapply(names(vars), function(v){
+  x <- dd[[v]]
+  data.frame(Variable=vars[[v]], N=sum(!is.na(x)),
+             Mean=mean(x,na.rm=TRUE), SD=sd(x,na.rm=TRUE),
+             Min=min(x,na.rm=TRUE), Median=median(x,na.rm=TRUE), Max=max(x,na.rm=TRUE),
+             check.names=FALSE)
+})
+tab <- do.call(rbind, rows)
+num <- sapply(tab[,3:7], function(c) ifelse(abs(c)>=100, sprintf("%.0f",c), sprintf("%.3f",c)))
+tab[,3:7] <- num
+knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+             align=c("l","r","r","r","r","r","r"), row.names=FALSE) |>
+  kableExtra::kable_styling(latex_options=c("HOLD_position"), font_size=9)
+```
+
+@tbl-desc reports summary statistics for the dependent variables and controls over
+the full 1985--2020 sample.
+
 Even before any regression, the raw data already reveal why the choice of metric
 matters. Over the full 1985--2020 sample (`r ds$n` country-periods), the
 official log-LCRPGR has a standard deviation of about `r round(ds$lcr_sd)` and
@@ -407,31 +432,6 @@ are hard to read as land-use behaviour. The BpCR series for the same countries a
 smooth and interpretable: most drift gradually towards balance, while the
 fastest-urbanising economies show the strongest sprawl earlier in the period
 before easing. The same data, read through a stable metric, become legible.
-
-```{r tbl-desc}
-#| label: tbl-desc
-#| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
-dd <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
-vars <- c(bpcr="BpCR", lcrpgr_log="LCRPGR (log)", ln_urban_density="ln(Urban Density)",
-          urban_pop_share="Urban Pop. Share", ln_gdp_pc="ln(GDP per capita)",
-          net_migr_pct="Net Migration (\\% Pop)")
-rows <- lapply(names(vars), function(v){
-  x <- dd[[v]]
-  data.frame(Variable=vars[[v]], N=sum(!is.na(x)),
-             Mean=mean(x,na.rm=TRUE), SD=sd(x,na.rm=TRUE),
-             Min=min(x,na.rm=TRUE), Median=median(x,na.rm=TRUE), Max=max(x,na.rm=TRUE),
-             check.names=FALSE)
-})
-tab <- do.call(rbind, rows)
-num <- sapply(tab[,3:7], function(c) ifelse(abs(c)>=100, sprintf("%.0f",c), sprintf("%.3f",c)))
-tab[,3:7] <- num
-knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
-             align=c("l","r","r","r","r","r","r"), row.names=FALSE) |>
-  kableExtra::kable_styling(latex_options=c("HOLD_position"), font_size=9)
-```
-
-@tbl-desc reports summary statistics for the dependent variables and controls over
-the full 1985--2020 sample.
 
 # Empirical Strategy {#sec-strategy}
 
