@@ -31,7 +31,7 @@ pa <- ggplot(d, aes(year, lcrpgr_log, color=country)) +
   geom_hline(yintercept=c(0,1), linetype=c("solid","dashed"), color="grey60", linewidth=0.3) +
   geom_line(linewidth=0.7) + geom_point(size=1.1) +
   scale_color_manual(values=cols) +
-  labs(title="(a) Official LCRPGR (log)", x=NULL, y="LCRPGR (log)") + base_t
+  labs(title="(a) LCRPGR (log)", x=NULL, y="LCRPGR (log)") + base_t
 pb <- ggplot(d, aes(year, bpcr, color=country)) +
   geom_hline(yintercept=0, color="grey60", linewidth=0.3) +
   geom_line(linewidth=0.7) + geom_point(size=1.1) +

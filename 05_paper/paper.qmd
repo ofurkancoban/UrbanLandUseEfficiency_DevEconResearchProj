@@ -24,7 +24,7 @@ abstract: |
   population grids under the Degree of Urbanisation, we (i) document where LCRPGR
   breaks down, (ii) show BpCR reproduces the policy signal without the
   instability, and (iii) estimate its economic drivers with two-way fixed-effects
-  and dynamic-panel GMM models.
+  and dynamic-panel GMM models, documenting heterogeneity across development groups.
 keywords:
   - SDG 11.3.1
   - Urban land-use efficiency
@@ -123,7 +123,9 @@ majority of country-periods. Per-capita land use is strongly path-dependent, wit
 about three-fifths of one period's value carried into the next. And within
 countries, denser cities, net in-migration, and higher income are all associated
 with less land consumed per resident, indicating that, over time, economic growth
-is accompanied by densification rather than sprawl.
+is accompanied by densification rather than sprawl. These patterns hold across
+development groups, with the compact-city effect strongest in the least-developed
+economies.
 
 The remainder of the paper is organised as follows. @sec-measurement sets out the
 SDG 11.3.1 indicator, its structural limitations, and the BpCR alternative.
@@ -148,8 +150,8 @@ $$
 \text{LCR}_i=\frac{V_{i,t}-V_{i,t-z}}{V_{i,t-z}}\cdot\frac{1}{z},\qquad
 \text{PGR}_i=\frac{\ln(P_{i,t}/P_{i,t-z})}{z},
 $$
-where, for country $i$, $V_{i,t}$ is the urban built-up area (in
-square kilometres) at the end of the period and $V_{i,t-z}$ the built-up area at the
+where, for country $i$, $V_{i,t}$ is the urban built-up area at the
+end of the period and $V_{i,t-z}$ the built-up area at the
 start; $P_{i,t}$ and $P_{i,t-z}$ are the corresponding urban populations; $z$ is the
 length of the period in years; $\ln(\cdot)$ denotes the natural logarithm. The Land Consumption Rate $(\text{LCR})$ is thus
 the arithmetic growth of built-up area, expressed per year, and the Population
@@ -192,6 +194,15 @@ means sprawl (more land per resident), $\text{BpCR}<0$ densification, and
 $\text{BpCR}=0$ land growing exactly in step with population. BpCR reproduces the
 policy signal of LCRPGR where the latter is well-behaved, but without the
 instability; it complements rather than contradicts the official indicator.
+
+In the empirical sections we benchmark BpCR against the logarithmic form of the
+ratio, $\text{LCRPGR}_{\log}=\text{LCR}_{i,\log}/\text{PGR}_{i,\log}$, which we
+label *LCRPGR (log)*. This is a deliberately conservative benchmark: it already
+replaces the arithmetic LCR with its logarithmic counterpart, so it removes the
+arithmetic-versus-logarithmic asymmetry and differs from BpCR only in being a
+ratio rather than a difference. Any instability it shows therefore comes purely
+from dividing by a near-zero growth rate; the official arithmetic ratio would be
+more unstable still.
 
 # Literature Review {#sec-literature}
 
@@ -410,8 +421,8 @@ knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
 the full 1985--2020 sample.
 
 Even before any regression, the raw data already reveal why the choice of metric
-matters. Over the full 1985--2020 sample (`r ds$n` country-periods), the
-official log-LCRPGR has a standard deviation of about `r round(ds$lcr_sd)` and
+matters. Over the full 1985--2020 sample (`r ds$n` country-periods), LCRPGR (log)
+has a standard deviation of about `r round(ds$lcr_sd)` and
 ranges from roughly `r round(ds$lcr_lo)` to `r round(ds$lcr_hi)`: its division by a
 near-zero population-growth rate produces enormous, sign-flipping outliers. BpCR,
 by contrast, stays in a tight band with a standard deviation of about
@@ -430,15 +441,14 @@ is the same under either metric; the difference is that BpCR delivers it without
 the numerical instability.
 
 Country trajectories make the contrast concrete (@fig-trends). For a set of
-regional representatives, the official LCRPGR swings erratically from one period
+regional representatives, LCRPGR (log) swings erratically from one period
 to the next, crossing zero and spiking to large positive and negative values that
 are hard to read as land-use behaviour. The BpCR series for the same countries are
 smooth and interpretable: most drift gradually towards balance, while the
 fastest-urbanising economies show the strongest sprawl earlier in the period
 before easing. The same data, read through a stable metric, become legible.
 
-![Country trajectories for seven regional representatives, 1985--2020. (a) The
-official log-LCRPGR swings erratically and crosses its zero and unity reference
+![Country trajectories for seven regional representatives, 1985--2020. (a) LCRPGR (log) swings erratically and crosses its zero and unity reference
 lines unpredictably; (b) BpCR is smooth and interpretable on the same data, with
 the fastest-urbanising economies showing the strongest early sprawl before
 easing.](../04_outputs/figures/country_trends.pdf){#fig-trends width=92%}
@@ -719,12 +729,12 @@ other drivers are controlled, indicating that what matters is the urban *form*
 (how densely a country builds) rather than the *stage* of urbanisation (how urban
 it already is).
 
-As reported in @tbl-gmm, the Arellano-Bond estimator differences the data and so
-drops the first period for each of the 193 countries (1,499 to 1,351
-observations), while the Blundell-Bond level equation recovers that period
-(1,544); the gap is one period per country, not a doubling of the sample. The
-system estimator's substantive addition is moment conditions, reflected in its
-larger instrument count (21 versus 15 collapsed instruments). Both estimators
+As reported in @tbl-gmm, the Arellano-Bond differenced equation uses 1,351
+observations and the Blundell-Bond system estimator 1,544: differencing costs the
+first usable period for each country, which the level equation in the system
+estimator restores, a gap of one period per country (193) rather than a doubling
+of the sample. The system estimator's substantive addition is moment conditions,
+reflected in its larger instrument count (21 versus 15 collapsed instruments). Both estimators
 pass the diagnostic tests: the Sargan/Hansen test does not reject
 the over-identifying restrictions and the AR(2) test finds no second-order serial
 correlation (both $p>0.10$), supporting the validity of the instruments. The
@@ -805,8 +815,8 @@ cannot capture.
 Taken together, the results support all five hypotheses. The metric comparison
 supports **H1** (BpCR is the more reliable, better-fitting metric); the dynamic
 model supports **H2** (density reduces land per capita), **H3** (income reduces
-it, within countries), **H4** (in-migration densifies), and **H5** (per-capita
-land use is strongly path-dependent).
+it, within countries), **H4** (in-migration densifies, in the developed and developing groups), and
+**H5** (per-capita land use is strongly path-dependent).
 
 # Discussion {#sec-discussion}
 
@@ -827,7 +837,11 @@ constant and so isolate this second, within-country margin, which cross-sectiona
 designs cannot recover. We therefore extend, rather than overturn, the drivers
 literature: income and density still shape urban land use, but the sign of the
 income relationship depends on whether one compares countries or follows a single
-country over time.
+country over time. The development-group analysis in @tbl-hetero sharpens this
+reading: the income relationship is negative in every group, but the compact-city
+density channel is markedly stronger in the developing and least-developed
+economies, where urban form is still being set, than in the already-dense
+developed group.
 
 The results also bear directly on the measurement debate. @nicolau2019lcrpgr argue
 on formal grounds that the official LCRPGR ratio is unstable, and @Lu2026 show that
