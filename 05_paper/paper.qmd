@@ -602,7 +602,7 @@ knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, lines
   kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
   kableExtra::row_spec(nb, hline_after=TRUE) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
-                                 "Clustered (by country) standard errors in parentheses."),
+                                 "Standard errors clustered by country, in parentheses."),
                        general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
 ```
 
