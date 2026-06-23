@@ -265,9 +265,9 @@ data.frame(
         "Mollweide (54009)", "Mollweide (54009)", "Mollweide (54009)",
         "WGS84 (EPSG:4326)", "--", "--"
     ),
-    Coverage = c(
+    Years = c(
         "1975-2030, 5-yr", "1975-2030, 5-yr", "1975-2030, 5-yr",
-        "Global", "1970-2024", "1950-2023"
+        "2024/2025", "1970-2024", "1950-2023"
     ),
     Variable = c(
         "Built-up area (m2/cell)", "Population (persons/cell)",
