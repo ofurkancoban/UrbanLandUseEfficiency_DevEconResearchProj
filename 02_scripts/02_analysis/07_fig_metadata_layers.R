@@ -46,8 +46,8 @@ bnd<-geom_sf(data=cty,fill=NA,color="#FFD700",linewidth=0.6,inherit.aes=FALSE)
 bg <-geom_spatraster_rgb(data=bm)
 maptheme<-theme_void()+theme(legend.position="none",plot.margin=margin(0,0,0,0))
 legtheme<-theme_void(base_family=ff)+theme(
-  legend.title=element_text(family=ff,size=11,face="bold"),
-  legend.text=element_text(family=ff,size=10),
+  legend.title=element_text(family=ff,size=15,face="bold"),
+  legend.text=element_text(family=ff,size=13),
   legend.key.height=unit(0.55,"cm"),legend.key.width=unit(0.4,"cm"),
   legend.justification="left", legend.box.just="left",
   legend.margin=margin(0,0,0,2), legend.box.margin=margin(0,0,0,0))
@@ -83,7 +83,7 @@ panel<-function(map,title,withleg=TRUE){
   } else row<-cowplot::plot_grid(body, NULL, nrow=1, rel_widths=c(1,0.27))
   # title close to the map (small row, label near its bottom edge)
   ttl<-cowplot::ggdraw()+cowplot::draw_label(title, fontfamily=ff, fontface="bold",
-        size=15, x=0.01, hjust=0, y=0.5, vjust=0.5)
+        size=20, x=0.01, hjust=0, y=0.5, vjust=0.5)
   cowplot::plot_grid(ttl, row, ncol=1, rel_heights=c(0.1,1))
 }
 P <- list(
