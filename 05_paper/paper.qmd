@@ -263,7 +263,7 @@ from the **Global Administrative Unit Layers (GAUL)** of the UN Food and
 Agriculture Organization [@gaul2024], which provide UN-validated, politically
 neutral country boundaries with global coverage. Socio-economic controls come from
 the **United Nations**: GDP per capita in constant 2020 US dollars from UN SNAAMA
-and net migration as a share of population from UN DESA World Population Prospects
+and international net migration as a share of population from UN DESA World Population Prospects
 2024 [@unsd2025snaama; @undesa2024wpp]. For the heterogeneity analysis we classify countries into United Nations development groups, developed economies, developing economies, and least-developed countries (LDCs), using the UN M49 regional classification together with the UN Committee for Development Policy LDC list (obtained through the `countrycode` R package).
 
 @tbl-data summarises the technical characteristics of each dataset.
@@ -351,7 +351,7 @@ the area of urban cells (distinct from, and about ten times larger than, the
 built-up surface in the dependent variable), used in logs. **Urban population
 share** is urban population divided by national total population. The remaining
 controls come from international sources: **GDP per capita** (constant 2020 US
-dollars, logs) from UN SNAAMA and **net migration** (share of population) from UN
+dollars, logs) from UN SNAAMA and **net migration** (international, share of population) from UN
 DESA WPP 2024. All variables align to the same country-period grid.
 
 The resulting dataset is a balanced-where-observed panel of 193 United Nations
@@ -458,7 +458,7 @@ data.frame(
         "BpCR captures land-use efficiency more reliably than LCRPGR",
         "Higher urban density is associated with less land per capita",
         "Higher income is associated with less land per capita",
-        "Net in-migration densifies cities",
+        "International net in-migration densifies cities",
         "Per-capita land use is path-dependent"
     ),
     Expected = c("Better Fit", "$-$", "$-$", "$-$", "$+$"),
@@ -512,9 +512,11 @@ gone with more sprawl, through larger homes and car-based mobility; but within a
 country, rising income can also fund vertical and infill construction,
 redevelopment, and stronger land-use regulation, which densify rather than expand
 the footprint. Our within-country design tests which force dominates over time
-(H3). **Net migration** proxies population pressure: in-migrants typically settle
-in the existing urban stock, so housing demand is absorbed by densification faster
-than the built-up area grows (H4). Finally, the **lagged dependent variable**
+(H3). **Net migration**, measured at the national level, captures *international*
+migration and proxies one channel of population pressure: in-migrants typically
+settle in the existing urban stock, so housing demand is absorbed by densification
+faster than the built-up area grows (H4). The internal rural-to-urban migration
+that drives much urban expansion is not observed (@sec-discussion). Finally, the **lagged dependent variable**
 captures path-dependence: the building stock, road network, and zoning that shape
 land use are long-lived, so a country's per-capita land use tends to persist from
 one period to the next (H5). H1 concerns the metric itself and is addressed by
@@ -703,10 +705,12 @@ richer, its per-capita land use falls, consistent with rising income funding
 infill, vertical development, and tighter land regulation. We return to the
 contrast with the cross-section in @sec-discussion.
 
-*Net migration (H4).* Net migration is negative and marginally significant
-($-0.0005$): each additional percentage point of net in-migration is associated
-with slightly lower per-capita land use, consistent with in-migrants being
+*Net migration (H4).* International net migration is negative and marginally
+significant ($-0.0005$): each additional percentage point is associated with
+slightly lower per-capita land use, consistent with international in-migrants being
 absorbed into the existing urban stock faster than the built-up footprint expands.
+This is the international channel only; internal migration is unobserved
+(@sec-discussion).
 
 *Urban population share.* The level of urbanisation is insignificant once the
 other drivers are controlled, indicating that what matters is the urban *form*
@@ -795,7 +799,8 @@ cannot capture.
 Taken together, the results support all five hypotheses. The metric comparison
 supports **H1** (BpCR is the more reliable, better-fitting metric); the dynamic
 model supports **H2** (density reduces land per capita), **H3** (income reduces
-it, within countries), **H4** (in-migration densifies, in the developed and developing groups), and
+it, within countries), **H4** (international in-migration densifies, in the developed and developing
+groups), and
 **H5** (per-capita land use is strongly path-dependent).
 
 # Discussion {#sec-discussion}
