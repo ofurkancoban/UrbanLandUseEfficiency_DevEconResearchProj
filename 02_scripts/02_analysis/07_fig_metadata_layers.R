@@ -83,7 +83,7 @@ panel<-function(map,title,withleg=TRUE){
   } else row<-cowplot::plot_grid(body, NULL, nrow=1, rel_widths=c(1,0.27))
   # title close to the map (small row, label near its bottom edge)
   ttl<-cowplot::ggdraw()+cowplot::draw_label(title, fontfamily=ff, fontface="bold",
-        size=20, x=0.01, hjust=0, y=0.5, vjust=0.5)
+        size=22, x=0.01, hjust=0, y=0.5, vjust=0.5)
   cowplot::plot_grid(ttl, row, ncol=1, rel_heights=c(0.1,1))
 }
 P <- list(
