@@ -6,6 +6,8 @@
 # internal net migration 166) by district name + type. Builds the analysis panel
 # read by 05_paper/supplementary.qmd.
 # Output: 03_datasets/processed/deu_kreis_casestudy.csv
+# Zonal sums use native 100 m scale (urban population/built-up levels are correct,
+# so the urban-population share is meaningful); this makes the GEE step slow.
 # Needs: GEE credentials (or your own login) + the inkaR package.
 # ============================================================================
 suppressMessages({library(reticulate); library(inkaR); library(dplyr); library(tidyr)})
@@ -28,7 +30,7 @@ for (yr in years) {
   img <- yi(builtC,"built_surface",yr)$updateMask(urb)$rename("V")$
          addBands(yi(popC,"population_count",yr)$updateMask(urb)$rename("P"))$
          addBands(ee$Image$pixelArea()$updateMask(urb)$rename("A"))
-  fc <- img$reduceRegions(collection=l2, reducer=ee$Reducer$sum(), scale=1000, tileScale=8)$
+  fc <- img$reduceRegions(collection=l2, reducer=ee$Reducer$sum(), scale=100, tileScale=16)$
         map(function(f) f$setGeometry(NULL))
   d <- bind_rows(lapply(fc$getInfo()$features, function(f) as.data.frame(f$properties, stringsAsFactors=FALSE)))
   d$year <- yr; out[[as.character(yr)]] <- d
@@ -48,7 +50,7 @@ gu <- g |> count(key,year) |> filter(n==1) |> distinct(key)
 
 F <- function(id) as.data.frame(get_inkar_data(id, level="KRE")) |>
   transmute(Kennziffer, Raumeinheit, Zeit=as.integer(Zeit), val=Wert)
-mig <- F("166"); gdp <- F("546")
+mig <- F("166"); gdp <- F("546"); tot <- F("xbev")
 ik <- mig |> distinct(Kennziffer,Raumeinheit) |> mutate(key=paste0(clean(Raumeinheit),"|",ti(Raumeinheit)))
 iu <- ik |> count(key) |> filter(n==1) |> distinct(key); ok <- intersect(gu$key, iu$key)
 ep <- c(1995,2000,2005,2010,2015,2020)
@@ -56,9 +58,13 @@ migE <- bind_rows(lapply(ep, function(e) mig |> inner_join(ik,by=c("Kennziffer",
   filter(key%in%ok, Zeit>e-5, Zeit<=e) |> group_by(key) |> summarise(int_migr=mean(val,na.rm=TRUE),.groups="drop") |> mutate(year=e)))
 gdpE <- gdp |> inner_join(ik,by=c("Kennziffer","Raumeinheit")) |> filter(key%in%ok, Zeit%in%ep) |>
   transmute(key, year=Zeit, ln_gdp=log(val))
+totE <- tot |> inner_join(ik,by=c("Kennziffer","Raumeinheit")) |> filter(key%in%ok, Zeit%in%ep) |>
+  transmute(key, year=Zeit, total_pop=val)
 
 d <- g |> filter(key%in%ok, year%in%ep, !is.na(bpcr), is.finite(lcrpgr_log)) |>
-  inner_join(migE,by=c("key","year")) |> inner_join(gdpE,by=c("key","year")) |>
-  transmute(kreis=gaul2_name, key, year, V, P, A, bpcr, pgr_log, lcr_log, lcrpgr_log, ln_density, ln_gdp, int_migr)
+  inner_join(migE,by=c("key","year")) |> inner_join(gdpE,by=c("key","year")) |> inner_join(totE,by=c("key","year")) |>
+  mutate(urban_pop_share = P/total_pop) |>
+  transmute(kreis=gaul2_name, key, year, V, P, A, total_pop, bpcr, pgr_log, lcr_log, lcrpgr_log,
+            ln_density, urban_pop_share, ln_gdp, int_migr)
 write.csv(d, "03_datasets/processed/deu_kreis_casestudy.csv", row.names=FALSE)
 cat("wrote deu_kreis_casestudy.csv:", nrow(d), "district-periods |", dplyr::n_distinct(d$key), "districts\n")

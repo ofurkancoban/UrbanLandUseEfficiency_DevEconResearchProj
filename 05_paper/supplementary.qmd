@@ -45,7 +45,8 @@ these totals just as nationally. Two controls are taken from the German regional
 database INKAR (Federal Institute for Research on Building, Urban Affairs and
 Spatial Development, BBSR): GDP per capita (workplace-based) and the **internal
 net-migration rate** (*Binnenwanderungssaldo*, per 1,000 inhabitants), the
-latter being the within-country flow that the national UN measure omits. GAUL
+latter being the within-country flow that the national UN measure omits. Urban population share is the GHSL urban population over the INKAR total district
+population. GAUL
 districts are matched to INKAR *Kreise* by name and type (city vs. rural district);
 `r length(unique(d$key))` districts match cleanly and enter the regressions, over
 the epochs `r min(d$year)`--`r max(d$year)` for which the INKAR controls are
@@ -65,12 +66,12 @@ more violently than nationally, whereas BpCR stays in a tight, interpretable ban
 ```{r tbl-fe}
 #| label: tbl-fe
 #| tbl-cap: "Static two-way fixed-effects models at the German Kreis level (1995-2020); log-LCRPGR ratio vs. BpCR, same sample and controls."
-mL <- feols(lcrpgr_log ~ ln_density + ln_gdp + int_migr | key + year, d, vcov = ~key)
-mB <- feols(bpcr       ~ ln_density + ln_gdp + int_migr | key + year, d, vcov = ~key)
+mL <- feols(lcrpgr_log ~ ln_density + urban_pop_share + ln_gdp + int_migr | key + year, d, vcov = ~key)
+mB <- feols(bpcr       ~ ln_density + urban_pop_share + ln_gdp + int_migr | key + year, d, vcov = ~key)
 est <- function(m,v){ ct<-coeftable(m); sprintf("%+.4f%s", ct[v,1], star(ct[v,4])) }
 sev <- function(m,v){ ct<-coeftable(m); sprintf("(%.4f)", ct[v,2]) }
-vars <- c(ln_density="ln(Urban Density)", ln_gdp="ln(GDP per capita)",
-          int_migr="Internal net migration (per 1{,}000)")
+vars <- c(ln_density="ln(Urban Density)", urban_pop_share="Urban Pop. Share",
+          ln_gdp="ln(GDP per capita)", int_migr="Internal net migration (per 1{,}000)")
 body <- do.call(rbind, lapply(names(vars), function(v) data.frame(
   Variables=c(vars[[v]], ""),
   `LCRPGR (log)`=c(est(mL,v), sev(mL,v)),
@@ -102,36 +103,35 @@ insignificant coefficients dominated by its unstable tails.
 suppressMessages(library(plm))
 pd <- pdata.frame(as.data.frame(d |> mutate(t = as.integer(factor(year)))), index = c("key","t"))
 gmm_col <- function(tr){
-  m <- pgmm(bpcr ~ lag(bpcr,1) + ln_gdp + int_migr | lag(bpcr,2:3),
+  m <- pgmm(bpcr ~ lag(bpcr,1) + ln_density + urban_pop_share + ln_gdp + int_migr | lag(bpcr,2:3),
             data=pd, effect="twoways", model="twosteps", transformation=tr, collapse=TRUE)
   s <- summary(m, robust=TRUE); cf <- s$coefficients
-  v <- c("lag(bpcr, 1)","ln_gdp","int_migr")
+  v <- c("lag(bpcr, 1)","ln_density","urban_pop_share","ln_gdp","int_migr")
   c(rbind(sapply(v,function(k) sprintf("%+.4f%s", cf[k,1], star(cf[k,4]))),
           sapply(v,function(k) sprintf("(%.4f)", cf[k,2]))),
     sprintf("%.2f", s$sargan$p.value), sprintf("%.2f", s$m2$p.value))
 }
 ab <- gmm_col("d"); bb <- gmm_col("ld")
-rn <- c("BpCR$_{t-1}$","","ln(GDP per capita)","","Internal net migration","",
+rn <- c("BpCR$_{t-1}$","","ln(Urban Density)","","Urban Pop. Share","","ln(GDP per capita)","","Internal net migration","",
         "Sargan (p)","AR(2) (p)")
 tab <- data.frame(Variables=rn, `Arellano-Bond`=ab, `Blundell-Bond`=bb, check.names=FALSE)
 knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l","c","c")) |>
   kableExtra::kable_styling(latex_options="HOLD_position", font_size=9) |>
-  kableExtra::row_spec(6, hline_after=TRUE) |>
+  kableExtra::row_spec(10, hline_after=TRUE) |>
   kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
                                  "Windmeijer-corrected robust standard errors in parentheses."),
                        general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
 ```
 
-Three points emerge. First, the **income-densification** result is robust: the
-system-GMM estimate keeps the negative, significant sign of the static model, in
-line with the national finding. Second, the lagged dependent variable is small and
-slightly negative rather than strongly positive: unlike the national series,
-district per-capita land use shows mild mean-reversion rather than the strong
-persistence seen across countries. Third, **internal net migration** carries the
-expected negative (densifying) sign but is imprecise within districts; the clearer
-association is cross-sectional, with districts that attract internal migrants being
-the denser ones.
+Three points emerge. First, per-capita land use is **strongly path-dependent** at
+the district level too: the lagged dependent variable is large and significant
+($\rho \approx 0.82$), echoing the persistence found across countries. Second, the
+**income-densification** result holds: the difference-GMM (Arellano-Bond) estimate
+keeps the negative, significant sign of the static model, in line with the national
+finding. Third, **internal net migration** is not significant within districts in
+this short panel; its clearer association with densification is cross-sectional,
+with the districts that attract internal migrants being the denser ones.
 
 # Caveats
 
