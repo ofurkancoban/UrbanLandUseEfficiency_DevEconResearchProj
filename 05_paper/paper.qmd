@@ -335,7 +335,10 @@ metric: for each country-period we sum urban built-up area $V$ and urban populat
 $P$ before forming any rate. This follows the metadata's aggregate-then-rate rule;
 averaging city-level ratios would let a small town with a near-zero population
 denominator dominate the national figure, whereas summing components first keeps
-the national rate well-defined.
+the national rate well-defined. Boundaries are held fixed at their current GAUL
+definition for every epoch, so each country is a constant spatial footprint and
+the within-country changes we study reflect land-use dynamics rather than shifting
+borders; both the GHSL grids and the UN series are keyed to present-day states.
 
 *Rates and indicators.* From these national totals we form the Land Consumption
 Rate (arithmetic growth of built-up area), the Population Growth Rate (logarithmic
@@ -843,7 +846,13 @@ by the Degree of Urbanisation at a fixed threshold (GHS-SMOD of at least 21);
 plausible alternative thresholds would shift the urban boundary and could affect
 the levels, if not the within-country patterns. Fourth, the built-up and
 population layers are satellite-based estimates and the economic controls are
-national aggregates, both of which carry measurement error. In particular, net migration is measured at the national level and so reflects international migration only: it does not capture internal rural-to-urban migration, which is often the dominant demographic driver of urban expansion in developing countries, so the migration channel we estimate is likely understated. Finally, the pooled
+national aggregates, both of which carry measurement error. In particular, net migration is measured at the national level and so reflects international migration only: it does not capture internal rural-to-urban migration, which is often the dominant demographic driver of urban expansion in developing countries, so the migration channel we estimate is likely understated. The panel also applies
+present-day boundaries retroactively: for states whose borders changed since 1985,
+the post-Soviet, ex-Yugoslav, and Czechoslovak successors, the spatial quantities
+before dissolution are reconstructed within today's borders from the gridded data,
+and where the historical economic series are unavailable (notably 1985, which
+leaves 23 such country-periods without a GDP control) the complete-case estimation
+drops those observations. Finally, the pooled
 specification imposes a common slope; the development-group analysis in
 @tbl-hetero shows that the income and density relationships, although consistent in
 sign, vary in strength across groups, and a finer treatment of cross-country
