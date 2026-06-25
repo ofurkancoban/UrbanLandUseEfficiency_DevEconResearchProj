@@ -26,15 +26,25 @@ if (file.exists(here::here(".env"))) {
 
 # 2. R PACKAGES
 pkgs <- c(
-  "reticulate", "sf", "dplyr", "tidyr", "readr", 
-  "geodata", "terra", "purrr", "geojsonsf", "cyphr", 
-  "sodium", "ggplot2", "viridis", "gridExtra", "zoo"
+  "reticulate", "sf", "dplyr", "tidyr", "readr",
+  "geodata", "terra", "purrr", "geojsonsf", "cyphr",
+  "sodium", "ggplot2", "viridis", "gridExtra", "zoo",
+  # modelling + reporting (country GMM and the German Kreis supplementary)
+  "fixest", "plm", "kableExtra", "knitr"
 )
 
 missing_pkgs <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
 if (length(missing_pkgs) > 0) {
   message("→ Installing missing R dependencies: ", paste(missing_pkgs, collapse = ", "))
   install.packages(missing_pkgs, repos = "https://cloud.r-project.org")
+}
+
+# inkaR (German INKAR regional indicators, used by the Kreis supplementary) is not
+# on CRAN; it is published on the author's R-universe.
+if (!("inkaR" %in% installed.packages()[, "Package"])) {
+  message("→ Installing inkaR from R-universe ...")
+  install.packages("inkaR",
+    repos = c("https://ofurkancoban.r-universe.dev", "https://cloud.r-project.org"))
 }
 
 # 3. PYTHON & GEE API SETUP

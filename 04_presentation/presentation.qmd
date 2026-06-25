@@ -1,5 +1,5 @@
 ---
-title: "Urban Land-Use Efficiency:<br>A Stable Metric for SDG 11.3.1 and Its Drivers"
+title: "Urban Land-Use Efficiency:<br>A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers"
 subtitle: "SDG 11.3.1: The Ratio of Land Consumption Rate to Population Growth Rate"
 author:
   - name: "Ömer Furkan Çoban"
@@ -1255,14 +1255,14 @@ gmm_gt(
         n_distinct(panel_fixed$iso3),
         n_distinct(panel_fixed$period_f)
     ),
-    fontpx = 17,
+    fontpx = 14,
     note = paste0(
         "<b>* p&lt;0.10, ** p&lt;0.05, *** p&lt;0.01.</b><br>",
         "Standard errors clustered by country.<br>",
         "<b>Notes:</b><br>",
         "<b>1)</b> Cols 1&ndash;5: dynamic two-way FE (country + period FE), controls added stepwise. <br>",
         "<b>2)</b> <b>AB</b> = Arellano-Bond difference GMM; <b>BB</b> = Blundell-Bond system GMM, instrumenting the lagged BpCR with lags &ge; 2 (two-step, Windmeijer-robust SE).<br>",
-        "<b>3)</b> <b>Sargan/Hansen</b> = over-identification test (p &gt; 0.10 &rarr; valid instruments); <b>AR(2)</b> = second-order serial correlation (p &gt; 0.10 &rarr; valid).<br>"
+        "<b>3)</b> <b>Hansen J</b> = over-identification test (p &gt; 0.10 &rarr; valid instruments); <b>AR(1)/AR(2)</b> = first/second-order serial correlation (AR(1) significant by construction; AR(2) p &gt; 0.10 &rarr; valid).<br>"
     )
 )
 ```
@@ -1311,7 +1311,7 @@ The fix is dynamic-panel GMM-Generalized Method of Moments. Arellano-Bond differ
 
 And the drivers hold: denser cities densify, in-migration densifies, and higher income densifies too.
 
-Two tests confirm the model is valid. The Sargan–Hansen test checks our instruments – the deeper lags – and with a p-value above 0.10 we don't reject them, so they're valid. The AR(2) test checks for second-order serial correlation, and again above 0.10 . So the estimates are trustworthy. This confirms hypotheses H2 through H5.
+Two tests confirm the model is valid. The Hansen J test checks our instruments – the deeper lags – and with a p-value above 0.10 we don't reject them, so they're valid. The AR(1) test is significant by construction, while AR(2) shows no second-order serial correlation – again above 0.10 – which is exactly the condition we need. So the estimates are trustworthy. This confirms hypotheses H2 through H5.
 :::
 
 

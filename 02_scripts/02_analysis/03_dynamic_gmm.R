@@ -90,7 +90,9 @@ gmm_col <- function(d, instr, tr) {
   s  <- summary(m, robust = TRUE); cf <- s$coefficients
   list(coef = vapply(terms_keep, function(v) fc(cf[v, 1], cf[v, 2], cf[v, 4]), character(1)),
        nobs = sum(lengths(m$residuals)), ninst = ncol(m$W[[1]]),
-       sargan = s$sargan$p.value, ar2 = s$m2$p.value)
+       # two-step estimation: the over-id statistic is the Hansen J (robust);
+       # report AR(1) (expected significant) alongside AR(2) (should not be)
+       hansen = s$sargan$p.value, ar1 = s$m1$p.value, ar2 = s$m2$p.value)
 }
 build_combo <- function(d, instr) {
   d2 <- filter(d, !is.na(bpcr_L))
@@ -108,11 +110,11 @@ build_combo <- function(d, instr) {
   # per-equation observation counts: AB = differenced obs; BB = level-equation obs
   ab_obs <- ab$nobs                 # difference equation (loses first period per country)
   bb_obs <- bb$nobs - ab$nobs       # level equation of the system estimator (recovers it)
-  fed <- function(m) c(format(nobs(m), big.mark = ","), fmt_w(unname(r2(m)["wr2"])), "Yes", "Yes", "–", "–", "–")
-  diag <- tibble(Term = c("Observations", "Within R²", "Country FE", "Period FE", "Instruments", "Sargan (p)", "AR(2) (p)"),
+  fed <- function(m) c(format(nobs(m), big.mark = ","), fmt_w(unname(r2(m)["wr2"])), "Yes", "Yes", "–", "–", "–", "–")
+  diag <- tibble(Term = c("Observations", "Within R²", "Country FE", "Period FE", "Instruments", "Hansen (p)", "AR(1) (p)", "AR(2) (p)"),
     `Base` = fed(b1), `+ Density` = fed(b2), `+ Net Migr.` = fed(b3), `+ GDP` = fed(b4), `+ Urban %` = fed(b5),
-    `Arellano-Bond` = c(format(ab_obs, big.mark = ","), "–", "Yes", "Yes", as.character(ab$ninst), fmt_p(ab$sargan), fmt_p(ab$ar2)),
-    `Blundell-Bond` = c(format(bb_obs, big.mark = ","), "–", "Yes", "Yes", as.character(bb$ninst), fmt_p(bb$sargan), fmt_p(bb$ar2)))
+    `Arellano-Bond` = c(format(ab_obs, big.mark = ","), "–", "Yes", "Yes", as.character(ab$ninst), fmt_p(ab$hansen), fmt_p(ab$ar1), fmt_p(ab$ar2)),
+    `Blundell-Bond` = c(format(bb_obs, big.mark = ","), "–", "Yes", "Yes", as.character(bb$ninst), fmt_p(bb$hansen), fmt_p(bb$ar1), fmt_p(bb$ar2)))
   bind_rows(body, diag)
 }
 

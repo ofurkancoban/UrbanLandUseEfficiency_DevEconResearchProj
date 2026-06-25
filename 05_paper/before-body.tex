@@ -13,16 +13,20 @@
 
 % ── University logo ───────────────────────────────────────────────────
 \begin{center}
-\vspace{0.2cm}
-\includegraphics[height=2.8cm]{uol_logo.png}
+\vspace{-0.4cm}
+\includegraphics[height=2.3cm]{uol_logo.png}
 \end{center}
-\vspace{0.3cm}
+\vspace{0cm}
 
 \title{%
-  \vspace{0.3cm}
+  \vspace{0.1cm}
   {\color{dark}\LARGE\bfseries $title$}
   $if(subtitle)$\\[0.3cm]
   {\Large\itshape\color{black!60}$subtitle$}$endif$
+  $if(case-study)$
+  \\[0.25cm]
+  {\large\itshape\color{black!55}$case-study$}
+  $endif$
   $if(course-info)$\\[0.25cm]
   {\large\color{black!55}$course-info$}$endif$
   $if(lecturer)$\\[0.15cm]
@@ -34,6 +38,7 @@ $for(by-author)$\author{$by-author.name.literal$%
 $if(by-author.attributes.corresponding)$\corref{cor1}$endif$%
 $if(by-author.note.text)$\fnref{fn$by-author.note.number$}$endif$}
 $if(by-author.email)$ \ead{$by-author.email$} $endif$
+$if(by-author.note.text)$\fntext[fn$by-author.note.number$]{$by-author.note.text$}$endif$
 $endfor$
 
 $for(by-affiliation)$
@@ -41,7 +46,7 @@ $for(by-affiliation)$
 $endfor$
 
 $if(abstract)$
-\vspace{0.3cm}
+\vspace{-0.15cm}
 \begin{abstract}
 \noindent{\color{accent}\rule{2.5cm}{0.6pt}}\\[0.15cm]
 $abstract$
@@ -62,7 +67,7 @@ $endif$
 
 % ── Document type ──────────────────────────────────────────────────────
 $if(doc-type)$
-\vspace{0.5cm}
+\vspace{0.15cm}
 \begin{center}
 {\color{black!40}\scshape $doc-type$}
 \end{center}

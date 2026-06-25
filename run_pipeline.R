@@ -2,7 +2,7 @@
 # run_pipeline.R  —  Master pipeline for the SDG 11.3.1 / BpCR project
 #
 # Reproduces the full chain:  download data -> build panel -> figures -> render
-# the presentation (and the paper). Each step is SKIPPED if its output already
+# the presentation, paper, and supplementary. Each step is SKIPPED if its output already
 # exists, so a fresh checkout (which ships the committed processed/ data) jumps
 # straight to figures + render without re-downloading the raw GEE rasters.
 #
@@ -116,6 +116,13 @@ tasks <- list(
        script = "02_scripts/02_analysis/03_dynamic_gmm.R",
        verify = function() ex("03_datasets/processed/dynamic_gmm.rds"), raw = FALSE),
 
+  # ---- Supplementary: sub-national case study (Germany, Kreis level) -----
+  # Pulls GHSL via GEE (cached in _deu_ghsl_raw.rds) + INKAR controls -> panel CSV.
+  # raw = TRUE: skipped by default (repo ships the committed CSV); --gee rebuilds.
+  list(name = "[GEE] Supplementary: German Kreis case-study panel",
+       script = "02_scripts/02_analysis/09_deu_kreis_casestudy.R",
+       verify = function() ex("03_datasets/processed/deu_kreis_casestudy.csv"), raw = TRUE),
+
   # ---- Phase 3: presentation figures (interactive HTML) ------------------
   list(name = "Figure: BpCR interactive map",
        script = "02_scripts/02_analysis/04_fig_bpcr_interactive.R",
@@ -188,6 +195,10 @@ if (!NO_RENDER) {
     if (file.exists(here::here("05_paper/paper.qmd"))) {
       cat("\n-> paper\n")
       system2("quarto", c("render", shQuote(here::here("05_paper/paper.qmd"))))
+    }
+    if (file.exists(here::here("05_paper/supplementary.qmd"))) {
+      cat("\n-> supplementary\n")
+      system2("quarto", c("render", shQuote(here::here("05_paper/supplementary.qmd"))))
     }
   } else {
     cat("  ! quarto not found on PATH; skipping render.\n")

@@ -1,18 +1,58 @@
 ---
-title: "Supplementary Material"
-subtitle: "Sub-national Case Study: Germany (Kreis level)"
-author: "Ömer Furkan Çoban"
+title: "Urban Land-Use Efficiency"
+subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers"
+case-study: "Sub-national Case Study: Germany (Kreis Level)"
+doc-type: "Supplementary Material"
+course-info: "Development Economics · SoSe 2026"
+lecturer: "Lecturer: Prof. Dr. Jürgen Bitzer"
+author:
+  - name: Ömer Furkan Çoban
+    email: oemer.furkan.coban@uni-oldenburg.de
+    affiliations:
+      - name: Carl von Ossietzky University of Oldenburg
+        department: Applied Economics and Data Science
+        city: Oldenburg
+        country: Germany
+    note: |
+      The author used the Claude Opus 4.8 and Gemini 3.5 large language models for
+      improving the writing and for coding assistance in the preparation of this supplement.
+      All analysis, results, and conclusions are the author's own, and the author
+      takes full responsibility for the content.
 date: today
+abstract: |
+  This supplement replicates the paper's driver analysis for the Built-up per Capita
+  Rate (BpCR) at the sub-national level, using Germany (district / *Kreis* level) as
+  a case study, and brings in internal (within-country) migration, which the national
+  analysis cannot observe. It asks whether the within-country income-densification
+  and path-dependence results survive at a finer spatial scale.
+keywords:
+  - SDG 11.3.1
+  - Built-up per capita rate (BpCR)
+  - Sub-national analysis
+  - Germany / Kreise
+  - Internal migration
+journal:
+  name: Development Economics seminar working paper
+bibliography: references.bib
 format:
-  pdf:
-    number-sections: true
-    geometry: [top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]
+  elsevier-pdf:
+    keep-tex: true
+    template-partials:
+      - before-body.tex
     include-in-header:
       text: |
         \usepackage{makecell}
-        \usepackage{booktabs}
         \usepackage{float}
+        \geometry{top=3cm,bottom=3cm}
+        \floatplacement{figure}{H}
         \floatplacement{table}{H}
+        \setlength{\floatsep}{6pt plus 2pt minus 2pt}
+        \setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
+        \setlength{\intextsep}{6pt plus 2pt minus 2pt}
+    journal:
+      formatting: preprint
+      model: 3p
+      cite-style: authoryear
 execute:
   echo: false
   warning: false
@@ -22,126 +62,196 @@ execute:
 ```{r setup}
 #| include: false
 library(here); library(dplyr); library(readr); library(fixest)
-d <- read_csv(here("03_datasets/processed/deu_kreis_casestudy.csv"), show_col_types = FALSE)
-sd_ratio <- round(sd(d$lcrpgr_log, na.rm = TRUE) / sd(d$bpcr, na.rm = TRUE))
-star <- function(p) ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*","")))
+# d_all keeps the 1990 base row (controls NA) that supplies the lagged DV for 1995
+# and the deeper-lag history for the GMM; d is the 1995-2020 estimation window.
+d_all <- read_csv(here("03_datasets/processed/deu_kreis_casestudy.csv"), show_col_types = FALSE)
+d <- dplyr::filter(d_all, year >= 1995)
 ```
-
-This supplement replicates the paper's metric comparison and driver analysis at the
-**sub-national** level, using Germany as a case study. It serves two purposes: to
-show that the instability of the official LCRPGR indicator, and the usability of
-the Built-up per Capita Rate (BpCR), persist at a finer spatial scale; and to bring
-in **internal (within-country) migration**, which the national analysis cannot
-observe.
 
 # Data and Method
 
 The dependent variable is built exactly as in the main paper, but for German
 districts (*Kreise*) rather than countries. Urban built-up area $V$ and urban
-population $P$ come from the GHSL grids (urban-masked at GHS-SMOD $\geq 21$),
+population $P$ come from the GHSL grids [@pesaresi2024ghsl; @schiavina2023smod]
+(urban-masked at GHS-SMOD $\geq 21$),
 aggregated to the GAUL level-2 units for Germany at the five-year epochs
-1985--2020; BpCR, the log-LCRPGR ratio, and urban density are then computed from
+1985--2020; BpCR and urban density are then computed from
 these totals just as nationally. Two controls are taken from the German regional
-database INKAR (Federal Institute for Research on Building, Urban Affairs and
-Spatial Development, BBSR): GDP per capita (workplace-based) and the **internal
+database INKAR [@bbsr2024inkar], published by the Federal Institute for Research on
+Building, Urban Affairs and Spatial Development (BBSR): GDP per capita
+(workplace-based) and the **internal
 net-migration rate** (*Binnenwanderungssaldo*, per 1,000 inhabitants), the
 latter being the within-country flow that the national UN measure omits. Urban population share is the GHSL urban population over the INKAR total district
 population. GAUL
-districts are matched to INKAR *Kreise* by name and type (city vs. rural district);
-`r length(unique(d$key))` districts match cleanly and enter the regressions, over
-the epochs `r min(d$year)`--`r max(d$year)` for which the INKAR controls are
-available (`r nrow(d)` district-periods). All specifications carry district and
+districts are matched to INKAR *Kreise* on a cleaned base name, disambiguating
+same-named *kreisfreie Stadt* / *Landkreis* twins by geographic area, so that
+`r length(unique(d$key))` of Germany's 400 districts enter the regressions. The
+single exception is Freyung-Grafenau, a rural Bavarian-Forest district whose largest
+settlement reaches only the rural-cluster class (GHS-SMOD 13): no cell attains the
+urban threshold (SMOD $\geq 21$), so its urban built-up area and population are zero
+and BpCR is undefined. This is the same urban definition used throughout the paper,
+under which a unit with no urban cells is simply not an urban observation, not a
+matching failure. The panel spans the epochs `r min(d$year)`--`r max(d$year)` for
+which the INKAR controls are available (`r nrow(d)` district-periods). All specifications carry district and
 period fixed effects with standard errors clustered by district; the dynamic
 models add the lagged dependent variable and use Arellano-Bond and Blundell-Bond
 GMM, as in the main paper.
 
-# The Metric Breaks Down Locally Too
+# Drivers of Per-Capita Land Use
 
-Even at the district level the contrast is stark. Across the `r nrow(d)`
-district-periods the log-LCRPGR ratio has a standard deviation roughly
-**`r format(sd_ratio, big.mark=",")` times** larger than that of BpCR: at this fine
-scale many districts have near-zero population growth, so the ratio diverges even
-more violently than nationally, whereas BpCR stays in a tight, interpretable band.
+We estimate the drivers of BpCR at the district level exactly as in the main paper:
+a two-way fixed-effects model built up control-by-control, then Arellano-Bond
+(difference) and Blundell-Bond (system) GMM that add the lagged dependent variable
+to capture path-dependence and correct its Nickell bias. The key addition relative
+to the national models is **internal (within-country) net migration**, the INKAR
+*Binnenwanderungssaldo*, which the national panel (international migration only)
+cannot observe.
 
-```{r tbl-fe}
-#| label: tbl-fe
-#| tbl-cap: "Static two-way fixed-effects models at the German Kreis level (1995-2020); log-LCRPGR ratio vs. BpCR, same sample and controls."
-mL <- feols(lcrpgr_log ~ ln_density + urban_pop_share + ln_gdp + int_migr | key + year, d, vcov = ~key)
-mB <- feols(bpcr       ~ ln_density + urban_pop_share + ln_gdp + int_migr | key + year, d, vcov = ~key)
-est <- function(m,v){ ct<-coeftable(m); sprintf("%+.4f%s", ct[v,1], star(ct[v,4])) }
-sev <- function(m,v){ ct<-coeftable(m); sprintf("(%.4f)", ct[v,2]) }
-vars <- c(ln_density="ln(Urban Density)", urban_pop_share="Urban Pop. Share",
-          ln_gdp="ln(GDP per capita)", int_migr="Internal net migration (per 1{,}000)")
-body <- do.call(rbind, lapply(names(vars), function(v) data.frame(
-  Variables=c(vars[[v]], ""),
-  `LCRPGR (log)`=c(est(mL,v), sev(mL,v)),
-  `BpCR`        =c(est(mB,v), sev(mB,v)), check.names=FALSE, row.names=NULL)))
-gof <- data.frame(Variables=c("Observations","Within R$^2$","District FE","Period FE"),
-  `LCRPGR (log)`=c(format(nobs(mL),big.mark=","), sprintf("%.4f",r2(mL)["wr2"]),"Yes","Yes"),
-  `BpCR`        =c(format(nobs(mB),big.mark=","), sprintf("%.4f",r2(mB)["wr2"]),"Yes","Yes"),
-  check.names=FALSE)
-knitr::kable(rbind(body,gof), format="latex", booktabs=TRUE, escape=FALSE, linesep="",
-             align=c("l","c","c")) |>
-  kableExtra::kable_styling(latex_options="HOLD_position", font_size=9) |>
-  kableExtra::row_spec(nrow(body), hline_after=TRUE) |>
-  kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
-                                 "Standard errors clustered by district, in parentheses."),
-                       general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
-```
-
-As nationally, BpCR yields interpretable, significant coefficients while LCRPGR does
-not. Income enters BpCR negative and significant: within German districts, getting
-richer is associated with *less* built-up land per resident, the same densification
-result found across countries. The LCRPGR column returns enormous, mostly
-insignificant coefficients dominated by its unstable tails.
-
-# Dynamic Models and Internal Migration
-
-```{r tbl-gmm}
+```{r}
 #| label: tbl-gmm
-#| tbl-cap: "Dynamic-panel GMM at the German Kreis level (dependent variable: BpCR); two-step with Windmeijer-corrected errors, lagged BpCR instrumented by lags 2-3, collapsed."
-suppressMessages(library(plm))
-pd <- pdata.frame(as.data.frame(d |> mutate(t = as.integer(factor(year)))), index = c("key","t"))
+#| results: asis
+#| tbl-cap: "Dynamic-panel model at the German Kreis level: FE stepwise build-up, Arellano-Bond (difference) and Blundell-Bond (system) GMM."
+suppressMessages({library(fixest); library(plm); library(dplyr)})
+stars <- function(p) ifelse(is.na(p),"",ifelse(p<.01,"***",ifelse(p<.05,"**",ifelse(p<.1,"*",""))))
+fc    <- function(est,se,p) ifelse(is.na(est),"",sprintf("%+.4f%s<br>(%.4f)",est,stars(p),se))
+fmt_w <- function(x) ifelse(is.na(x),"–",sprintf("%.3f",x))
+fmt_p <- function(x) ifelse(is.na(x),"–",sprintf("%.2f",x))
+fe_terms <- c("bpcr_L","ln_density","int_migr","ln_gdp","urban_pop_share")
+term_lab <- c("BpCR[t−1]","ln(Urban Density)","Internal Net Migration","ln(GDP per capita)","Urban Pop. Share")
+gmm_keep <- c("lag(bpcr, 1)","ln_density","int_migr","ln_gdp","urban_pop_share")
+ctl <- "ln_density + int_migr + ln_gdp + urban_pop_share"
+d2 <- filter(d, !is.na(bpcr_L))   # bpcr_L comes from the full series, so 1995 is kept (lag = BpCR 1990)
+fe_col <- function(m){ ct<-coeftable(m)
+  vapply(fe_terms, function(v) if(v %in% rownames(ct)) fc(ct[v,1],ct[v,2],ct[v,4]) else "", character(1)) }
+ff <- function(rhs) feols(as.formula(paste("bpcr ~",rhs,"| key + factor(year)")), d2, vcov=~key)
+b1<-ff("bpcr_L"); b2<-ff("bpcr_L + ln_density"); b3<-ff("bpcr_L + ln_density + int_migr")
+b4<-ff("bpcr_L + ln_density + int_migr + ln_gdp"); b5<-ff("bpcr_L + ln_density + int_migr + ln_gdp + urban_pop_share")
+# GMM panel includes the 1990 base row (NA controls) so the lag and deeper-lag instruments reach back
+pd <- pdata.frame(as.data.frame(d_all |> arrange(key,year) |> mutate(t=as.integer(factor(year)))), index=c("key","t"))
 gmm_col <- function(tr){
-  m <- pgmm(bpcr ~ lag(bpcr,1) + ln_density + urban_pop_share + ln_gdp + int_migr | lag(bpcr,2:3),
+  m <- pgmm(as.formula(paste("bpcr ~ lag(bpcr,1) +",ctl,"| lag(bpcr,2:3)")),
             data=pd, effect="twoways", model="twosteps", transformation=tr, collapse=TRUE)
   s <- summary(m, robust=TRUE); cf <- s$coefficients
-  v <- c("lag(bpcr, 1)","ln_density","urban_pop_share","ln_gdp","int_migr")
-  c(rbind(sapply(v,function(k) sprintf("%+.4f%s", cf[k,1], star(cf[k,4]))),
-          sapply(v,function(k) sprintf("(%.4f)", cf[k,2]))),
-    sprintf("%.2f", s$sargan$p.value), sprintf("%.2f", s$m2$p.value))
+  if (tr=="d") rho_ab <<- cf["lag(bpcr, 1)", 1]
+  list(coef=vapply(gmm_keep, function(v) fc(cf[v,1],cf[v,2],cf[v,4]), character(1)),
+       nobs=sum(lengths(m$residuals)), ninst=ncol(m$W[[1]]),
+       hansen=s$sargan$p.value, ar1=s$m1$p.value, ar2=s$m2$p.value)
 }
 ab <- gmm_col("d"); bb <- gmm_col("ld")
-rn <- c("BpCR$_{t-1}$","","ln(Urban Density)","","Urban Pop. Share","","ln(GDP per capita)","","Internal net migration","",
-        "Sargan (p)","AR(2) (p)")
-tab <- data.frame(Variables=rn, `Arellano-Bond`=ab, `Blundell-Bond`=bb, check.names=FALSE)
-knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
-             align=c("l","c","c")) |>
-  kableExtra::kable_styling(latex_options="HOLD_position", font_size=9) |>
-  kableExtra::row_spec(10, hline_after=TRUE) |>
-  kableExtra::footnote(general=c("*** p<0.01, ** p<0.05, * p<0.1.",
-                                 "Windmeijer-corrected robust standard errors in parentheses."),
-                       general_title="", footnote_as_chunk=FALSE, escape=FALSE, threeparttable=TRUE)
+body <- data.frame(Variables=term_lab, Base=fe_col(b1), `+ Density`=fe_col(b2), `+ Net Migr.`=fe_col(b3),
+  `+ GDP`=fe_col(b4), `+ Urban %`=fe_col(b5), `Arellano-Bond`=ab$coef, `Blundell-Bond`=bb$coef, check.names=FALSE)
+ab_obs<-ab$nobs; bb_obs<-bb$nobs-ab$nobs
+fed <- function(m) c(format(nobs(m),big.mark=","), fmt_w(unname(r2(m)["wr2"])),"Yes","Yes","–","–","–","–")
+diag <- data.frame(Variables=c("Observations","Within R$^2$","District FE","Period FE","Instruments","Hansen (p)","AR(1) (p)","AR(2) (p)"),
+  Base=fed(b1), `+ Density`=fed(b2), `+ Net Migr.`=fed(b3), `+ GDP`=fed(b4), `+ Urban %`=fed(b5),
+  `Arellano-Bond`=c(format(ab_obs,big.mark=","),"–","Yes","Yes",as.character(ab$ninst),fmt_p(ab$hansen),fmt_p(ab$ar1),fmt_p(ab$ar2)),
+  `Blundell-Bond`=c(format(bb_obs,big.mark=","),"–","Yes","Yes",as.character(bb$ninst),fmt_p(bb$hansen),fmt_p(bb$ar1),fmt_p(bb$ar2)),
+  check.names=FALSE)
+mc <- rbind(body, diag); names(mc)[1] <- "Variables"
+ncoef <- 5L
+split_two <- function(row){ est<-se<-row
+  for(j in 2:length(row)){ x<-row[[j]]
+    if(grepl("<br>",x,fixed=TRUE)){ est[[j]]<-sub("<br>.*$","",x); se[[j]]<-sub("^.*<br>","",x) } else { est[[j]]<-x; se[[j]]<-"" } }
+  est[[1]]<-row[[1]]; se[[1]]<-""; rbind(est,se) }
+coef_long <- do.call(rbind, lapply(seq_len(ncoef), function(i) split_two(mc[i,])))
+gof <- mc[(ncoef+1):nrow(mc),]
+tab <- rbind(coef_long, gof)
+esc <- function(x) gsub("%","\\%",x,fixed=TRUE); names(tab)<-esc(names(tab)); tab[[1]]<-esc(tab[[1]])
+nb <- nrow(coef_long)
+coef_grey <- as.vector(sapply(which(seq_len(ncoef)%%2==1), function(k) c(2*k-1,2*k)))
+gof_grey  <- nb + which(seq_len(nrow(gof))%%2==1)
+kbl <- knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+             align=c("l", rep("c", ncol(tab)-1)), row.names=FALSE) |>
+  kableExtra::kable_styling(latex_options=c("HOLD_position","scale_down")) |>
+  kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
+  kableExtra::row_spec(nb, hline_after=TRUE) |>
+  kableExtra::column_spec(6, border_right=TRUE) |>
+  kableExtra::add_header_above(c(" "=1, "Fixed Effects"=5, "GMM (Bias-Corrected)"=2)) |>
+  kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR"=7))
+x <- as.character(kbl)
+x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
+cat(x)
 ```
+
+\vspace{-1.0em}
+
+\footnotesize
+*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (differenced for Arellano-Bond; the larger stacked level-equation set for Blundell-Bond). Sample: 399 of Germany's 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined.
+\normalsize
 
 Three points emerge. First, per-capita land use is **strongly path-dependent** at
 the district level too: the lagged dependent variable is large and significant
-($\rho \approx 0.82$), echoing the persistence found across countries. Second, the
-**income-densification** result holds: the difference-GMM (Arellano-Bond) estimate
-keeps the negative, significant sign of the static model, in line with the national
-finding. Third, **internal net migration** is not significant within districts in
+($\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the persistence found across countries. Second, the
+**income-densification** result holds: ln(GDP per capita) is negative and
+significant across the fixed-effects build-up and in the difference-GMM
+(Arellano-Bond) estimate, in line with the national finding. Third, **internal net migration** is not significant within districts in
 this short panel; its clearer association with densification is cross-sectional,
 with the districts that attract internal migrants being the denser ones.
 
-# Caveats
+# Limitations
 
-The case study matches present-day GAUL districts to INKAR by name, so a minority
-of districts are dropped where the match is ambiguous; the controls limit the
-window to 1995--2020; and the GMM diagnostics, acceptable for the Arellano-Bond
-difference estimator, are weaker for the system estimator at this fine, short
-panel. The results should therefore be read as a corroborating local illustration
-rather than a stand-alone causal analysis. With those caveats, the case study
-reproduces the paper's two central messages sub-nationally: LCRPGR is unusable
-where population growth is near zero while BpCR recovers an interpretable
-income-densification relationship; and it shows that the densifying role of
-in-migration also holds for the internal flows the national analysis cannot see.
+Several limitations qualify this case study and mark it as a corroborating local
+illustration rather than a stand-alone causal analysis.
+
+*Coverage and matching.* GAUL districts are matched to INKAR by name (`r length(unique(d$key))`
+of Germany's 400 districts); the only exclusion, Freyung-Grafenau, has no
+urban-classified cells and hence no defined BpCR. The match relies on a cleaned
+base name with an area-based rule for same-named city/rural twins rather than an
+official code, so it is accurate here but would need a code crosswalk to be
+fully automatic in other settings.
+
+*Short, recent panel.* The INKAR controls are available only from 1995, so the
+estimation window is six five-year epochs (1995--2020). This is shorter than the
+national panel and, together with the five-year spacing, means the models speak to
+medium-run trajectories rather than short-run adjustment. The brevity matters most
+for the dynamic estimators: because the GHSL series used here begins in 1985 (BpCR
+from 1990), the deeper lags that instrument the Arellano-Bond difference equation
+are available only from 2000 onward, so the GMM is estimated on fewer periods than
+the within (fixed-effects) columns even though the latter retain all of 1995--2020.
+
+*GMM diagnostics.* The Arellano-Bond difference estimator is well behaved: the
+Hansen test does not reject the instruments, first-order serial correlation is
+present and second-order is absent, as required. The Blundell-Bond system
+estimator, by contrast, is rejected at this fine and short scale (its Hansen and
+AR(2) tests fail), so we treat Arellano-Bond as the preferred dynamic estimator and
+read Blundell-Bond only as a sign-and-significance cross-check.
+
+*Internal migration.* The internal net-migration control (INKAR
+*Binnenwanderungssaldo*) is the within-country flow the national analysis cannot
+observe, but it is not statistically significant within districts in this short
+panel; its association with densification appears to be cross-sectional (the
+districts that attract internal migrants are the already-denser ones) rather than a
+within-district dynamic that six epochs can identify.
+
+*Measurement and scope.* As in the main paper, the built-up and population layers
+are satellite-based estimates, the urban area is defined at a fixed Degree-of-Urbanisation
+threshold (GHS-SMOD of at least 21), and present-day GAUL boundaries are applied
+throughout; the income and migration controls are administrative aggregates. The
+estimates are associations, not causal effects, and they describe a single country,
+so they illustrate rather than establish external validity.
+
+# Conclusion
+
+This supplement reproduces the paper's substantive findings at the sub-national
+(German district) scale, across `r nrow(d)` district-periods. Per-capita urban land
+use is strongly path-dependent within districts (Arellano-Bond
+$\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the persistence found across
+countries, and it declines with income: getting richer is associated with less
+built-up land per resident, the same compact-city, income-densification relationship
+the national panel shows. The result is therefore not an artefact of country-level
+aggregation; it holds at a much finer spatial resolution and within a single
+national institutional setting.
+
+The case study also adds the internal migration that the national analysis cannot
+see. The within-country net-migration flow is not statistically significant in this
+short, six-epoch panel; its sign and the broader cross-sectional pattern are
+consistent with in-migrants being absorbed into the existing urban stock rather than
+driving outward expansion, but identifying that channel would require a longer panel.
+Taken together, the German evidence corroborates, at a scale the national panel
+cannot reach, that economic growth within a place is accompanied by densification
+rather than sprawl.
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

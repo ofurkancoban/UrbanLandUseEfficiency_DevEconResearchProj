@@ -1553,7 +1553,7 @@ FUNCTION {begin.bib}
   write$ newline$
   "\providecommand{\path}[1]{#1}"
   write$ newline$
-  "\providecommand{\DOIprefix}{doi:}"
+  "\providecommand{\DOIprefix}{DOI:}"
   write$ newline$
   "\providecommand{\ArXivprefix}{arXiv:}"
   write$ newline$
