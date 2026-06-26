@@ -86,9 +86,15 @@ format:
       - text: Main paper (HTML)
         href: paper.html
         icon: file-earmark-text
+      - text: Main paper (PDF)
+        href: paper.pdf
+        icon: file-earmark-pdf
       - text: Presentation (slides)
         href: ../04_presentation/presentation.html
         icon: easel
+      - text: Presentation (PDF)
+        href: ../04_presentation/presentation.pdf
+        icon: file-earmark-pdf
 execute:
   echo: false
   warning: false

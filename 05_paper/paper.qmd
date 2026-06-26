@@ -97,9 +97,15 @@ format:
       - text: Supplementary (HTML)
         href: supplementary.html
         icon: file-earmark-text
+      - text: Supplementary (PDF)
+        href: supplementary.pdf
+        icon: file-earmark-pdf
       - text: Presentation (slides)
         href: ../04_presentation/presentation.html
         icon: easel
+      - text: Presentation (PDF)
+        href: ../04_presentation/presentation.pdf
+        icon: file-earmark-pdf
 bibliography: references.bib
 execute:
   echo: false
