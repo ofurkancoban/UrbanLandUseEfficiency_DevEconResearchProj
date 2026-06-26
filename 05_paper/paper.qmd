@@ -1,6 +1,6 @@
 ---
 title: "Urban Land-Use Efficiency"
-subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers — 193 UN Member Countries x 1985-2020 Panel Data Analysis"
+subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers: 193 UN Member Countries x 1985-2020 Panel Data Analysis"
 doc-type: "Seminar Paper"
 course-info: "Development Economics · SoSe 2026"
 lecturer: "Lecturer: Prof. Dr. Jürgen Bitzer"
