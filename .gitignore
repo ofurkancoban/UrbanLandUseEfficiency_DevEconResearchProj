@@ -16,6 +16,14 @@
 04_presentation/presentation_files/
 04_presentation/presentation_cache/
 
+# Exception: these interactive figures' *_files/ dependencies must ship so the
+# presentation's Data Sources map and Country Trends plot render on the website.
+# (bpcr_interactive needs no *_files/, so it stays ignored.)
+!04_outputs/figures/data_sources_map_files/
+!04_outputs/figures/data_sources_map_files/**
+!04_outputs/figures/desc_trend_regional_files/
+!04_outputs/figures/desc_trend_regional_files/**
+
 # ---- OS / editor cruft ----
 .DS_Store
 **/.DS_Store
