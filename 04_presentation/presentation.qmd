@@ -938,7 +938,7 @@ Food and Agriculture Organization, @gaul2024
 :::
 
 ::: {.full-width-map style="margin-top:6px; width:100%; display:block;"}
-<iframe src="figures/data_sources_map.html" width="100%" height="510px" style="display:block; border:none; border-radius:12px;"></iframe>
+<iframe data-mapsrc="../04_outputs/figures/data_sources_map.html" src="about:blank" width="100%" height="510px" style="display:block; border:none; border-radius:12px;"></iframe>
 :::
 
 ::: {.notes}
@@ -1012,7 +1012,7 @@ So even before any regression, the data already shows which variable is usable â
 
 ## Country Trends: Regional Representatives
 
-<iframe src="figures/desc_trend_regional.html" width="100%" height="640px" allowtransparency="true" style="border:none; display:block; background:transparent;" scrolling="no"></iframe>
+<iframe data-mapsrc="../04_outputs/figures/desc_trend_regional.html" src="about:blank" width="100%" height="640px" allowtransparency="true" style="border:none; display:block; background:transparent;" scrolling="no"></iframe>
 
 ::: {.callout-note title="Key patterns"}
 ::: {style="font-size:1.42em;"}
@@ -1405,7 +1405,7 @@ The bottom line: a better yardstick gives better answers. Thank you.
 
 ## Global BpCR Distribution {visibility="uncounted"}
 
-<iframe src="figures/bpcr_interactive.html"
+<iframe data-mapsrc="../04_outputs/figures/bpcr_interactive.html" src="about:blank"
         width="100%" height="970px"
         allowtransparency="true"
         style="border:none; display:block; max-width:none !important; width:100% !important; margin:0 auto;"
@@ -1423,3 +1423,28 @@ The bottom line: a better yardstick gives better answers. Thank you.
 
 **Bottom line:** sprawl is the global norm (64%) and mostly construction-driven (active); where densification occurs it is overwhelmingly demographic (passive); and the recent trajectory is cautiously positive (decelerating, rarely worsening).
 :::
+```{=html}
+<script>
+// Lazy-load the large interactive map iframes (kept out of the self-contained
+// bundle via data-mapsrc, so they are not inlined as oversized data: URIs).
+// Reveal loads each map when its slide becomes active, so Leaflet initialises at
+// the correct visible size.
+(function () {
+  function loadMaps(scope) {
+    (scope || document).querySelectorAll('iframe[data-mapsrc]').forEach(function (f) {
+      if (!f.dataset.loaded) { f.src = f.getAttribute('data-mapsrc'); f.dataset.loaded = '1'; }
+    });
+  }
+  function wire() {
+    if (window.Reveal && Reveal.on) {
+      Reveal.on('ready', function (e) { loadMaps(e.currentSlide); });
+      Reveal.on('slidechanged', function (e) { loadMaps(e.currentSlide); });
+      // if Reveal already finished initialising before this ran, load the
+      // current slide's map now (deep-links / fast loads miss the 'ready' event)
+      if (Reveal.isReady && Reveal.isReady()) { loadMaps(Reveal.getCurrentSlide()); }
+    } else { setTimeout(wire, 150); }
+  }
+  wire();
+})();
+</script>
+```
