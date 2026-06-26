@@ -12,10 +12,6 @@ author:
         department: Applied Economics and Data Science
         city: Oldenburg
         country: Germany
-    note: |
-      The author used the Claude Opus 4.8 and Gemini 3.5 large language models for
-      improving the writing and for coding assistance; all analysis, results, and conclusions
-      are the author's own.
 date: today
 abstract: |
   The official SDG 11.3.1 indicator, the ratio of land consumption rate to

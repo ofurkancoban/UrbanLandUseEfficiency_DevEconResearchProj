@@ -9,16 +9,17 @@ Development Economics seminar, University of Oldenburg (SoSe 2026).
 Author: Ömer Furkan Çoban.
 Project date: 13.06.2026.
 
-This project 
+This project
+
 - (1) shows that the **official SDG 11.3.1 indicator (LCRPGR) is
-statistically unstable**,
+  statistically unstable**,
 - (2) proposes a stable, log-based replacement, the
-**Built-up per Capita Rate (BpCR)**, and
+  **Built-up per Capita Rate (BpCR)**, and
 - (3) estimates the **economic drivers** of
-urban land use across a harmonised satellite panel of **193 UN member states,
-1985–2020**, using two-way fixed effects and dynamic-panel GMM, with a
-**heterogeneity analysis** by development group and a **sub-national German
-case study** (supplementary).
+  urban land use across a harmonised satellite panel of **193 UN member states,
+  1985–2020**, using two-way fixed effects and dynamic-panel GMM, with a
+  **heterogeneity analysis** by development group and a **sub-national German
+  case study** (supplementary).
 
 ---
 
@@ -56,7 +57,9 @@ than by real land-use behaviour.
 
 We measure the **log change in built-up area per person**:
 
-$$\text{BpCR} = \frac{1}{z}\,\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right) = \text{LCR}_{\log} - \text{PGR}_{\log}$$
+$$
+\text{BpCR} = \frac{1}{z}\,\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right) = \text{LCR}_{\log} - \text{PGR}_{\log}
+$$
 
 where $V$ = urban built-up area, $P$ = urban population, $z$ = period length.
 Because it is the **difference of two logarithmic growth rates**, BpCR is:
@@ -76,16 +79,16 @@ Everything is fetched by code; nothing is placed manually. The analysis uses a
 single, **urban-scale** panel built under the EU/UN **Degree of Urbanisation**
 (urban = `GHS-SMOD ≥ 21`), so built-up and population are measured consistently.
 
-| Source | Variable | Access |
-| --- | --- | --- |
-| **GHS-BUILT-S** R2023A (GHSL, JRC) | Urban built-up area `V` | Google Earth Engine |
-| **GHS-POP** R2023A (GHSL, JRC) | Urban & total population `P` | Google Earth Engine |
-| **GHS-SMOD** R2023A (GHSL, JRC) | Degree of Urbanisation mask; map overlay | GEE + JRC download |
-| **GAUL 2024 L1** (FAO) | Reporting units (193 states) | public GEE `sat-io` asset |
-| **GAUL 2025 L1/L2** (FAO) | Map boundaries (choropleth fill + WMS) | FAO GeoServer WFS/WMS |
-| **UN SNAAMA** | GDP per capita (constant 2020 US$) | UN download |
-| **UN DESA WPP 2024** | International net migration; national total population | UN download |
-| **UN M49 / `countrycode`** | Region & development group | R package |
+| Source                                   | Variable                                               | Access                     |
+| ---------------------------------------- | ------------------------------------------------------ | -------------------------- |
+| **GHS-BUILT-S** R2023A (GHSL, JRC) | Urban built-up area`V`                               | Google Earth Engine        |
+| **GHS-POP** R2023A (GHSL, JRC)     | Urban & total population`P`                          | Google Earth Engine        |
+| **GHS-SMOD** R2023A (GHSL, JRC)    | Degree of Urbanisation mask; map overlay               | GEE + JRC download         |
+| **GAUL 2024 L1** (FAO)             | Reporting units (193 states)                           | public GEE`sat-io` asset |
+| **GAUL 2025 L1/L2** (FAO)          | Map boundaries (choropleth fill + WMS)                 | FAO GeoServer WFS/WMS      |
+| **UN SNAAMA**                      | GDP per capita (constant 2020 US$)                     | UN download                |
+| **UN DESA WPP 2024**               | International net migration; national total population | UN download                |
+| **UN M49 / `countrycode`**       | Region & development group                             | R package                  |
 
 Coverage: **193 UN member states**, 5-year epochs **1985–2020**. Full bibliographic
 citations are in `04_presentation/references.bib`.
@@ -103,12 +106,15 @@ identical urban panel so the comparison is like-for-like.
 **Specification.** One specification, run with each metric as the dependent
 variable:
 
-$$\text{Metric}_{it} = \rho\,\text{Metric}_{i,t-1} + \beta_1 \ln(\text{UrbDens}) + \beta_2\,\text{UrbShare} + \beta_3 \ln(\text{GDPpc}) + \beta_4\,\text{NetMigr} + \mu_i + \delta_t + \varepsilon_{it}$$
+$$
+\text{Metric}_{it} = \rho\,\text{Metric}_{i,t-1} + \beta_1 \ln(\text{UrbDens}) + \beta_2\,\text{UrbShare} + \beta_3 \ln(\text{GDPpc}) + \beta_4\,\text{NetMigr} + \mu_i + \delta_t + \varepsilon_{it}
+$$
 
 with country fixed effects $\mu_i$, period fixed effects $\delta_t$, and SEs clustered by
 country.
 
 **Two-stage strategy.**
+
 1. **Static** (drop the lagged DV) to isolate *metric* effects: LCRPGR vs BpCR.
 2. **Dynamic** (add the lagged DV) for path-dependence. The lagged-dependent-
    variable coefficient is **downward-biased under fixed effects (Nickell bias)**,
@@ -132,13 +138,13 @@ world.
 
 **Economic drivers (Arellano-Bond GMM; dependent variable BpCR):**
 
-| Driver | Coef. | Reading |
-| --- | --- | --- |
-| BpCR (t−1), ρ | +0.61\*\*\* | Strong path-dependence; ~60% of last period's BpCR persists. GMM ρ ≈ 3× the FE estimate, confirming the FE Nickell bias. |
-| ln(Urban density) | −0.052\*\*\* | Compact-city effect: denser cities consume less new land per resident. |
-| Int'l net migration (% pop) | −0.0005\* | In-migrants pack into the existing stock faster than built-up grows. |
-| ln(GDP per capita) | −0.014\*\* | Within-country, richer countries **densify, not sprawl**: growth ≠ sprawl. |
-| Urban population share | −0.031 (n.s.) | The *level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use. |
+| Driver                      | Coef.          | Reading                                                                                                                     |
+| --------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| BpCR (t−1), ρ             | +0.61\*\*\*    | Strong path-dependence; ~60% of last period's BpCR persists. GMM ρ ≈ 3× the FE estimate, confirming the FE Nickell bias. |
+| ln(Urban density)           | −0.052\*\*\*  | Compact-city effect: denser cities consume less new land per resident.                                                      |
+| Int'l net migration (% pop) | −0.0005\*     | In-migrants pack into the existing stock faster than built-up grows.                                                        |
+| ln(GDP per capita)          | −0.014\*\*    | Within-country, richer countries**densify, not sprawl**: growth ≠ sprawl.                                            |
+| Urban population share      | −0.031 (n.s.) | The*level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use.    |
 
 Estimation sample 1,499 country-periods; Arellano-Bond uses 1,351 and Blundell-Bond
 1,544 observations (15 vs 21 collapsed instruments). Sargan/Hansen and AR(2) tests
@@ -164,11 +170,11 @@ stale.)*
 
 ## 7. Deliverables
 
-| Output | Source | Build |
-| --- | --- | --- |
+| Output                   | Source                               | Build                                                 |
+| ------------------------ | ------------------------------------ | ----------------------------------------------------- |
 | Presentation (reveal.js) | `04_presentation/presentation.qmd` | `quarto render` → `presentation.html` / `.pdf` |
-| Paper (PDF) | `05_paper/paper.qmd` | `quarto render` → `paper.pdf` |
-| Supplementary (PDF) | `05_paper/supplementary.qmd` | `quarto render` → `supplementary.pdf` |
+| Paper (PDF)              | `05_paper/paper.qmd`               | `quarto render` → `paper.pdf`                    |
+| Supplementary (PDF)      | `05_paper/supplementary.qmd`       | `quarto render` → `supplementary.pdf`            |
 
 ## 8. Project structure
 
