@@ -652,6 +652,7 @@ the sample. The contrast between the metrics is stark (@tbl-static).
 
 ```{r}
 #| label: tbl-static
+#| results: asis
 #| tbl-cap: "Static two-way fixed-effects model on the estimation sample (1985-2020), same sample and controls for both metrics."
 suppressMessages({
     library(fixest)
@@ -703,20 +704,27 @@ nb <- nrow(body)
 nv <- length(vars)
 coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2 * k - 1, 2 * k)))
 gof_grey <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
-knitr::kable(rbind(body, gof),
+notes_s <- c(
+    "*** p<0.01, ** p<0.05, * p<0.1.",
+    "Standard errors clustered by country, in parentheses."
+)
+k <- knitr::kable(rbind(body, gof),
     format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "c", "c")
 ) |>
     kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9) |>
     kableExtra::row_spec(c(coef_grey, gof_grey), background = "#efefef") |>
-    kableExtra::row_spec(nb, hline_after = TRUE) |>
-    kableExtra::footnote(
-        general = c(
-            "*** p<0.01, ** p<0.05, * p<0.1.",
-            "Standard errors clustered by country, in parentheses."
-        ),
-        general_title = "", footnote_as_chunk = FALSE, escape = FALSE, threeparttable = (out_fmt == "latex")
-    )
+    kableExtra::row_spec(nb, hline_after = TRUE)
+if (out_fmt == "latex") {
+    k <- k |> kableExtra::footnote(general = notes_s, general_title = "",
+        footnote_as_chunk = FALSE, escape = FALSE, threeparttable = TRUE)
+    cat(as.character(k))
+} else {
+    cat("```{=html}\n", as.character(k),
+        "\n<p style=\"font-size:.8rem;color:#4b5563;margin:.3rem 0 1rem;text-align:left\">",
+        gsub("<", "&lt;", paste(notes_s, collapse = " ")),
+        "</p>\n```\n", sep = "")
+}
 ```
 
 ```{r r2-inline}
@@ -857,6 +865,7 @@ deep-lag instruments to be reliable.
 
 ```{r}
 #| label: tbl-hetero
+#| results: asis
 #| tbl-cap: "Heterogeneity: static two-way fixed-effects BpCR model by United Nations development group (same estimation sample as Table 4)."
 suppressMessages({
     library(fixest)
@@ -916,21 +925,29 @@ nb <- nrow(body)
 nv <- length(vars)
 coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2 * k - 1, 2 * k)))
 gof_grey <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
-knitr::kable(rbind(body, gof),
+notes_h <- c(
+    "*** p<0.01, ** p<0.05, * p<0.1.",
+    "Standard errors are clustered at the country level, in parentheses, to robustify against potential serial correlation within subgroups."
+)
+k <- knitr::kable(rbind(body, gof),
     format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "c", "c", "c")
 ) |>
     kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9) |>
     kableExtra::row_spec(c(coef_grey, gof_grey), background = "#efefef") |>
     kableExtra::row_spec(nb, hline_after = TRUE) |>
-    kableExtra::add_header_above(c(" " = 1, "Dependent variable: BpCR" = 3)) |>
-    kableExtra::footnote(
-        general = c(
-            "*** p<0.01, ** p<0.05, * p<0.1.",
-            "Standard errors are clustered at the country level, in parentheses, to robustify against potential serial correlation within subgroups."
-        ),
-        general_title = "", footnote_as_chunk = FALSE, escape = FALSE, threeparttable = (out_fmt == "latex")
-    )
+    kableExtra::add_header_above(c(" " = 1, "Dependent variable: BpCR" = 3))
+if (out_fmt == "latex") {
+    k <- k |> kableExtra::footnote(general = notes_h, general_title = "",
+        footnote_as_chunk = FALSE, escape = FALSE, threeparttable = TRUE)
+    cat(as.character(k))
+} else {
+    # HTML: note as a full-width paragraph below the table (not a table cell)
+    cat("```{=html}\n", as.character(k),
+        "\n<p style=\"font-size:.8rem;color:#4b5563;margin:.3rem 0 1rem;text-align:left\">",
+        gsub("<", "&lt;", paste(notes_h, collapse = " ")),
+        "</p>\n```\n", sep = "")
+}
 ```
 
 Three patterns stand out. First, the compact-city effect of density is present in
