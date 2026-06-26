@@ -1,9 +1,20 @@
-# ============================================================================
-# 22_un_gdp_per_capita.R
-# UN SNAAMA "Per Capita GDP at constant 2020 prices in US Dollars" (all countries),
-# the single GDP source for the panel (replaces WDI; covers DPRK & Tanzania natively).
-# Source: UNSD AMA API file 12. Output: 03_datasets/raw/un_gdp_per_capita.csv
-# ============================================================================
+# ==============================================================================
+# File:          05_un_gdp_per_capita.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Preprocessing
+# Description:   Downloads and processes UN SNAAMA Per Capita GDP at constant 2020 
+#                prices in US Dollars for all countries.
+# ==============================================================================
 suppressMessages({library(tidyverse); library(readxl); library(countrycode)})
 setwd(here::here())
 

@@ -1,27 +1,20 @@
-# ============================================================================
-# 13_country_urban_panel.R
-# COUNTRY-level SDG 11.3.1 panel computed the way the metadata requires:
-# aggregate the COMPONENTS to national level first (sum urban built-up and urban
-# population across ADM1), THEN form the rates/ratios (never average ratios; cf.
-# metadata 4.b). Urban = DEGURBA / GHS-SMOD >= 21 (from the urban GEE collection).
-# Controls are self-contained: GDP per capita (UN SNAAMA), net migration (UN WPP),
-# region & development group (UN M49 via countrycode). No external control panel.
+# ==============================================================================
+# File:          01_country_urban_panel.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
 #
-# Per country x 5-year period (U = national urban built-up m², P = national urban
-# population), using the project's log definitions + the metadata's arithmetic
-# LCR / official LCRPGR / secondary indicators:
-#   lcr_log    = ln(U_t/U_{t-z})/z
-#   pgr_log    = ln(P_t/P_{t-z})/z
-#   lcrpgr_log = lcr_log / pgr_log                 (deck DV; log/log)
-#   lcr        = (U_t-U_{t-z})/U_{t-z} * 1/z        (metadata arithmetic LCR)
-#   lcrpgr     = lcr / pgr_log                      (official LCRPGR: arith LCR / log PGR)
-#   total_change = (U_t-U_{t-z})/U_{t-z}            (metadata secondary)
-#   bup        = U_t/P_t                            (metadata secondary, m²/person)
-#   bpcr       = ln(bup_t/bup_{t-z})/z = lcr_log - pgr_log
-#   lue_status = 1 if lcrpgr_log in (0,1], else 0
-#
-# Output: 03_datasets/processed/reg_panel_urban.csv
-# ============================================================================
+# Category:      Data Analysis
+# Description:   Assembles country-level SDG 11.3.1 panel data using GHSL components 
+#                and UN controls (GDP, migration, region/development groups).
+# ==============================================================================
 suppressMessages({library(tidyverse)})
 setwd(here::here())
 indir <- "03_datasets/raw/Zonal_Stats_Urban_GAUL2024"

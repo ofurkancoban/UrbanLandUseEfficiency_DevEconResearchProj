@@ -1,3 +1,20 @@
+# ==============================================================================
+# File:          06_fig_data_sources_map.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Generates interactive HTML maps for data sources (GDP, GHS-SMOD layers).
+# ==============================================================================
+
 library(sf)
 library(dplyr)
 library(leaflet)

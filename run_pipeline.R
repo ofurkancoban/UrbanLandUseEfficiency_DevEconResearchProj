@@ -1,10 +1,20 @@
 # ==============================================================================
-# run_pipeline.R  —  Master pipeline for the SDG 11.3.1 / BpCR project
+# File:          run_pipeline.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
 #
-# Reproduces the full chain:  download data -> build panel -> figures -> render
-# the presentation, paper, and supplementary. Each step is SKIPPED if its output already
-# exists, so a fresh checkout (which ships the committed processed/ data) jumps
-# straight to figures + render without re-downloading the raw GEE rasters.
+# Category:      Pipeline Orchestration
+# Description:   Master pipeline that reproduces the full project chain: 
+#                download data -> build panel -> figures -> render documents.
+# ==============================================================================
 #
 # Usage:
 #   Rscript run_pipeline.R              # run all steps, skipping done ones

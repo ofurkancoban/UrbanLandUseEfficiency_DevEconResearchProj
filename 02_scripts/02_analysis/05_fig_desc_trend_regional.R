@@ -1,10 +1,20 @@
-# ============================================================================
-# 19_desc_trend_regional.R
-# Interactive "Urban Land Efficiency Trends: Regional Representatives" plot,
-# recomputed from the metadata-correct URBAN panel (DEGURBA/GHS-POP).
-# Two panels: BpCR (log diff) and LCRPGR (log) for 7 representative countries,
-# 1990-2020. Transparent background. Output: figures/desc_trend_regional.html
-# ============================================================================
+# ==============================================================================
+# File:          05_fig_desc_trend_regional.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Generates regional representative trend plots (BpCR and LCRPGR) 
+#                for 7 countries.
+# ==============================================================================
 suppressMessages({library(tidyverse); library(plotly); library(htmlwidgets)})
 setwd(here::here())
 

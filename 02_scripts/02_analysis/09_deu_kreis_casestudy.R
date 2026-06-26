@@ -1,15 +1,20 @@
-# ============================================================================
-# 09_deu_kreis_casestudy.R
-# Supplementary sub-national case study (Germany, Kreis level).
-# GHSL urban built-up V, urban population P, urban area A aggregated to GAUL L2
-# German districts (5-yr epochs), matched to INKAR controls (GDP per capita 546,
-# internal net migration 166) by district name + type. Builds the analysis panel
-# read by 05_paper/supplementary.qmd.
-# Output: 03_datasets/processed/deu_kreis_casestudy.csv
-# Zonal sums use native 100 m scale (urban population/built-up levels are correct,
-# so the urban-population share is meaningful); this makes the GEE step slow.
-# Needs: GEE credentials (or your own login) + the inkaR package.
-# ============================================================================
+# ==============================================================================
+# File:          09_deu_kreis_casestudy.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Processes sub-national case study data for German districts 
+#                (Kreis level) using GHSL and INKAR.
+# ==============================================================================
 suppressMessages({library(inkaR); library(dplyr); library(tidyr)})
 pr <- here::here(); setwd(pr)
 cachef <- "03_datasets/processed/_deu_ghsl_raw.rds"

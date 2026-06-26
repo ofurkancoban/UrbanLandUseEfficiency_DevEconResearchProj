@@ -1,3 +1,21 @@
+# ==============================================================================
+# File:          04_fig_bpcr_interactive.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Generates interactive HTML maps and plots for the BpCR 
+#                (Built-up per Capita Change Ratio).
+# ==============================================================================
+
 library(tidyverse)
 library(sf)
 library(rnaturalearth)

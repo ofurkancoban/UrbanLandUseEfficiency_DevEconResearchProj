@@ -1,10 +1,20 @@
-# ============================================================================
-# 23_un_net_migration.R
-# Net migration from UN DESA World Population Prospects 2024 (Crude rate of net
-# migration, CNMR, per 1,000) -> net_migr_pct = CNMR/10 (% of population).
-# Replaces the WDI net-migration control. Source: WPP2024 Demographic Indicators.
-# Output: 03_datasets/raw/un_net_migration.csv  (iso3, year, net_migr_pct)
-# ============================================================================
+# ==============================================================================
+# File:          06_un_net_migration.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Preprocessing
+# Description:   Downloads and processes net migration rates from UN DESA World 
+#                Population Prospects 2024.
+# ==============================================================================
 suppressMessages({library(tidyverse)})
 setwd(here::here())
 

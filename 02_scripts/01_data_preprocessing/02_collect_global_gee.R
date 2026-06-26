@@ -1,23 +1,19 @@
 # ==============================================================================
-# 02_collect_global_gee.R
-# GEE BATCH EXPORT (GAUL 2024) - ALL 193 COUNTRIES (Built_GHSL + Pop_GHSL),
-# FULL TERRITORY (whole-country, not urban-only). Provides the national TOTAL
-# population used by 02_analysis/03_add_urban_share_density.R to form
-# urban_pop_share = urban pop / total pop.
+# File:          02_collect_global_gee.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
 #
-#   Admin source : projects/sat-io/open-datasets/FAO/GAUL/GAUL_2024_L1
-#                  (FAO Global Administrative Unit Layers 2024, CC BY 4.0)
-#   Country key  : iso3_code
-#   Unit fields  : gaul1_code / gaul1_name
-#
-# GAUL 2024 covers every UN member at level 1, so no microstate fallback needed.
-# Output: 03_datasets/raw/Zonal_Stats_Global_GAUL2024/  (one CSV per country,
-#   columns Built_GHSL_<year> / Pop_GHSL_<year>, summed over the whole territory).
-#
-# Submits all countries as GEE server-side export tasks.
-# Skips countries that already have a CSV file.
-# Includes rate-limit protection and retry logic.
-# Results go to Google Drive → then downloaded locally.
+# Category:      Data Preprocessing
+# Description:   Google Earth Engine batch export (GAUL 2024 L1) for all 193 
+#                countries (whole-country, not urban-only) for national totals.
 # ==============================================================================
 
 # 1. SETUP & AUTHENTICATION

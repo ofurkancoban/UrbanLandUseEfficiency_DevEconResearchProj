@@ -1,10 +1,20 @@
-# ============================================================================
-# 08_fig_country_trends.R
-# Static two-panel country-trend figure for the paper: official log-LCRPGR (left)
-# vs BpCR (right) for seven regional representatives, 1985-2020. Shows LCRPGR's
-# erratic swings against BpCR's smooth, interpretable series.
-# Output: 04_outputs/figures/country_trends.pdf (vector) + .png (600 dpi)
-# ============================================================================
+# ==============================================================================
+# File:          08_fig_country_trends.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Generates paper figures comparing official LCRPGR vs BpCR 
+#                country-level trends.
+# ==============================================================================
 suppressMessages({library(here); library(readr); library(dplyr); library(tidyr)
   library(ggplot2); library(showtext); library(sysfonts)}); setwd(here::here())
 lm_dir <- "~/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm"

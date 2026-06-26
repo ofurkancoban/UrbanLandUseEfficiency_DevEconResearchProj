@@ -1,11 +1,20 @@
-# ============================================================================
-# 14_smod_urban_area_gee.R
-# National URBAN AREA (km²) from GHS-SMOD (DEGURBA urban = SMOD >= 21), per
-# country per year, for urban density (= urban population / urban area).
-# Single server-side Export.table.toDrive task (no getInfo timeout), then
-# download + parse. Years 1975-2020.
-# Output: 03_datasets/raw/smod_urban_area_national.csv  (iso3, year, urban_area_km2)
-# ============================================================================
+# ==============================================================================
+# File:          03_smod_urban_area_gee.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Preprocessing
+# Description:   National URBAN AREA (km²) from GHS-SMOD (DEGURBA urban = SMOD >= 21) 
+#                per country per year, for urban density via Google Earth Engine.
+# ==============================================================================
 suppressMessages({library(tidyverse); library(cli)})
 pr <- here::here(); setwd(pr)
 source(file.path(pr,"02_scripts/00_setup/01_encryption_utils.R")); my_password <- "OmerFurkanCoban"

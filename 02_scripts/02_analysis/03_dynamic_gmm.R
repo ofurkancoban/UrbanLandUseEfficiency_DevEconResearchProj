@@ -1,11 +1,20 @@
-# ============================================================================
-# 24_dynamic_gmm.R
-# Dynamic-panel GMM (Arellano-Bond diff + Blundell-Bond system) for the BpCR
-# inertia coefficient, addressing the downward Nickell bias of the lagged-DV FE
-# estimator. Computed here (plm attached) and saved so the presentation does NOT
-# load plm (which would mask dplyr::lag used throughout the panel build).
-# Output: 03_datasets/processed/dynamic_gmm.rds  (list: main, robust tibbles)
-# ============================================================================
+# ==============================================================================
+# File:          03_dynamic_gmm.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Performs dynamic-panel GMM estimations (Arellano-Bond diff + 
+#                Blundell-Bond system) for BpCR inertia.
+# ==============================================================================
 suppressMessages({library(plm); library(fixest); library(dplyr); library(readr); library(tidyr); library(here)})
 setwd(here::here())  # project root (portable; works for any clone location)
 

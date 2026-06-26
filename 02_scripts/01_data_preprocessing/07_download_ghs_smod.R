@@ -1,11 +1,20 @@
-# ============================================================================
-# 07_download_ghs_smod.R
-# Download the GHS-SMOD (Degree of Urbanisation) global raster, R2023A, 1 km,
-# epoch 2020, from the JRC GHSL open-data FTP. Used as the DEGURBA overlay in the
-# data-sources map (07_fig_data_sources_map.R), which crops it to a small window.
-# Fully reproducible; no manual download.
-# Output: 03_datasets/raw/GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0/<...>.tif
-# ============================================================================
+# ==============================================================================
+# File:          07_download_ghs_smod.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Preprocessing
+# Description:   Downloads the GHS-SMOD (Degree of Urbanisation) global raster, 
+#                R2023A, 1 km, epoch 2020, from the JRC GHSL open-data server.
+# ==============================================================================
 suppressMessages(library(here))
 setwd(here::here())
 

@@ -1,14 +1,19 @@
 # ==============================================================================
-# GADM 4.1 → GEE Asset Upload
-# ==============================================================================
-# Downloads GADM 4.1 level-1 administrative boundaries, extracts the ADM_1
-# layer, and uploads it to Google Earth Engine as a project asset.
+# File:          03_upload_gadm_to_gee.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
 #
-# Run this script ONCE before using 01_data_collection_batch.R with GADM.
-#
-# Prerequisites:
-#   - earthengine CLI authenticated: earthengine authenticate
-#   - R packages: sf, here
+# Category:      Environment Setup
+# Description:   Downloads GADM 4.1 level-1 administrative boundaries, extracts
+#                the ADM_1 layer, and uploads it to Google Earth Engine.
 # ==============================================================================
 
 project_root <- if (requireNamespace("here", quietly = TRUE)) {

@@ -1,25 +1,19 @@
 # ==============================================================================
-# 10_ghsl_urban_national_gee.R   (single, self-contained pipeline)
-# URBAN-scale GHSL collection for SDG 11.3.1, EXACTLY per the indicator metadata
-# (Metadata-11-03-01.pdf, UN-Habitat, 2025-04-23).
+# File:          01_collect_urban_gee.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
 #
-#   * Analysis area = URBAN area via the Degree of Urbanisation (DEGURBA),
-#     implemented on the GHSL grid as GHS-SMOD.  DEGURBA urban = SMOD >= 21
-#     (Cities = 30; Towns & semi-dense = 23/22/21).  Rural = 13/12/11, Water = 10.
-#   * Built-up = GHS-BUILT-S, Population = GHS-POP, summed ONLY over urban cells.
-#   * Admin / reporting level = GAUL 2024 L1, 193 UN states (iso3 from reg_panel).
-#   * Years 1975-2030, 5-year steps.
-#
-# One run does everything:
-#   (1) PRIMARY: per-country reduceRegions export -> Drive -> local (skips files
-#       that already exist).
-#   (2) FALLBACK: any country whose task FAILS (e.g. "Encoded string is too large"
-#       for huge / many-island geometries like Chile, Australia) is re-done
-#       PER-ADM1 (one reduceRegion task per region, bestEffort), then the parts
-#       are merged into NNN_Country.csv. Proven approach; isolates bad regions.
-#   (3) DOWNLOAD + MERGE + reconcile.
-#
-# Output: 03_datasets/raw/Zonal_Stats_Urban_GAUL2024/  (one CSV per country)
+# Category:      Data Preprocessing
+# Description:   URBAN-scale GHSL collection (Built-up and Population) for 
+#                SDG 11.3.1 via Google Earth Engine.
 # ==============================================================================
 project_root <- if (requireNamespace("here", quietly = TRUE)) here::here() else getwd()
 source(file.path(project_root, "02_scripts/00_setup/01_encryption_utils.R"))

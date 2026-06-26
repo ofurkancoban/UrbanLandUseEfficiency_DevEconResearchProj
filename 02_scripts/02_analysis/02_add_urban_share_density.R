@@ -1,12 +1,20 @@
-# ============================================================================
-# 15_add_urban_share_density.R
-# Add two SMOD/GHSL-consistent urban controls to the country urban panel:
-#   urban_pop_share = national urban population / national TOTAL population
-#                     (urban pop from script 10; total pop = full-territory GHS-POP)
-#   urban_density   = national urban population / national urban area (km²)
-#                     (urban area from script 14, GHS-SMOD >= 21)
-# Both at the period-end year, merged into reg_panel_urban.csv.
-# ============================================================================
+# ==============================================================================
+# File:          02_add_urban_share_density.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Adds urban population share and urban density controls to the 
+#                country-level panel data.
+# ==============================================================================
 suppressMessages({library(tidyverse)})
 setwd(here::here())
 

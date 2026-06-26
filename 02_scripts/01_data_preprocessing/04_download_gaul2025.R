@@ -1,11 +1,20 @@
-# ============================================================================
-# 04_download_gaul2025.R
-# Download FAO GAUL 2025 Level-1 (sub-national) admin boundaries as a shapefile,
-# straight from the FAO GeoServer WFS — the SAME server that serves the map's
-# WMS border layers, so the country choropleth fill (L1 dissolved to L0) matches
-# the on-map GAUL borders exactly. Fully reproducible; no manual download.
-# Output: 03_datasets/raw/GAUL_2025_L1/gaul_2025_l1.shp  (+ .dbf/.shx/.prj)
-# ============================================================================
+# ==============================================================================
+# File:          04_download_gaul2025.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Preprocessing
+# Description:   Downloads FAO GAUL 2025 Level-1 sub-national administrative 
+#                boundaries shapefile directly from FAO GeoServer WFS.
+# ==============================================================================
 suppressMessages({library(here); library(sf)})
 setwd(here::here())
 

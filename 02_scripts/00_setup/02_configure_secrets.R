@@ -3,6 +3,7 @@
 # Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
 #                Evaluation of the Land Consumption to Population Growth Ratio
 # Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
 # 
 # University:    Carl von Ossietzky University of Oldenburg
 # Department:    Applied Economics and Data Science

@@ -1,11 +1,20 @@
-# ============================================================================
-# 07_fig_metadata_layers.R
-# Step-by-step GIS visualisation of the SDG 11.3.1 / BpCR inputs (Istanbul /
-# Bosphorus): (a) satellite basemap, (b) GHS-BUILT-S, (c) GHS-SMOD DEGURBA,
-# (d) urban-masked built-up. The MAP of each panel has rounded corners and a
-# frame; the title sits above and the legend beside it. Latin Modern fonts.
-# Output: 04_outputs/figures/metadata_layers.png
-# ============================================================================
+# ==============================================================================
+# File:          07_fig_metadata_layers.R
+# Project:       Measuring Sustainable Urbanization in Turkey: An Empirical 
+#                Evaluation of the Land Consumption to Population Growth Ratio
+# Author:        Ömer Furkan Çoban
+# Date:          13.06.2026
+# 
+# University:    Carl von Ossietzky University of Oldenburg
+# Department:    Applied Economics and Data Science
+# Course:        Development Economics
+# Semester:      SoSe 26
+# Lecturers:     Prof. Dr. Jürgen Bitzer
+#
+# Category:      Data Analysis
+# Description:   Generates step-by-step GIS visualization plots of SDG 11.3.1 
+#                inputs (satellite, built-up, DEGURBA).
+# ==============================================================================
 suppressMessages({library(here); library(terra); library(sf); library(ggplot2)
   library(tidyterra); library(maptiles); library(showtext); library(sysfonts)
   library(grid); library(magick); library(cowplot)}); setwd(here::here())
