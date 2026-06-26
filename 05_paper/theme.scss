@@ -69,3 +69,17 @@ figure { margin: 1.4rem auto; text-align: center; }
 // scrollspy, so sub-sections still expand as you scroll.
 nav#TOC > ul, nav[role="doc-toc"] > ul { display: block !important; }
 nav#TOC .nav-link { padding-top: 0.15rem; padding-bottom: 0.15rem; }
+
+// kableExtra writes table footnotes into the first cell only (no colspan), so in
+// HTML the note is squeezed into the first column. Lay each footnote row out as a
+// full-width block and drop the empty trailing cells, so the note uses the whole
+// table width.
+table tfoot tr { display: block; }
+table tfoot td { display: none; }
+table tfoot td:first-child {
+  display: block;
+  border: 0;
+  padding: 0.1rem 0 !important;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
