@@ -38,11 +38,11 @@ country is judged.
 
 ## 2. The problem: LCRPGR is an unstable yardstick
 
-`LCRPGR = LCR / PGR`, where `LCR` is the (arithmetic) growth rate of built-up area
-and `PGR` is the (logarithmic) population growth rate. Two flaws follow:
+$\text{LCRPGR} = \text{LCR} / \text{PGR}$, where $\text{LCR}$ is the (arithmetic) growth rate of built-up area
+and $\text{PGR}$ is the (logarithmic) population growth rate. Two flaws follow:
 
 1. **Division by a near-zero denominator.** When population is roughly flat
-   (`PGR ≈ 0`) the ratio explodes towards ±∞ and flips sign, so small, ordinary
+   ($\text{PGR} \approx 0$) the ratio explodes towards $\pm\infty$ and flips sign, so small, ordinary
    demographic differences produce wild, uninterpretable values.
 2. **Arithmetic-vs-log asymmetry.** The numerator uses arithmetic growth while the
    denominator uses logarithmic growth, so the ratio is not symmetric and does not
@@ -55,18 +55,16 @@ than by real land-use behaviour.
 
 We measure the **log change in built-up area per person**:
 
-```
-BpCR = (1/z) · ln( (Vt / Pt) / (Vt−z / Pt−z) ) = LCR_log − PGR_log
-```
+$$\text{BpCR} = \frac{1}{z}\,\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right) = \text{LCR}_{\log} - \text{PGR}_{\log}$$
 
-where `V` = urban built-up area, `P` = urban population, `z` = period length.
+where $V$ = urban built-up area, $P$ = urban population, $z$ = period length.
 Because it is the **difference of two logarithmic growth rates**, BpCR is:
 
 - **finite and well-defined for every country-period** (no division by ~0),
 - **symmetric** (densification and sprawl are mirror images around 0),
-- **additively decomposable** (`BpCR = LCR_log − PGR_log`), and
-- **directly interpretable**: `BpCR > 0` = sprawl (more land per resident),
-  `BpCR < 0` = densification, `BpCR = 0` = land grows exactly with population.
+- **additively decomposable** ($\text{BpCR} = \text{LCR}_{\log} - \text{PGR}_{\log}$), and
+- **directly interpretable**: $\text{BpCR} > 0$ = sprawl (more land per resident),
+  $\text{BpCR} < 0$ = densification, $\text{BpCR} = 0$ = land grows exactly with population.
 
 BpCR reproduces the same policy signal as LCRPGR where LCRPGR is well-behaved, but
 without the instability. It complements, rather than contradicts, the indicator.
@@ -104,12 +102,9 @@ identical urban panel so the comparison is like-for-like.
 **Specification.** One specification, run with each metric as the dependent
 variable:
 
-```
-Metric_it = ρ·Metric_i,t−1 + β1·ln(UrbDens) + β2·UrbShare
-          + β3·ln(GDPpc)   + β4·NetMigr + μ_i + δ_t + ε_it
-```
+$$\text{Metric}_{it} = \rho\,\text{Metric}_{i,t-1} + \beta_1 \ln(\text{UrbDens}) + \beta_2\,\text{UrbShare} + \beta_3 \ln(\text{GDPpc}) + \beta_4\,\text{NetMigr} + \mu_i + \delta_t + \varepsilon_{it}$$
 
-with country fixed effects `μ_i`, period fixed effects `δ_t`, and SEs clustered by
+with country fixed effects $\mu_i$, period fixed effects $\delta_t$, and SEs clustered by
 country.
 
 **Two-stage strategy.**
@@ -125,10 +120,10 @@ country.
 
 **The metric matters.** On the same data, LCRPGR's instability shows up in its
 extreme tails, whereas BpCR is well-behaved across all country-periods; sprawl is
-real and measurable but is over- and under-stated by LCRPGR exactly where `PGR`
+real and measurable but is over- and under-stated by LCRPGR exactly where $\text{PGR}$
 is small.
 
-**Sprawl is the global norm.** A majority of countries show `BpCR > 0` over
+**Sprawl is the global norm.** A majority of countries show $\text{BpCR} > 0$ over
 1985–2020: built-up area is growing faster than urban population for most of the
 world.
 
