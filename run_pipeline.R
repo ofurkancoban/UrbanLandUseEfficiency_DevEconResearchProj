@@ -133,6 +133,21 @@ tasks <- list(
        script = "02_scripts/02_analysis/09_deu_kreis_casestudy.R",
        verify = function() ex("03_datasets/processed/deu_kreis_casestudy.csv"), raw = TRUE),
 
+  # ---- Phase 2b: static raster-map figures (paper Figs 1-2 + supplement) --
+  # These read the local GHSL rasters (GHS-BUILT-S + GHS-SMOD), the GAUL L1
+  # boundaries and an online satellite basemap, so they need those raw inputs
+  # present. The repo ships the rendered images, so each step is gated on its
+  # output and skipped in committed mode; --force re-runs them (rasters required).
+  list(name = "Figure: SDG 11.3.1 data layers (paper Fig. 1, Istanbul)",
+       script = "02_scripts/02_analysis/07_fig_metadata_layers.R",
+       verify = function() ex("04_outputs/figures/metadata_layers.png"), raw = FALSE),
+  list(name = "Figure: official LCRPGR vs BpCR country trends (paper Fig. 2)",
+       script = "02_scripts/02_analysis/08_fig_country_trends.R",
+       verify = function() ex("04_outputs/figures/country_trends.pdf"), raw = FALSE),
+  list(name = "Figure: SDG 11.3.1 data layers, Germany (supplement, Berlin)",
+       script = "02_scripts/02_analysis/10_fig_metadata_layers_deu.R",
+       verify = function() ex("04_outputs/figures/metadata_layers_deu.png"), raw = FALSE),
+
   # ---- Phase 3: presentation figures (interactive HTML) ------------------
   list(name = "Figure: BpCR interactive map",
        script = "02_scripts/02_analysis/04_fig_bpcr_interactive.R",
