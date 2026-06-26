@@ -58,7 +58,7 @@ than by real land-use behaviour.
 We measure the **log change in built-up area per person**:
 
 $$
-\text{BpCR} = \frac{1}{z}\,\ln\!\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right) = \text{LCR}_{\log} - \text{PGR}_{\log}
+\text{BpCR} = \frac{1}{z}\,\ln\left(\frac{V_t/P_t}{V_{t-z}/P_{t-z}}\right) = \text{LCR}_{\log} - \text{PGR}_{\log}
 $$
 
 where $V$ = urban built-up area, $P$ = urban population, $z$ = period length.
