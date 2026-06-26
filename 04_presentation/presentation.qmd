@@ -1,6 +1,6 @@
 ---
 title: "Urban Land-Use Efficiency:<br>A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers"
-subtitle: "SDG 11.3.1: The Ratio of Land Consumption Rate to Population Growth Rate"
+subtitle: "SDG 11.3.1: The Ratio of Land Consumption Rate to Population Growth Rate<br>193 UN Member Countries x 1985-2020 Panel Data Analysis"
 author:
   - name: "Ömer Furkan Çoban"
     affiliation: "Development Economics · SoSe 2026"
