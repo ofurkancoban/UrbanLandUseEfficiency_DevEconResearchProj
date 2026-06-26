@@ -54,6 +54,7 @@ format:
       model: 3p
       cite-style: authoryear
   html:
+    subtitle: "Supplementary Material · Sub-national Case Study: Germany (Kreis Level)"
     theme: [litera, theme.scss]
     embed-resources: true
     include-in-header:
