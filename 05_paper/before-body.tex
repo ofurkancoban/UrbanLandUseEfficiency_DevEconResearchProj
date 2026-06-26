@@ -1,38 +1,46 @@
 
 % ── Cover aesthetics ──────────────────────────────────────────────────
-\definecolor{accent}{HTML}{D97706}
+\definecolor{accent}{HTML}{00406B}
 \definecolor{dark}{HTML}{1F2937}
 
 % ── Patch elsarticle email label ───────────────────────────────────────
 \makeatletter
 \patchcmd{\printFirstPageNotes}{Email address:}{E-Mail Adress:}{}{}
 \patchcmd{\printFirstPageNotes}{Email addresses:}{E-Mail Adresses:}{}{}
+% Shrink elsarticle's fixed 36pt gap between the affiliation block and the
+% Abstract rule (\pprintMaketitle / \MaketitleBox both hard-code \vskip36pt).
+\patchcmd{\pprintMaketitle}{\vskip36pt}{\vskip8pt}{}{}
+\patchcmd{\MaketitleBox}{\vskip36pt}{\vskip8pt}{}{}
+% Shrink the \medskip elsarticle inserts between the "Abstract" heading and
+% the abstract body (our accent rule sits right after it).
+\patchcmd{\abstract}{\medskip}{\vskip2pt}{}{}
 \makeatother
 
 \begin{frontmatter}
 
 % ── University logo ───────────────────────────────────────────────────
 \begin{center}
-\vspace{-0.4cm}
-\includegraphics[height=2.3cm]{uol_logo.png}
+\vspace{-0.8cm}
+\includegraphics[height=2.1cm]{uol_logo.png}
 \end{center}
-\vspace{0cm}
+\vspace{-0.2cm}
 
 \title{%
-  \vspace{0.1cm}
   {\color{dark}\LARGE\bfseries $title$}
-  $if(subtitle)$\\[0.3cm]
+  $if(subtitle)$\\[0.2cm]
   {\Large\itshape\color{black!60}$subtitle$}$endif$
   $if(case-study)$
-  \\[0.25cm]
+  \\[0.15cm]
   {\large\itshape\color{black!55}$case-study$}
   $endif$
-  $if(course-info)$\\[0.25cm]
+  $if(course-info)$\\[0.15cm]
   {\large\color{black!55}$course-info$}$endif$
-  $if(lecturer)$\\[0.15cm]
-  {\normalsize\color{black!50}$lecturer$}$endif$\\[0.3cm]
+  $if(lecturer)$\\[0.1cm]
+  {\normalsize\color{black!50}$lecturer$}$endif$\\[0.2cm]
   {\color{accent}\rule{0.35\textwidth}{1pt}}
 }
+
+\vspace{-0.15cm}
 
 $for(by-author)$\author{$by-author.name.literal$%
 $if(by-author.attributes.corresponding)$\corref{cor1}$endif$%
@@ -46,9 +54,8 @@ $for(by-affiliation)$
 $endfor$
 
 $if(abstract)$
-\vspace{-0.15cm}
 \begin{abstract}
-\noindent{\color{accent}\rule{2.5cm}{0.6pt}}\\[0.15cm]
+\noindent{\color{accent}\rule{2.5cm}{0.6pt}}\\[0.1cm]
 $abstract$
 \end{abstract}
 $endif$
@@ -67,7 +74,7 @@ $endif$
 
 % ── Document type ──────────────────────────────────────────────────────
 $if(doc-type)$
-\vspace{0.15cm}
+\vspace{0.35cm}
 \begin{center}
 {\color{black!40}\scshape $doc-type$}
 \end{center}

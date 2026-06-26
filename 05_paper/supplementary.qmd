@@ -106,7 +106,10 @@ execute:
 library(here); library(dplyr); library(readr); library(fixest)
 # d_all keeps the 1990 base row (controls NA) that supplies the lagged DV for 1995
 # and the deeper-lag history for the GMM; d is the 1995-2020 estimation window.
-d_all <- read_csv(here("03_datasets/processed/deu_kreis_casestudy.csv"), show_col_types = FALSE)
+d_all <- read_csv(here("03_datasets/processed/deu_kreis_casestudy.csv"), show_col_types = FALSE) |>
+    # INKAR reports the Binnenwanderungssaldo per 1,000 inhabitants; rescale to
+    # percent of population so the coefficient scale matches the national control
+    dplyr::mutate(int_migr = int_migr / 10)
 d <- dplyr::filter(d_all, year >= 1995)
 # format-aware table output: LaTeX for the PDF, HTML for the web build
 out_fmt <- if (knitr::is_latex_output()) "latex" else "html"
@@ -120,13 +123,17 @@ population $P$ come from the GHSL grids [@pesaresi2024ghsl; @schiavina2023smod]
 (urban-masked at GHS-SMOD $\geq 21$),
 aggregated to the GAUL level-2 units for Germany at the five-year epochs
 1985--2020; BpCR and urban density are then computed from
-these totals just as nationally. Two controls are taken from the German regional
+these totals just as nationally. Three series are taken from the German regional
 database INKAR [@bbsr2024inkar], published by the Federal Institute for Research on
-Building, Urban Affairs and Spatial Development (BBSR): GDP per capita
-(workplace-based) and the **internal
-net-migration rate** (*Binnenwanderungssaldo*, per 1,000 inhabitants), the
-latter being the within-country flow that the national UN measure omits. Urban population share is the GHSL urban population over the INKAR total district
-population. GAUL
+Building, Urban Affairs and Spatial Development (BBSR) and accessed through the
+author's `inkaR` R package [@coban2026inkar]: GDP per capita
+(workplace-based), the **internal
+net-migration rate** (*Binnenwanderungssaldo*, reported per 1,000 inhabitants and
+rescaled here to a percentage of population for comparability with the national
+control), the latter being the within-country flow that the national UN measure
+omits, and total district population, which serves as the denominator of the
+urban population share (GHSL urban population over INKAR total district
+population). GAUL
 districts are matched to INKAR *Kreise* on a cleaned base name, disambiguating
 same-named *kreisfreie Stadt* / *Landkreis* twins by geographic area, so that
 `r length(unique(d$key))` of Germany's 400 districts enter the regressions. The
@@ -177,7 +184,7 @@ fc    <- function(est,se,p) ifelse(is.na(est),"",sprintf("%+.4f%s<br>(%.4f)",est
 fmt_w <- function(x) ifelse(is.na(x),"–",sprintf("%.3f",x))
 fmt_p <- function(x) ifelse(is.na(x),"–",sprintf("%.2f",x))
 fe_terms <- c("bpcr_L","ln_density","int_migr","ln_gdp","urban_pop_share")
-term_lab <- c("BpCR[t−1]","ln(Urban Density)","Internal Net Migration","ln(GDP per capita)","Urban Pop. Share")
+term_lab <- c("BpCR[t−1]","ln(Urban Density)","Internal Net Migration (% Pop)","ln(GDP per capita)","Urban Pop. Share")
 gmm_keep <- c("lag(bpcr, 1)","ln_density","int_migr","ln_gdp","urban_pop_share")
 ctl <- "ln_density + int_migr + ln_gdp + urban_pop_share"
 d2 <- filter(d, !is.na(bpcr_L))   # bpcr_L comes from the full series, so 1995 is kept (lag = BpCR 1990)
@@ -246,11 +253,14 @@ if (knitr::is_latex_output()) {
 Three points emerge. First, per-capita land use is **strongly path-dependent** at
 the district level too: the lagged dependent variable is large and significant
 ($\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the persistence found across countries. Second, the
-**income-densification** result holds: ln(GDP per capita) is negative and
-significant across the fixed-effects build-up and in the difference-GMM
-(Arellano-Bond) estimate, in line with the national finding. Third, **internal net migration** is not significant within districts in
-this short panel; its clearer association with densification is cross-sectional,
-with the districts that attract internal migrants being the denser ones.
+**income** coefficient is negative in every specification, matching the sign of
+the national income-densification result, but it does not reach statistical
+significance in this shorter panel, so the district evidence is consistent with
+the national finding rather than an independent confirmation of it. Third,
+**internal net migration** enters with an essentially zero coefficient that is
+only marginally significant (10\% level) in the fixed-effects columns and
+insignificant in the GMM: six five-year epochs give little power to identify a
+within-district migration channel.
 
 # Limitations
 
@@ -282,10 +292,12 @@ read Blundell-Bond only as a sign-and-significance cross-check.
 
 *Internal migration.* The internal net-migration control (INKAR
 *Binnenwanderungssaldo*) is the within-country flow the national analysis cannot
-observe, but it is not statistically significant within districts in this short
-panel; its association with densification appears to be cross-sectional (the
-districts that attract internal migrants are the already-denser ones) rather than a
-within-district dynamic that six epochs can identify.
+observe, but within districts its coefficient is essentially zero, at best
+marginally significant (10\% level) in the fixed-effects columns and insignificant
+in the GMM. A plausible reading is that any clearer migration-densification
+association is cross-sectional (denser districts attract internal migrants), a
+pattern this within-district design does not test formally; six epochs in any case
+give little power to identify such a dynamic.
 
 *Measurement and scope.* As in the main paper, the built-up and population layers
 are satellite-based estimates, the urban area is defined at a fixed Degree-of-Urbanisation
@@ -296,24 +308,24 @@ so they illustrate rather than establish external validity.
 
 # Conclusion
 
-This supplement reproduces the paper's substantive findings at the sub-national
-(German district) scale, across `r nrow(d)` district-periods. Per-capita urban land
-use is strongly path-dependent within districts (Arellano-Bond
-$\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the persistence found across
-countries, and it declines with income: getting richer is associated with less
-built-up land per resident, the same compact-city, income-densification relationship
-the national panel shows. The result is therefore not an artefact of country-level
-aggregation; it holds at a much finer spatial resolution and within a single
-national institutional setting.
+This supplement takes the paper's driver analysis to the sub-national (German
+district) scale, across `r nrow(d)` district-periods. The headline replication is
+path-dependence: per-capita urban land use is strongly persistent within districts
+(Arellano-Bond $\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the finding
+across countries, so this result is not an artefact of country-level aggregation.
+The income coefficient is negative throughout, in line with the sign of the
+national income-densification result, but it remains statistically insignificant
+in this short six-epoch panel; the district evidence therefore corroborates the
+direction of the national finding without independently establishing it.
 
 The case study also adds the internal migration that the national analysis cannot
-see. The within-country net-migration flow is not statistically significant in this
-short, six-epoch panel; its sign and the broader cross-sectional pattern are
-consistent with in-migrants being absorbed into the existing urban stock rather than
-driving outward expansion, but identifying that channel would require a longer panel.
-Taken together, the German evidence corroborates, at a scale the national panel
-cannot reach, that economic growth within a place is accompanied by densification
-rather than sprawl.
+see. The within-country net-migration flow enters with an essentially zero
+coefficient, at best marginally significant in the fixed-effects columns and
+insignificant in the GMM; identifying that channel convincingly would require a
+longer panel. Taken together, the German evidence confirms the strong persistence
+of per-capita land use at a scale the national panel cannot reach, and is
+directionally consistent with, though not conclusive on, the income-densification
+channel.
 
 # References {.unnumbered}
 

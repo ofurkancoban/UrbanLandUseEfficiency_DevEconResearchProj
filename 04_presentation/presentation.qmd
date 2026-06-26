@@ -1328,8 +1328,8 @@ Two tests confirm the model is valid. The Hansen J test checks our instruments �
 
 - **Sprawl is real and measurable.** In most world regions urban land grows faster than population: a policy-relevant inefficiency.
 
-    - BpCR > 0 (sprawl) in **62%** of country-period observations; **64% of countries (124/193)** sprawl on average over time [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
-    - Median BpCR = **+0.0036** (built-up per capita rising); LCRPGR > 1 in **55%** of cases [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
+    - BpCR > 0 (sprawl) in **63%** of country-period observations; **67% of countries (129/193)** sprawl on average over time [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
+    - Median BpCR = **+0.0041** (built-up per capita rising); LCRPGR > 1 in **56%** of cases [(Source: own calculations (GHSL/SMOD + UN data, 1985–2020))]{style="opacity:0.6; font-size:0.85em;"}
 
 - **The official LCRPGR is unreliable.** A raw ratio that explodes when population growth is near zero (division instability) and explains almost nothing within countries (within R² ≈ 0.003).
 
