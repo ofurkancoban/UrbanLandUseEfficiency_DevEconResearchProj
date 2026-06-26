@@ -1430,15 +1430,29 @@ The bottom line: a better yardstick gives better answers. Thank you.
 // Reveal loads each map when its slide becomes active, so Leaflet initialises at
 // the correct visible size.
 (function () {
+  function nudge(f) {
+    // make the embedded Leaflet/Plotly recompute its size once the slide is
+    // actually visible (loading during a slide transition can size it to 0)
+    try { f.contentWindow.dispatchEvent(new Event('resize')); } catch (e) {}
+  }
   function loadMaps(scope) {
     (scope || document).querySelectorAll('iframe[data-mapsrc]').forEach(function (f) {
-      if (!f.dataset.loaded) { f.src = f.getAttribute('data-mapsrc'); f.dataset.loaded = '1'; }
+      if (!f.dataset.loaded) {
+        f.dataset.loaded = '1';
+        f.addEventListener('load', function () { nudge(f); setTimeout(function () { nudge(f); }, 300); });
+        f.src = f.getAttribute('data-mapsrc');
+      } else {
+        nudge(f);
+      }
     });
   }
   function wire() {
     if (window.Reveal && Reveal.on) {
       Reveal.on('ready', function (e) { loadMaps(e.currentSlide); });
-      Reveal.on('slidechanged', function (e) { loadMaps(e.currentSlide); });
+      Reveal.on('slidechanged', function (e) {
+        loadMaps(e.currentSlide);
+        setTimeout(function () { loadMaps(e.currentSlide); }, 450);  // after the transition settles
+      });
       // if Reveal already finished initialising before this ran, load the
       // current slide's map now (deep-links / fast loads miss the 'ready' event)
       if (Reveal.isReady && Reveal.isReady()) { loadMaps(Reveal.getCurrentSlide()); }
