@@ -1039,7 +1039,7 @@ specification imposes a common slope, whereas @tbl-hetero shows the income and
 density relationships, though consistent in sign, vary in strength across groups.
 These point to natural extensions: a sub-national analysis exploiting the ADM1
 detail in the data, which would also measure internal migration
-directly;^[A first such case study, for Germany at the *Kreis* level, is provided as supplementary material at <https://ofurkancoban.github.io/UrbanLandUseEfficiency_DevEconProj/05_paper/supplementary.pdf>.]
+directly;^[A first such case study, for Germany at the *Kreis* level, is provided as supplementary material at <https://ofurkancoban.github.io/UrbanLandUseEfficiency_DevEconResearchProj/05_paper/supplementary.pdf>.]
 designs aimed at causal identification; and an assessment of BpCR as a
 practical, stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 
