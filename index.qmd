@@ -1,0 +1,46 @@
+---
+title: "Urban Land-Use Efficiency"
+subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers"
+author: "Ömer Furkan Çoban"
+date: today
+format:
+  html:
+    theme: [litera, 05_paper/theme.scss]
+    embed-resources: true
+    toc: false
+    anchor-sections: false
+    link-external-newwindow: true
+---
+
+::: {.callout-note appearance="simple"}
+Development Economics seminar · SoSe 2026 · Carl von Ossietzky University of
+Oldenburg (Applied Economics and Data Science) · Lecturer: Prof. Dr. Jürgen Bitzer.
+:::
+
+The official SDG 11.3.1 indicator (LCRPGR) is unstable where population growth is
+near zero. This project proposes the **Built-up per Capita Rate (BpCR)**, a stable
+log-based metric, builds a harmonised global panel of 193 UN member states
+(1985–2020) from GHSL settlement data under the Degree of Urbanisation, and
+estimates the economic and structural drivers of per-capita urban land use with
+two-way fixed-effects and dynamic-panel GMM.
+
+## Outputs
+
+#### Paper
+- [Read online (HTML)](05_paper/paper.html)
+- [Download PDF](05_paper/paper.pdf)
+
+#### Supplementary — Sub-national case study: Germany (Kreis level)
+- [Read online (HTML)](05_paper/supplementary.html)
+- [Download PDF](05_paper/supplementary.pdf)
+
+#### Presentation
+- [Open slides (HTML)](04_presentation/presentation.html)
+- [Download PDF](04_presentation/presentation.pdf)
+
+## Reproducibility
+
+The full chain (data → panel → figures → render) is orchestrated by
+`run_pipeline.R`. The repository ships the committed processed panels, so a clean
+checkout renders the paper, supplementary, and presentation without credentials;
+`--gee` rebuilds the raw inputs from Google Earth Engine and INKAR.

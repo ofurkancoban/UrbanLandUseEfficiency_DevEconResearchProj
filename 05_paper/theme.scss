@@ -1,0 +1,65 @@
+/*-- scss:defaults --*/
+// Academic, paper-like HTML theme (matches the PDF's accent colour)
+$font-family-sans-serif: "Source Sans 3", "Source Sans Pro", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !default;
+$font-family-serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif !default;
+
+$font-size-root: 18px;
+$body-color: #1f2937;
+$body-bg: #ffffff;
+$link-color: #b1690f;          // accent, same as the PDF cover rule
+$code-color: #9a3412;
+$toc-font-size: 0.85rem;
+
+/*-- scss:rules --*/
+
+// Body in a serif face, comfortable measure and leading
+body {
+  font-family: $font-family-serif;
+  line-height: 1.62;
+}
+
+// Headings in a clean sans for contrast
+h1, h2, h3, h4, h5, .title, .subtitle {
+  font-family: $font-family-sans-serif;
+}
+h1.title { font-weight: 800; letter-spacing: -0.015em; }
+.subtitle { font-style: italic; color: #6b7280; font-weight: 400; }
+
+h2 {
+  font-weight: 700;
+  margin-top: 2.2rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+h3 { font-weight: 600; margin-top: 1.4rem; }
+
+// Justified paragraphs like a journal article
+p { text-align: justify; text-justify: inter-word; }
+
+// Title-block author / affiliation
+#title-block-header .quarto-title-meta { color: #4b5563; }
+
+// Abstract: subtle card with the accent rule
+.abstract {
+  background: #f9fafb;
+  border-left: 4px solid $link-color;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+}
+.abstract > .abstract-title { font-family: $font-family-sans-serif; font-weight: 700; }
+
+// Tables: compact, clean, academic
+table, .table {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+caption, .quarto-float-caption, figcaption {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+// Figures centred with a little breathing room
+figure { margin: 1.4rem auto; text-align: center; }
+
+// References list
+#refs { font-size: 0.92rem; }

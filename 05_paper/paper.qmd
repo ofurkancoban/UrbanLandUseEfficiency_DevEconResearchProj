@@ -62,6 +62,20 @@ format:
       formatting: preprint      # preprint | review | doubleblind
       model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
       cite-style: authoryear    # elsarticle author-year citations
+  html:
+    theme: [litera, theme.scss]
+    embed-resources: true
+    toc: true
+    toc-depth: 2
+    toc-title: Contents
+    number-sections: true
+    tbl-cap-location: top
+    fig-cap-location: bottom
+    smooth-scroll: true
+    anchor-sections: true
+    link-external-newwindow: true
+    citations-hover: true
+    code-tools: false
 bibliography: references.bib
 execute:
   echo: false
@@ -79,6 +93,9 @@ panel <- read_csv(here("03_datasets/processed/reg_panel_urban.csv"),
     show_col_types = FALSE
 )
 gmm <- readRDS(here("03_datasets/processed/dynamic_gmm.rds"))
+# format-aware table output: LaTeX for the PDF, HTML for the web build
+out_fmt <- if (knitr::is_latex_output()) "latex" else "html"
+pc <- if (knitr::is_latex_output()) "\\%" else "%"   # percent sign, escaped for LaTeX only
 ```
 
 # Introduction
@@ -302,7 +319,7 @@ data.frame(
     check.names = FALSE
 ) |>
     knitr::kable(
-        format = "latex", booktabs = TRUE, escape = TRUE, linesep = "",
+        format = out_fmt, booktabs = TRUE, escape = TRUE, linesep = "",
         align = c("l", "l", "l", "l", "l", "l", "l")
     ) |>
     kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down"))
@@ -405,7 +422,7 @@ dd <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
 vars <- c(
     bpcr = "BpCR", lcrpgr_log = "LCRPGR (log)", ln_urban_density = "ln(Urban Density)",
     urban_pop_share = "Urban Pop. Share", ln_gdp_pc = "ln(GDP per capita)",
-    net_migr_pct = "Net Migration (\\% Pop)"
+    net_migr_pct = paste0("Net Migration (", pc, " Pop)")
 )
 rows <- lapply(names(vars), function(v) {
     x <- dd[[v]]
@@ -420,7 +437,7 @@ tab <- do.call(rbind, rows)
 num <- sapply(tab[, 3:7], function(c) ifelse(abs(c) >= 100, sprintf("%.0f", c), sprintf("%.3f", c)))
 tab[, 3:7] <- num
 knitr::kable(tab,
-    format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+    format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "r", "r", "r", "r", "r", "r"), row.names = FALSE
 ) |>
     kableExtra::kable_styling(latex_options = c("HOLD_position"), font_size = 9)
@@ -484,7 +501,7 @@ data.frame(
     check.names = FALSE
 ) |>
     knitr::kable(
-        format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+        format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
         align = c("c", "l", "c")
     ) |>
     kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9)
@@ -635,7 +652,7 @@ sev <- function(m, v) {
     sprintf("(%.4f)", ct[v, 2])
 }
 vars <- c(
-    ln_urban_density = "ln(Urban Density)", net_migr_pct = "Net Migration (\\% Pop)",
+    ln_urban_density = "ln(Urban Density)", net_migr_pct = paste0("Net Migration (", pc, " Pop)"),
     ln_gdp_pc = "ln(GDP per capita)", urban_pop_share = "Urban Pop. Share"
 )
 # two physical rows per variable (estimate, then SE) so zebra shading fills cleanly
@@ -658,7 +675,7 @@ nv <- length(vars)
 coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2 * k - 1, 2 * k)))
 gof_grey <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
 knitr::kable(rbind(body, gof),
-    format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+    format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "c", "c")
 ) |>
     kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9) |>
@@ -728,7 +745,7 @@ nb <- nrow(coef_long)
 coef_grey <- as.vector(sapply(which(seq_len(ncoef) %% 2 == 1), function(k) c(2 * k - 1, 2 * k)))
 gof_grey <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
 kbl <- knitr::kable(tab,
-    format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+    format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", rep("c", ncol(tab) - 1)), row.names = FALSE
 ) |>
     kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down")) |>
@@ -738,8 +755,12 @@ kbl <- knitr::kable(tab,
     kableExtra::add_header_above(c(" " = 1, "Fixed Effects" = 5, "GMM (Bias-Corrected)" = 2)) |>
     kableExtra::add_header_above(c(" " = 1, "Dependent variable: BpCR" = 7))
 x <- as.character(kbl)
-x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
-cat(x)
+if (knitr::is_latex_output()) {
+    x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)  # LaTeX-only mid-rule
+    cat(x)
+} else {
+    cat("```{=html}\n", x, "\n```\n", sep = "")  # raw HTML so pandoc does not re-parse the table
+}
 ```
 
 \vspace{-1.0em}
@@ -843,7 +864,7 @@ sev <- function(m, v) {
 }
 nC <- function(g) as.character(n_distinct(filter(sph, income_group == g)$iso3))
 vars <- c(
-    ln_urban_density = "ln(Urban Density)", net_migr_pct = "Net Migration (\\% Pop)",
+    ln_urban_density = "ln(Urban Density)", net_migr_pct = paste0("Net Migration (", pc, " Pop)"),
     ln_gdp_pc = "ln(GDP per capita)", urban_pop_share = "Urban Pop. Share"
 )
 body <- do.call(rbind, lapply(names(vars), function(v) {
@@ -867,7 +888,7 @@ nv <- length(vars)
 coef_grey <- as.vector(sapply(which(seq_len(nv) %% 2 == 1), function(k) c(2 * k - 1, 2 * k)))
 gof_grey <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
 knitr::kable(rbind(body, gof),
-    format = "latex", booktabs = TRUE, escape = FALSE, linesep = "",
+    format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "c", "c", "c")
 ) |>
     kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9) |>

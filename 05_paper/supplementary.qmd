@@ -53,6 +53,19 @@ format:
       formatting: preprint
       model: 3p
       cite-style: authoryear
+  html:
+    theme: [litera, theme.scss]
+    embed-resources: true
+    toc: true
+    toc-depth: 2
+    toc-title: Contents
+    number-sections: true
+    tbl-cap-location: top
+    fig-cap-location: bottom
+    smooth-scroll: true
+    anchor-sections: true
+    link-external-newwindow: true
+    citations-hover: true
 execute:
   echo: false
   warning: false
@@ -66,6 +79,8 @@ library(here); library(dplyr); library(readr); library(fixest)
 # and the deeper-lag history for the GMM; d is the 1995-2020 estimation window.
 d_all <- read_csv(here("03_datasets/processed/deu_kreis_casestudy.csv"), show_col_types = FALSE)
 d <- dplyr::filter(d_all, year >= 1995)
+# format-aware table output: LaTeX for the PDF, HTML for the web build
+out_fmt <- if (knitr::is_latex_output()) "latex" else "html"
 ```
 
 # Data and Method
@@ -160,7 +175,7 @@ esc <- function(x) gsub("%","\\%",x,fixed=TRUE); names(tab)<-esc(names(tab)); ta
 nb <- nrow(coef_long)
 coef_grey <- as.vector(sapply(which(seq_len(ncoef)%%2==1), function(k) c(2*k-1,2*k)))
 gof_grey  <- nb + which(seq_len(nrow(gof))%%2==1)
-kbl <- knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep="",
+kbl <- knitr::kable(tab, format=out_fmt, booktabs=TRUE, escape=FALSE, linesep="",
              align=c("l", rep("c", ncol(tab)-1)), row.names=FALSE) |>
   kableExtra::kable_styling(latex_options=c("HOLD_position","scale_down")) |>
   kableExtra::row_spec(c(coef_grey, gof_grey), background="#efefef") |>
@@ -169,8 +184,12 @@ kbl <- knitr::kable(tab, format="latex", booktabs=TRUE, escape=FALSE, linesep=""
   kableExtra::add_header_above(c(" "=1, "Fixed Effects"=5, "GMM (Bias-Corrected)"=2)) |>
   kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR"=7))
 x <- as.character(kbl)
-x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
-cat(x)
+if (knitr::is_latex_output()) {
+  x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x)
+  cat(x)
+} else {
+  cat("```{=html}\n", x, "\n```\n", sep = "")
+}
 ```
 
 \vspace{-1.0em}

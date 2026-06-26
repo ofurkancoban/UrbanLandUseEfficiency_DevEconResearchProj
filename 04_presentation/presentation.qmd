@@ -11,6 +11,7 @@ format:
   revealjs:
     theme: default
     css: custom.css
+    embed-resources: true
     html-math-method: katex
     transition: fade
     slide-number: true
