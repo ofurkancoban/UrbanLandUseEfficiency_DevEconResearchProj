@@ -1,10 +1,10 @@
 # Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers
 
-> ⚠️ **Work in progress — not finalised.** This project is **actively under
-> development** for an ongoing seminar (SoSe 2026). Code, data, results, and the
-> written paper may still change; the paper (`05_paper/paper.qmd`) is a draft
-> scaffold and numbers/figures are not yet final. Please treat everything here as
-> preliminary and do not cite it as a completed work.
+> **Seminar project (Development Economics, SoSe 2026).** The 12-page paper
+> (`05_paper/paper.qmd`), the German sub-national supplementary
+> (`05_paper/supplementary.qmd`), and the presentation are complete; every number
+> and figure is reproduced from the committed data by the pipeline. Please cite it
+> as a student seminar paper.
 
 Development Economics seminar, University of Oldenburg (SoSe 2026).
 Author: Ömer Furkan Çoban.
@@ -17,7 +17,9 @@ statistically unstable**,
 **Built-up per Capita Rate (BpCR)**, and
 - (3) estimates the **economic drivers** of
 urban land use across a harmonised satellite panel of **193 UN member states,
-1985–2020**, using two-way fixed effects and dynamic-panel GMM.
+1985–2020**, using two-way fixed effects and dynamic-panel GMM, with a
+**heterogeneity analysis** by development group and a **sub-national German
+case study** (supplementary).
 
 ---
 
@@ -83,7 +85,7 @@ single, **urban-scale** panel built under the EU/UN **Degree of Urbanisation**
 | **GAUL 2024 L1** (FAO) | Reporting units (193 states) | public GEE `sat-io` asset |
 | **GAUL 2025 L1/L2** (FAO) | Map boundaries (choropleth fill + WMS) | FAO GeoServer WFS/WMS |
 | **UN SNAAMA** | GDP per capita (constant 2020 US$) | UN download |
-| **UN DESA WPP 2024** | Net migration; national total population | UN download |
+| **UN DESA WPP 2024** | International net migration; national total population | UN download |
 | **UN M49 / `countrycode`** | Region & development group | R package |
 
 Coverage: **193 UN member states**, 5-year epochs **1985–2020**. Full bibliographic
@@ -121,7 +123,9 @@ country.
 **The metric matters.** On the same data, LCRPGR's instability shows up in its
 extreme tails, whereas BpCR is well-behaved across all country-periods; sprawl is
 real and measurable but is over- and under-stated by LCRPGR exactly where $\text{PGR}$
-is small.
+is small. On identical data, replacing LCRPGR with BpCR raises the within-country
+explanatory power **roughly twenty-fold** (within $R^2$ about 0.003 → 0.065) and
+turns uninformative coefficients into significant, interpretable ones.
 
 **Sprawl is the global norm.** A majority of countries show $\text{BpCR} > 0$ over
 1985–2020: built-up area is growing faster than urban population for most of the
@@ -131,19 +135,29 @@ world.
 
 | Driver | Coef. | Reading |
 | --- | --- | --- |
-| BpCR (t−1), ρ | **+0.61*** | Strong path-dependence; ~60% of last period's BpCR persists. GMM ρ ≈ 3× the FE estimate, confirming the FE Nickell bias. |
-| ln(Urban density) | **−0.052*** | Compact-city effect: denser cities consume less new land per resident. |
-| Net migration (% pop) | **−0.0005*** | In-migrants pack into the existing stock faster than built-up grows. |
-| ln(GDP per capita) | **−0.014*** | Within-country, richer countries **densify, not sprawl**: growth ≠ sprawl. |
+| BpCR (t−1), ρ | +0.61\*\*\* | Strong path-dependence; ~60% of last period's BpCR persists. GMM ρ ≈ 3× the FE estimate, confirming the FE Nickell bias. |
+| ln(Urban density) | −0.052\*\*\* | Compact-city effect: denser cities consume less new land per resident. |
+| Int'l net migration (% pop) | −0.0005\* | In-migrants pack into the existing stock faster than built-up grows. |
+| ln(GDP per capita) | −0.014\*\* | Within-country, richer countries **densify, not sprawl**: growth ≠ sprawl. |
 | Urban population share | −0.031 (n.s.) | The *level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use. |
 
-Sample: 1,351 country-period observations; Sargan and AR(2) tests pass
-(instruments valid). `*** p<0.01, ** p<0.05, * p<0.1`.
+Estimation sample 1,499 country-periods; Arellano-Bond uses 1,351 and Blundell-Bond
+1,544 observations (15 vs 21 collapsed instruments). Sargan/Hansen and AR(2) tests
+pass (instruments valid). `*** p<0.01, ** p<0.05, * p<0.1`.
 
 > The within-country income → densification result **complements** the
 > cross-sectional income → sprawl literature: across countries richer places have
 > sprawled historically, but *within* a country, getting richer over time is
 > associated with denser, not more sprawling, urban land use.
+
+**Heterogeneity (by UN development group).** The income–densification link is
+negative in all three groups, most precise in the developed and developing
+economies; the compact-city density effect is strongest in the least-developed
+countries (where urban form is still being set); and international net migration
+densifies in the developed and developing groups but not in LDCs, where internal
+rural-to-urban migration (unobserved here) dominates. A sub-national German
+case study (`05_paper/supplementary.qmd`) reproduces the metric breakdown and the
+income–densification result at the *Kreis* level.
 
 *(All figures are reproduced from the committed data by the pipeline; coefficient
 chips in the slides are generated directly from the GMM output, so they never go
@@ -155,6 +169,7 @@ stale.)*
 | --- | --- | --- |
 | Presentation (reveal.js) | `04_presentation/presentation.qmd` | `quarto render` → `presentation.html` / `.pdf` |
 | Paper (PDF) | `05_paper/paper.qmd` | `quarto render` → `paper.pdf` |
+| Supplementary (PDF) | `05_paper/supplementary.qmd` | `quarto render` → `supplementary.pdf` |
 
 ## 8. Project structure
 
@@ -166,7 +181,7 @@ stale.)*
 ├── 02_scripts/
 │   ├── 00_setup/           # packages, encrypted-credential utils, GEE asset upload
 │   ├── 01_data_preprocessing/  # 01-03 GEE collections; 04-07 web downloads (GAUL 2025, UN, GHS-SMOD)
-│   └── 02_analysis/        # 01-03 panel + GMM; 04-06 presentation figures
+│   └── 02_analysis/        # 01-03 panel + GMM; 04-06 deck figures; 07-08 paper figures; 09 German case study
 ├── 03_datasets/
 │   ├── raw/                # GHSL/GAUL rasters & zonal stats - NOT committed; rebuilt with --gee
 │   ├── processed/          # committed analysis panels (project runs from these)
