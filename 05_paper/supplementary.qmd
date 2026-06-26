@@ -59,6 +59,7 @@ format:
     toc: true
     toc-depth: 2
     toc-title: Contents
+    toc-expand: true
     number-sections: true
     tbl-cap-location: top
     fig-cap-location: bottom
@@ -66,6 +67,13 @@ format:
     anchor-sections: true
     link-external-newwindow: true
     citations-hover: true
+    other-links:
+      - text: Main paper (HTML)
+        href: paper.html
+        icon: file-earmark-text
+      - text: Presentation (slides)
+        href: ../04_presentation/presentation.html
+        icon: easel
 execute:
   echo: false
   warning: false
