@@ -1,10 +1,9 @@
 # Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers
 
-> **Seminar project (Development Economics, SoSe 2026).** The 12-page paper
-> (`05_paper/paper.qmd`), the German sub-national supplementary
-> (`05_paper/supplementary.qmd`), and the presentation are complete; every number
-> and figure is reproduced from the committed data by the pipeline. Please cite it
-> as a student seminar paper.
+> ⚠️ **Work in progress — not finalised.** This project is **actively under
+> development** for an ongoing seminar (SoSe 2026). Code, data, results, and the
+> written paper may still change. Please treat everything here as preliminary and
+> do not cite it as a completed work.
 
 Development Economics seminar, University of Oldenburg (SoSe 2026).
 Author: Ömer Furkan Çoban.
