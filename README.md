@@ -64,7 +64,7 @@ Because it is the **difference of two logarithmic growth rates**, BpCR is:
 
 - **finite and well-defined for every country-period** (no division by ~0),
 - **symmetric** (densification and sprawl are mirror images around 0),
-- **additively decomposable** ($\text{BpCR} = \text{LCR}_{\log} - \text{PGR}_{\log}$), and
+- **additively decomposable** (built-up log-growth minus population log-growth), and
 - **directly interpretable**: $\text{BpCR} > 0$ = sprawl (more land per resident),
   $\text{BpCR} < 0$ = densification, $\text{BpCR} = 0$ = land grows exactly with population.
 
