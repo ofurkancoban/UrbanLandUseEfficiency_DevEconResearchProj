@@ -18,7 +18,7 @@ author:
       improving the writing and for coding assistance in the preparation of this supplement.
       All analysis, results, and conclusions are the author's own, and the author
       takes full responsibility for the content.
-date: today
+date: "June 26, 2026"
 abstract: |
   This supplement replicates the paper's driver analysis for the Built-up per Capita
   Rate (BpCR) at the sub-national level, using Germany (district / *Kreis* level) as
