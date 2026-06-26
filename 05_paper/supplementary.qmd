@@ -145,13 +145,13 @@ GMM, as in the main paper.
 for Berlin and the surrounding Brandenburg countryside. As in the national figure,
 built-up surface (panel b) is retained only where the GHS-SMOD grid classifies a cell
 as urban (SMOD at least 21, panel c), giving the urban-masked built-up that enters the
-analysis as $V$ (panel d); urban population $P$ is masked the same way. The gold line
+analysis as $V$ (panel d); urban population $P$ is masked the same way. The cyan line
 is the Berlin state boundary: the dense urban core falls inside it, while the rural
 matrix that the mask removes makes up most of the surrounding districts.
 
 ![Building the analysis input following the SDG 11.3.1 metadata at the German *Kreis*
 scale (Berlin / Brandenburg window), each layer drawn over an Esri satellite basemap.
-(a) Basemap with the Berlin state boundary (gold). (b) GHS-BUILT-S built-up surface,
+(a) Basemap with the Berlin state boundary (cyan). (b) GHS-BUILT-S built-up surface,
 shown as the built-up share of each 1 km cell. (c) GHS-SMOD Degree of Urbanisation
 (1 km); cells coded 21 or higher count as urban. (d) Urban-masked built-up, the input
 actually used: panel (b) kept only where panel (c) is urban.

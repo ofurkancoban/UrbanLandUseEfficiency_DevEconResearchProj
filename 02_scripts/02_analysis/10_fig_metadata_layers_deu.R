@@ -56,8 +56,69 @@ cty<-gaul[gaul$iso3_code=="DEU",]|>st_transform(utm)|>st_crop(st_bbox(win_m))
 smod_lev<-c("10","11","12","13","21","22","23","30")
 smod_col<-c("#9ecae1","#e5f5b8","#c7e29a","#7bb661","#ffe34d","#f0a23c","#c5562b","#d7191c")
 co<-coord_sf(crs=utm,expand=FALSE,xlim=c(ext_m$xmin,ext_m$xmax),ylim=c(ext_m$ymin,ext_m$ymax))
-bnd<-geom_sf(data=cty,fill=NA,color="#FFD700",linewidth=0.6,inherit.aes=FALSE)
+bnd<-geom_sf(data=cty[cty$gaul1_name == "Berlin", ],fill=NA,color="#00FFFF",linewidth=1.8,inherit.aes=FALSE)
 bg <-geom_spatraster_rgb(data=bm)
+
+# Map built-up data (urb_p) to RGB using scales::col_numeric and convert to grayscale outside Berlin
+berlin <- cty[cty$gaul1_name == "Berlin", ]
+berlin_vect <- vect(berlin)
+
+val_urb <- values(urb_p)[, 1]
+valid_idx <- which(!is.na(val_urb))
+cols <- rep(NA, length(val_urb))
+cols[valid_idx] <- scales::col_numeric("inferno", domain=blim)(val_urb[valid_idx])
+rgb_mat <- matrix(NA, nrow=length(val_urb), ncol=3)
+rgb_mat[valid_idx, ] <- t(col2rgb(cols[valid_idx]))
+
+urb_rgb <- c(urb_p, urb_p, urb_p)
+values(urb_rgb[[1]]) <- rgb_mat[, 1]
+values(urb_rgb[[2]]) <- rgb_mat[, 2]
+values(urb_rgb[[3]]) <- rgb_mat[, 3]
+RGB(urb_rgb) <- 1:3
+
+gray_urb <- 0.299 * urb_rgb[[1]] + 0.587 * urb_rgb[[2]] + 0.114 * urb_rgb[[3]]
+urb_gray <- urb_rgb
+urb_gray[[1]] <- gray_urb
+urb_gray[[2]] <- gray_urb
+urb_gray[[3]] <- gray_urb
+
+urb_color_masked <- mask(urb_rgb, berlin_vect)
+urb_gray_masked <- mask(urb_gray, berlin_vect, inverse=TRUE)
+urb_d_rgb <- cover(urb_color_masked, urb_gray_masked)
+RGB(urb_d_rgb) <- 1:3
+
+# Map Degree of Urbanisation (smod >= 21) to RGB and convert to grayscale outside Berlin
+smod_urb <- smod
+smod_urb[smod_urb < 21] <- NA
+val_smod <- as.character(values(smod_urb)[, 1])
+smod_rgb_cols <- rep(NA, length(val_smod))
+for (i in seq_along(smod_lev)) {
+  idx <- which(val_smod == smod_lev[i])
+  if (length(idx) > 0) {
+    smod_rgb_cols[idx] <- smod_col[i]
+  }
+}
+rgb_smod_mat <- matrix(NA, nrow=length(val_smod), ncol=3)
+valid_smod_idx <- which(!is.na(smod_rgb_cols))
+rgb_smod_mat[valid_smod_idx, ] <- t(col2rgb(smod_rgb_cols[valid_smod_idx]))
+
+smod_rgb <- c(smod_urb, smod_urb, smod_urb)
+values(smod_rgb[[1]]) <- rgb_smod_mat[, 1]
+values(smod_rgb[[2]]) <- rgb_smod_mat[, 2]
+values(smod_rgb[[3]]) <- rgb_smod_mat[, 3]
+RGB(smod_rgb) <- 1:3
+
+gray_smod <- 0.299 * smod_rgb[[1]] + 0.587 * smod_rgb[[2]] + 0.114 * smod_rgb[[3]]
+smod_gray <- smod_rgb
+smod_gray[[1]] <- gray_smod
+smod_gray[[2]] <- gray_smod
+smod_gray[[3]] <- gray_smod
+
+smod_color_masked <- mask(smod_rgb, berlin_vect)
+smod_gray_masked <- mask(smod_gray, berlin_vect, inverse=TRUE)
+smod_d_rgb <- cover(smod_color_masked, smod_gray_masked)
+RGB(smod_d_rgb) <- 1:3
+
 maptheme<-theme_void()+theme(legend.position="none",plot.margin=margin(0,0,0,0))
 legtheme<-theme_void(base_family=ff)+theme(
   legend.title=element_text(family=ff,size=15,face="bold"),
@@ -72,7 +133,11 @@ map_b<-ggplot()+bg+geom_spatraster(data=built_p,alpha=0.85)+bnd+co+
 map_c<-ggplot()+bg+geom_spatraster(data=as.factor(smod),alpha=1)+bnd+co+
   scale_fill_manual(values=setNames(smod_col,smod_lev),breaks=smod_lev,limits=smod_lev,drop=FALSE,
                     na.value="transparent",name="SMOD",na.translate=FALSE)+maptheme
-map_d<-ggplot()+bg+geom_spatraster(data=urb_p,alpha=0.92)+bnd+co+
+map_d<-ggplot()+
+  geom_spatraster_rgb(data=smod_d_rgb,alpha=0.5)+
+  geom_spatraster_rgb(data=urb_d_rgb,alpha=0.92)+
+  geom_spatraster(data=urb_p,alpha=0)+
+  bnd+co+
   scale_fill_viridis_c(option="inferno",limits=blim,na.value="transparent",name="Built-up\n(% of cell)")+maptheme
 
 # round + frame the MAP only, via a grid roundrect mask in magick
