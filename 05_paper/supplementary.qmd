@@ -1,6 +1,6 @@
 ---
 title: "Urban Land-Use Efficiency"
-subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers: 193 UN Member Countries x 1985-2020 Panel Data Analysis"
+subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers: 400 German Districts x 1990-2020 Panel Data Analysis"
 case-study: "Sub-national Case Study: Germany (Kreis Level)"
 doc-type: "Supplementary Material"
 course-info: "Development Economics · SoSe 2026"
@@ -54,7 +54,7 @@ format:
       model: 3p
       cite-style: authoryear
   html:
-    subtitle: "Supplementary Material · Sub-national Case Study: Germany (Kreis Level) : 193 UN Member Countries x 1985-2020 Panel Data Analysis"
+    subtitle: "Supplementary Material · Sub-national Case Study: Germany (Kreis Level) : 400 German Districts x 1990-2020 Panel Data Analysis"
     theme: [litera, theme.scss]
     embed-resources: true
     include-in-header:
