@@ -57,7 +57,7 @@ format:
         \setlength{\floatsep}{6pt plus 2pt minus 2pt}
         \setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
         \setlength{\intextsep}{6pt plus 2pt minus 2pt}
-        \setlength{\bibsep}{2pt plus 1pt}
+        \setlength{\bibsep}{0pt plus 0.5pt}
     journal:
       formatting: preprint      # preprint | review | doubleblind
       model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
@@ -1032,17 +1032,18 @@ complete-case estimation drops those observations. Finally, the pooled
 specification imposes a common slope, whereas @tbl-hetero shows the income and
 density relationships, though consistent in sign, vary in strength across groups.
 These point to natural extensions: a sub-national analysis exploiting the ADM1
-detail already in the data, which would also let internal migration be measured
-directly; designs aimed at causal identification; and an assessment of BpCR as a
+detail in the data, which would also measure internal migration
+directly;^[A first such case study, for Germany at the *Kreis* level, is provided as supplementary material at <https://ofurkancoban.github.io/UrbanLandUseEfficiency_DevEconProj/05_paper/supplementary.pdf>.]
+designs aimed at causal identification; and an assessment of BpCR as a
 practical, stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 
 # Conclusion {#sec-conclusion}
 
 Urban sprawl is real and measurable: across 1985--2020, built-up area per capita
-rose in almost two-thirds of country-periods and of countries. The difficulty is
-not the phenomenon but the yardstick. The official LCRPGR indicator is unstable by
+rose in almost two-thirds of country-periods. The difficulty is
+not the phenomenon but the yardstick. The official LCRPGR is unstable by
 construction, producing sign-flipping outliers exactly where land-use efficiency
-matters most; our log-based Built-up per Capita Rate is finite, symmetric, and
+matters most; our log-based Built-up per Capita Rate is finite and
 interpretable for every country-period and reproduces the policy signal without the
 instability, raising within-country explanatory power by a factor of about
 `r r2ratio` on identical data.
@@ -1051,10 +1052,9 @@ Using this stable metric on a dynamic panel of 193 United Nations member states,
 find that per-capita urban land use is strongly path-dependent and, within
 countries, declines with urban density, net in-migration, and income, so that
 economic growth over time is accompanied by densification rather than sprawl. The
-contribution is as much methodological as substantive: a stable metric paired with
-a bias-corrected dynamic estimator. For monitoring sustainable urbanisation, the
-choice of metric is not a technicality but a precondition for drawing the right
-conclusions.
+contribution is as much methodological as substantive. For monitoring sustainable
+urbanisation, the choice of metric is not a technicality but a precondition for
+drawing the right conclusions.
 
 # References {.unnumbered}
 
