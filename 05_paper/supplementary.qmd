@@ -59,7 +59,6 @@ format:
     toc: true
     toc-depth: 2
     toc-title: Contents
-    toc-expand: true
     number-sections: true
     tbl-cap-location: top
     fig-cap-location: bottom
@@ -67,7 +66,11 @@ format:
     anchor-sections: true
     link-external-newwindow: true
     citations-hover: true
+    format-links: false
     other-links:
+      - text: Supplementary (PDF)
+        href: supplementary.pdf
+        icon: file-earmark-pdf
       - text: Main paper (HTML)
         href: paper.html
         icon: file-earmark-text

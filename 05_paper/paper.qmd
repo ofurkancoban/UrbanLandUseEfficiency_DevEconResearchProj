@@ -68,7 +68,6 @@ format:
     toc: true
     toc-depth: 2
     toc-title: Contents
-    toc-expand: true
     number-sections: true
     tbl-cap-location: top
     fig-cap-location: bottom
@@ -77,7 +76,11 @@ format:
     link-external-newwindow: true
     citations-hover: true
     code-tools: false
+    format-links: false
     other-links:
+      - text: Paper (PDF)
+        href: paper.pdf
+        icon: file-earmark-pdf
       - text: Supplementary (HTML)
         href: supplementary.html
         icon: file-earmark-text
@@ -678,7 +681,7 @@ body <- do.call(rbind, lapply(names(vars), function(v) {
     )
 }))
 gof <- data.frame(
-    Variables = c("Observations", "Within R$^2$", "Country FE", "Period FE"),
+    Variables = c("Observations", "Within R²", "Country FE", "Period FE"),
     `LCRPGR (log)` = c(format(nobs(mL), big.mark = ","), sprintf("%.4f", r2(mL)["wr2"]), "Yes", "Yes"),
     `BpCR` = c(format(nobs(mB), big.mark = ","), sprintf("%.4f", r2(mB)["wr2"]), "Yes", "Yes"),
     check.names = FALSE
@@ -890,7 +893,7 @@ body <- do.call(rbind, lapply(names(vars), function(v) {
     )
 }))
 gof <- data.frame(
-    Variables = c("Observations", "Within R$^2$", "Countries", "Country FE", "Period FE"),
+    Variables = c("Observations", "Within R²", "Countries", "Country FE", "Period FE"),
     `Developed` = c(format(nobs(m1), big.mark = ","), sprintf("%.4f", r2(m1)["wr2"]), nC("Developed"), "Yes", "Yes"),
     `Developing` = c(format(nobs(m2), big.mark = ","), sprintf("%.4f", r2(m2)["wr2"]), nC("Developing"), "Yes", "Yes"),
     `LDC` = c(format(nobs(m3), big.mark = ","), sprintf("%.4f", r2(m3)["wr2"]), nC("LDC"), "Yes", "Yes"),
