@@ -97,7 +97,7 @@ format:
         icon: file-earmark-pdf
       - text: Replication Package
         href: https://github.com/ofurkancoban/UrbanLandUseEfficiency_DevEconResearchProj
-        icon: github
+        icon: file-earmark-zip
 execute:
   echo: false
   warning: false
