@@ -66,7 +66,7 @@ sld_l2   <- sld_doc("gaul_2025_l2", sprintf('<PolygonSymbolizer>%s</PolygonSymbo
 # map window (Oldenburg / NW Germany), lon/lat
 crop_ll <- terra::vect(terra::ext(7.5, 9.0, 52.8, 53.6), crs = "EPSG:4326")
 
-# ── GHSL built-up local raster (100 m, 2020) — OPTIONAL (kept if the tif exists) ──
+# ── GHSL built-up local raster (100 m, 2020) - OPTIONAL (kept if the tif exists) ──
 ghsl_tif  <- here("03_datasets/raw/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_100_V1_0/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_100_V1_0.tif")
 have_ghsl <- file.exists(ghsl_tif)
 if (have_ghsl) {
@@ -111,23 +111,23 @@ lmap <- leaflet(options = leafletOptions(minZoom = 1, maxZoom = 18, worldCopyJum
   addProviderTiles(providers$Esri.WorldImagery, options = tileOptions(opacity = 1), group = "World Imagery (XYZ)") |>
   addWMSTiles(baseUrl = ghsl_wms, layers = "LC.GHS_BUILT_S_E2018_GLOBE_R2022A_54009_10_V1_0",
     options = WMSTileOptions(format="image/png", transparent=TRUE, opacity=0.8, version="1.3.0", maxZoom=18),
-    group = g_b18, attribution = "© EC JRC — GHS-BUILT-S R2022A, Sentinel-2, 2018")
+    group = g_b18, attribution = "© EC JRC - GHS-BUILT-S R2022A, Sentinel-2, 2018")
 
 if (have_ghsl) lmap <- lmap |> addRasterImage(ghsl_crop, colors = built_pal, opacity = 0.85,
     project = TRUE, method = "ngb", maxBytes = 12*1024*1024, group = g_b20,
-    attribution = "© European Union — GHS-BUILT-S R2023A, 100 m, 2020 (CC BY 4.0)")
+    attribution = "© European Union - GHS-BUILT-S R2023A, 100 m, 2020 (CC BY 4.0)")
 
 lmap <- lmap |> addRasterImage(smod_crop, colors = smod_pal, opacity = 0.8, project = TRUE,
     method = "ngb", maxBytes = 8*1024*1024, group = g_smod,
-    attribution = "© European Union — GHS-SMOD R2023A, 1 km, 2020 (CC BY 4.0)") |>
+    attribution = "© European Union - GHS-SMOD R2023A, 1 km, 2020 (CC BY 4.0)") |>
   addWMSTiles(baseUrl = fao_gaul_wms, layers = "gaul_2024_l0",
     options = WMSTileOptions(format="image/png", transparent=TRUE, opacity=0.95, version="1.3.0",
                              styles="", sld_body = sld_l0),
-    group = g_gaul, attribution = "© FAO — GAUL 2024 L0 (CC BY 4.0)") |>
+    group = g_gaul, attribution = "© FAO - GAUL 2024 L0 (CC BY 4.0)") |>
   addWMSTiles(baseUrl = fao_gaul_wms, layers = "gaul_2025_l1",
     options = WMSTileOptions(format="image/png", transparent=TRUE, opacity=0.95, version="1.3.0",
                              styles="", sld_body = sld_l1),
-    group = g_adm1, attribution = "© FAO — GAUL 2025 L1 (CC BY 4.0)") |>
+    group = g_adm1, attribution = "© FAO - GAUL 2025 L1 (CC BY 4.0)") |>
   addPolygons(data = adm0[!is.na(adm0$gdp_pc), ], fillColor = ~pal(gdp_pc), fillOpacity = 0.7, color = "#4A4A4A",
     weight = 0.8, opacity = 0.8, group = g_wdi,
     label = ~paste0(name, ": ", ifelse(is.na(gdp_pc), "No Data", paste0("$", formatC(round(gdp_pc), big.mark = ",", format = "d")))),

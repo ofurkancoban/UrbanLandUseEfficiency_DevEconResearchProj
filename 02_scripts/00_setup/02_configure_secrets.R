@@ -40,7 +40,7 @@ if (file.exists(gee_json_path)) {
 }
 
 # 4. ENCRYPT GOOGLE DRIVE OAUTH TOKEN
-# Opens browser once for consent — token is then cached and encrypted.
+# Opens browser once for consent - token is then cached and encrypted.
 library(googledrive)
 source(here::here("02_scripts/00_setup/01_encryption_utils.R"))
 
@@ -50,7 +50,7 @@ if (!file.exists(drive_token_path)) {
   googledrive::drive_auth(email = "f.coban93@gmail.com")
   save_encrypted_drive_token(my_password, drive_token_path)
 } else {
-  message("✔ Drive token already encrypted — skipping.")
+  message("✔ Drive token already encrypted - skipping.")
 }
 
 cat("\nSECURITY NOTICE: You can now safely delete the original .env and .json files.\n")

@@ -39,7 +39,7 @@ fc <- img$reduceRegions(collection = adm0, reducer = ee$Reducer$sum(), scale = 1
 drive_folder <- "GEE_Urban_Area"
 library(googledrive); load_drive_token(my_password, file.path(pr,"03_datasets/config/drive_token.enc"))
 
-# Skip the GEE export if the result is already on Drive — download it directly.
+# Skip the GEE export if the result is already on Drive - download it directly.
 hit <- tryCatch(googledrive::drive_find(pattern = "urban_area_national", type = "csv", n_max = 50),
                 error = function(e) tibble())
 if (nrow(hit) == 0) {
@@ -51,7 +51,7 @@ if (nrow(hit) == 0) {
   hit <- googledrive::drive_find(pattern = "urban_area_national", type = "csv", n_max = 50)
   if (nrow(hit) == 0) stop("export not found on Drive yet; re-run download later")
 } else {
-  cli::cli_alert_info("Found existing export on Drive — skipping GEE, downloading directly")
+  cli::cli_alert_info("Found existing export on Drive - skipping GEE, downloading directly")
 }
 lp <- file.path(pr, "03_datasets/raw/urban_area_national_raw.csv")
 googledrive::drive_download(googledrive::as_id(hit$id[1]), path = lp, overwrite = TRUE)

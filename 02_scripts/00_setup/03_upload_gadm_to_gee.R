@@ -179,7 +179,7 @@ if (any(grepl("Found asset", asset_check))) {
   } else {
     if (gpkg_just_written && nrow(existing_drive) > 0) {
       cli::cli_alert_info(
-        "GPKG was re-generated — deleting old Drive file first..."
+        "GPKG was re-generated - deleting old Drive file first..."
       )
       drive_rm(as_id(existing_drive$id[1]))
     }
@@ -193,12 +193,12 @@ if (any(grepl("Found asset", asset_check))) {
     cli::cli_alert_success("Uploaded to Drive (id: {drive_id})")
   }
 
-  # GEE ingestion requires a gs:// URI — Drive URLs are not accepted.
+  # GEE ingestion requires a gs:// URI - Drive URLs are not accepted.
   # Manual upload instructions:
   cli::cli_alert_warning(
     "Step 5b: GEE startTableIngestion only accepts gs:// URIs."
   )
-  cli::cli_alert_info("Manual upload option A — GEE Code Editor UI:")
+  cli::cli_alert_info("Manual upload option A - GEE Code Editor UI:")
   cli::cli_alert_info(
     "  1. Open https://code.earthengine.google.com"
   )
@@ -211,7 +211,7 @@ if (any(grepl("Found asset", asset_check))) {
   )
   cli::cli_alert_info("")
   cli::cli_alert_info(
-    "Manual upload option B — gcloud CLI (if installed):"
+    "Manual upload option B - gcloud CLI (if installed):"
   )
   cli::cli_alert_info(
     "  gsutil cp {out_gpkg} gs://YOUR_BUCKET/GADM_level1.gpkg"

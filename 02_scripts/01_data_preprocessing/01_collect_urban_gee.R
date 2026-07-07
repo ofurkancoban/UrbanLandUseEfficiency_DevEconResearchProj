@@ -77,11 +77,11 @@ dl_csvs <- function(folder_nm, dest, prefix=NULL) {
              error=function(e) cli::cli_alert_danger("dl {fl$name[j]}: {e$message}")) } }
 
 # ── PRE-DOWNLOAD: pull exports already on Drive, so finished countries are NOT
-#    re-processed in GEE — only genuinely missing ones get a new export task.
+#    re-processed in GEE - only genuinely missing ones get a new export task.
 #    If every country file is already local, skip Drive entirely (no API calls). ─
 local_nums0 <- na.omit(as.integer(str_extract(list.files(output_dir, pattern="\\.csv$"), "^[0-9]+")))
 if (length(local_nums0) >= length(countries)) {
-  cli::cli_alert_success("All {length(countries)} country files already local — skipping Drive pre-download.")
+  cli::cli_alert_success("All {length(countries)} country files already local - skipping Drive pre-download.")
 } else {
   cli::cli_h2("Pre-download: fetching exports on Drive that are not already local")
   dl_csvs(drive_main, output_dir)   # dl_csvs already skips files present locally
@@ -108,7 +108,7 @@ for (iso in countries) {
     }, error=function(e) {
       if (grepl("Too Many Requests|rate|concurrency", e$message, ignore.case=TRUE)) { Sys.sleep(attempt*10); FALSE }
       else if (grepl("too large|Encoded string", e$message, ignore.case=TRUE)) {
-        tol <<- tol * 50; cli::cli_alert_warning("{export_name}: geometry too large — retry at simplify {tol} m"); FALSE
+        tol <<- tol * 50; cli::cli_alert_warning("{export_name}: geometry too large - retry at simplify {tol} m"); FALSE
       } else { cli::cli_alert_danger("{export_name}: {e$message}"); TRUE } })
     if (isTRUE(ok)) { Sys.sleep(2); break }
   }

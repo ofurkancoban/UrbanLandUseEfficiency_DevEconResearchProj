@@ -23,7 +23,7 @@
 #                                        #   (needs credentials; see 00_setup)
 #   Rscript run_pipeline.R --no-render  # stop before rendering presentation/paper
 #
-# NOTE: raw-rebuild steps (marked raw = TRUE) re-create the raw inputs — either
+# NOTE: raw-rebuild steps (marked raw = TRUE) re-create the raw inputs - either
 # GEE collections (need decrypted Earth Engine credentials, can take HOURS) or
 # web downloads (GAUL 2025 boundaries, GHS-SMOD raster, UN GDP/migration). They
 # are SKIPPED by default because the repo ships the processed panels + figures.
@@ -48,7 +48,7 @@ RUN_GEE   <- "--gee"       %in% args
 NO_RENDER <- "--no-render" %in% args
 
 hr <- function(ch = "=") cat(strrep(ch, 78), "\n", sep = "")
-hr(); cat("SDG 11.3.1 / BpCR  —  pipeline\n"); hr(); cat("\n")
+hr(); cat("SDG 11.3.1 / BpCR  -  pipeline\n"); hr(); cat("\n")
 
 # Ensure standard output directories exist (clean checkout, or folders deleted to
 # test a from-scratch rebuild) so every step can write without failing.
@@ -87,7 +87,7 @@ tasks <- list(
        script = "02_scripts/00_setup/00_import.R",
        verify = NULL, raw = FALSE),   # always run; no output gate
 
-  # ---- Phase 1: raw inputs — GEE collections + web downloads (--gee) -----
+  # ---- Phase 1: raw inputs - GEE collections + web downloads (--gee) -----
   list(name = "[GEE] Urban (DEGURBA/SMOD) zonal stats",
        script = "02_scripts/01_data_preprocessing/01_collect_urban_gee.R",
        verify = function() ncsv("03_datasets/raw/Zonal_Stats_Urban_GAUL2024") >= 190, raw = TRUE),

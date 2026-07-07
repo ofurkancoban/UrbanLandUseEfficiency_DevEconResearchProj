@@ -100,12 +100,12 @@ cli::cli_alert_success(
 )
 
 # 4. PRE-DOWNLOAD: pull exports already on Drive so finished countries are NOT
-#    re-processed in GEE — only genuinely missing ones get a new export task.
+#    re-processed in GEE - only genuinely missing ones get a new export task.
 #    If every country file is already local, skip Drive entirely (no API calls).
 local_nums0 <- as.integer(str_extract(list.files(output_dir, pattern = "\\.csv$"), "^[0-9]+"))
 local_nums0 <- na.omit(local_nums0)
 if (length(local_nums0) >= length(countries)) {
-  cli::cli_alert_success("All {length(countries)} country files already local — skipping Drive.")
+  cli::cli_alert_success("All {length(countries)} country files already local - skipping Drive.")
 } else {
   if (!requireNamespace("googledrive", quietly = TRUE)) install.packages("googledrive")
   library(googledrive)
@@ -227,7 +227,7 @@ for (i in all_nums) {
       } else if (grepl("too large|Encoded string", e$message, ignore.case = TRUE)) {
         simplify_tol <<- simplify_tol * 50   # coarsen geometry, then retry
         cli::cli_alert_warning(
-          "[{file_index}] {full_name}: geometry too large — ",
+          "[{file_index}] {full_name}: geometry too large - ",
           "retry at simplify {simplify_tol} m (attempt {attempt}/{max_retries})"
         )
       } else {
@@ -264,7 +264,7 @@ if (length(notfound_list) > 0) {
   }
 }
 
-# 6. MONITOR TASK STATUS — only if anything was submitted this run.
+# 6. MONITOR TASK STATUS - only if anything was submitted this run.
 # (Download still runs afterwards, so a re-run can fetch already-finished exports.)
 if (length(task_list) > 0) {
 cli::cli_h2(
@@ -307,7 +307,7 @@ repeat {
 }
 
 # 6b. FALLBACK: tasks that FAILED at runtime (e.g. "Encoded string is too large"
-#     for Chile/Australia — huge multi-island coastlines). Re-export with very
+#     for Chile/Australia - huge multi-island coastlines). Re-export with very
 #     aggressive geometry simplification; the national TOTAL-population sum is
 #     insensitive to boundary precision, so a coarse outline is fine.
 fb_failed <- names(statuses[statuses %in% c("FAILED", "UNKNOWN")])
@@ -358,7 +358,7 @@ if (is.null(folder) || nrow(folder) == 0) {
 }
 
 if (nrow(folder) == 0) {
-  cli::cli_alert_danger("Drive folder '{drive_folder}' not found — download skipped.")
+  cli::cli_alert_danger("Drive folder '{drive_folder}' not found - download skipped.")
   cli::cli_alert_info("Re-run 01_data_collection_gaul2024_download.R once exports appear in Drive.")
 } else {
   folder_id   <- folder$id[1]
@@ -381,7 +381,7 @@ if (nrow(folder) == 0) {
                                     path = local_path, overwrite = TRUE)
         TRUE
       }, error = function(e) {
-        cli::cli_alert_warning("retry {attempt}/3 — {fname}: {e$message}")
+        cli::cli_alert_warning("retry {attempt}/3 - {fname}: {e$message}")
         Sys.sleep(attempt * 3); FALSE
       })
       if (isTRUE(ok)) break
