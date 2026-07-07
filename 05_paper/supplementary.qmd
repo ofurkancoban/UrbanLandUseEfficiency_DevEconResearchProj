@@ -95,6 +95,9 @@ format:
       - text: Presentation (PDF)
         href: ../04_presentation/presentation.pdf
         icon: file-earmark-pdf
+      - text: Replication Package
+        href: https://github.com/ofurkancoban/UrbanLandUseEfficiency_DevEconResearchProj
+        icon: github
 execute:
   echo: false
   warning: false
