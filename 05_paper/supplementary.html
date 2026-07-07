@@ -2461,7 +2461,7 @@ GMM (Bias-Corrected)
 <th style="text-align: center;" data-quarto-table-cell-role="th">+ Density</th>
 <th style="text-align: center;" data-quarto-table-cell-role="th">+ Net Migr.</th>
 <th style="text-align: center;" data-quarto-table-cell-role="th">+ GDP</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">+ Urban \%</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">+ Urban %</th>
 <th style="text-align: center;" data-quarto-table-cell-role="th">Arellano-Bond</th>
 <th style="text-align: center;" data-quarto-table-cell-role="th">Blundell-Bond</th>
 </tr>
@@ -2508,7 +2508,7 @@ GMM (Bias-Corrected)
 <td style="text-align: center;">(0.0007)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Internal Net Migration (\% Pop)</td>
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Internal Net Migration (% Pop)</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0003*</td>
@@ -2652,8 +2652,8 @@ GMM (Bias-Corrected)
 </div>
 </figure>
 </div>
-<p><em>Note:</em> *** p&lt;0.01, ** p&lt;0.05, * p&lt;0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction <span class="citation" data-cites="windmeijer2005">(<a href="#ref-windmeijer2005" role="doc-biblioref">Windmeijer 2005</a>)</span> in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (differenced for Arellano-Bond; the larger stacked level-equation set for Blundell-Bond). Sample: 399 of Germany’s 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined. </p>
-<p>Three points emerge. First, per-capita land use is <strong>strongly path-dependent</strong> at the district level too: the lagged dependent variable is large and significant (<span class="math inline">\(\rho \approx 0.71\)</span>), echoing the persistence found across countries. Second, the <strong>income</strong> coefficient is negative in every specification, matching the sign of the national income-densification result, but it does not reach statistical significance in this shorter panel, so the district evidence is consistent with the national finding rather than an independent confirmation of it. Third, <strong>internal net migration</strong> enters with an essentially zero coefficient that is only marginally significant (10% level) in the fixed-effects columns and insignificant in the GMM: six five-year epochs give little power to identify a within-district migration channel.</p>
+<p><em>Note:</em> *** p&lt;0.01, ** p&lt;0.05, * p&lt;0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction <span class="citation" data-cites="windmeijer2005">(<a href="#ref-windmeijer2005" role="doc-biblioref">Windmeijer 2005</a>)</span> in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (the differenced-equation set for Arellano-Bond; the larger level-equation set for Blundell-Bond). Sample: 399 of Germany’s 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined. </p>
+<p>Three points emerge. First, per-capita land use is <strong>strongly path-dependent</strong> at the district level too: the lagged dependent variable is large and significant (<span class="math inline">\(\rho \approx 0.71\)</span>), echoing the persistence found across countries. Second, the <strong>income</strong> coefficient is negative in every specification, matching the sign of the national income-densification result, but it does not reach statistical significance in this shorter panel, so the district evidence is consistent with the national finding rather than an independent confirmation of it. Third, <strong>internal net migration</strong> enters with an essentially zero coefficient that is only marginally significant (10% level) in the fixed-effects columns and insignificant in the GMM: six five-year epochs give little power to identify a within-district migration channel. Urban density, insignificant in the fixed-effects columns, turns significantly negative in the Arellano-Bond column (<span class="math inline">\(-0.044\)</span>), mirroring the national compact-city estimate; as in the main paper, this coefficient shares the population term with the dependent variable and is read as partly mechanical rather than as clean evidence.</p>
 </section>
 <section id="limitations" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Limitations</h1>

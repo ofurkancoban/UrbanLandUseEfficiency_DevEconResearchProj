@@ -223,7 +223,9 @@ split_two <- function(row){ est<-se<-row
 coef_long <- do.call(rbind, lapply(seq_len(ncoef), function(i) split_two(mc[i,])))
 gof <- mc[(ncoef+1):nrow(mc),]
 tab <- rbind(coef_long, gof)
-esc <- function(x) gsub("%","\\%",x,fixed=TRUE); names(tab)<-esc(names(tab)); tab[[1]]<-esc(tab[[1]])
+# escape % for LaTeX only; HTML needs the literal character
+esc <- if (knitr::is_latex_output()) function(x) gsub("%","\\%",x,fixed=TRUE) else identity
+names(tab)<-esc(names(tab)); tab[[1]]<-esc(tab[[1]])
 nb <- nrow(coef_long)
 coef_grey <- as.vector(sapply(which(seq_len(ncoef)%%2==1), function(k) c(2*k-1,2*k)))
 gof_grey  <- nb + which(seq_len(nrow(gof))%%2==1)
@@ -247,7 +249,7 @@ if (knitr::is_latex_output()) {
 \vspace{-1.0em}
 
 \footnotesize
-*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (differenced for Arellano-Bond; the larger stacked level-equation set for Blundell-Bond). Sample: 399 of Germany's 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined.
+*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (the differenced-equation set for Arellano-Bond; the larger level-equation set for Blundell-Bond). Sample: 399 of Germany's 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined.
 \normalsize
 
 Three points emerge. First, per-capita land use is **strongly path-dependent** at
@@ -260,7 +262,11 @@ the national finding rather than an independent confirmation of it. Third,
 **internal net migration** enters with an essentially zero coefficient that is
 only marginally significant (10\% level) in the fixed-effects columns and
 insignificant in the GMM: six five-year epochs give little power to identify a
-within-district migration channel.
+within-district migration channel. Urban density, insignificant in the
+fixed-effects columns, turns significantly negative in the Arellano-Bond column
+($-0.044$), mirroring the national compact-city estimate; as in the main paper,
+this coefficient shares the population term with the dependent variable and is
+read as partly mechanical rather than as clean evidence.
 
 # Limitations
 
