@@ -1,6 +1,6 @@
 # Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers
 
-> ⚠️ **Work in progress — not finalised.** This project is **actively under
+> ⚠️ **Work in progress: not finalised.** This project is **actively under
 > development** for an ongoing seminar (SoSe 2026). Code, data, results, and the
 > written paper may still change. Please treat everything here as preliminary and
 > do not cite it as a completed work.
@@ -161,8 +161,10 @@ economies; the compact-city density effect is strongest in the least-developed
 countries (where urban form is still being set); and international net migration
 densifies in the developed and developing groups but not in LDCs, where internal
 rural-to-urban migration (unobserved here) dominates. A sub-national German
-case study (`05_paper/supplementary.qmd`) reproduces the metric breakdown and the
-income–densification result at the *Kreis* level.
+case study (`05_paper/supplementary.qmd`) replicates the driver analysis at the
+*Kreis* level: path-dependence is confirmed (Arellano-Bond ρ ≈ 0.71), while the
+income coefficient stays negative but is not significant in the short
+six-epoch district panel.
 
 *(All figures are reproduced from the committed data by the pipeline; coefficient
 chips in the slides are generated directly from the GMM output, so they never go
