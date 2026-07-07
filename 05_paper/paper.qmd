@@ -27,7 +27,7 @@ abstract: |
   global panel of 193 UN member states (1985–2020) built from GHSL built-up and
   population grids under the Degree of Urbanisation, we first document where LCRPGR
   breaks down and show that, on identical data, replacing it with BpCR raises
-  within-country explanatory power rougabshly nineteenfold. Estimating the drivers of
+  within-country explanatory power roughly nineteenfold. Estimating the drivers of
   BpCR with two-way fixed-effects and dynamic-panel GMM, we find that built-up area
   per capita rose in nearly two-thirds of country-periods, that per-capita land use
   is strongly path-dependent, and that within countries higher density, income, and
@@ -63,7 +63,7 @@ format:
         \usepackage{multicol}
         \let\oldthebibliography\thebibliography
         \let\endoldthebibliography\endthebibliography
-        \renewenvironment{thebibliography}[1]{\footnotesize\begin{multicols}{2}\raggedright\emergencystretch=2em\oldthebibliography{#1}}{\endoldthebibliography\end{multicols}}
+        \renewenvironment{thebibliography}[1]{\scriptsize\begin{multicols}{2}\raggedright\emergencystretch=2em\oldthebibliography{#1}}{\endoldthebibliography\end{multicols}}
     journal:
       formatting: preprint      # preprint | review | doubleblind
       model: 3p                 # 1p | 3p | 5p (3p = standard single-column-ish)
@@ -351,7 +351,7 @@ data.frame(
     ),
     Variable = c(
         "Built-up area (m2/cell)", "Population (persons/cell)",
-        "Degree of Urbanisation (class 10-30)", "Admin boundaries",
+        "Degree of Urbanisation (codes 10-30)", "Admin boundaries",
         "GDP p.c. (const. 2020 US$)", "Net migration (% of pop.)", "Development group"
     ),
     check.names = FALSE
@@ -463,7 +463,7 @@ ds$ctry_pct <- round(100 * ds$ctry_pos / ds$ctry_tot)
 
 ```{r}
 #| label: tbl-desc
-#| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR is the official log ratio; BpCR is the log growth of built-up area per capita."
+#| tbl-cap: "Summary statistics, 1985-2020 (country-periods with an observed BpCR). LCRPGR (log) is the log-form ratio benchmark; BpCR is the log growth of built-up area per capita."
 dd <- subset(panel, !is.na(bpcr) & year >= 1985 & year <= 2020)
 vars <- c(
     bpcr = "BpCR", lcrpgr_log = "LCRPGR (log)", ln_urban_density = "ln(Urban Density)",
@@ -496,17 +496,16 @@ the `r format(ds$n, big.mark=",")` country-periods, LCRPGR (log) has a standard 
 `r round(ds$lcr_hi)`: its division by a near-zero population-growth rate produces
 enormous, sign-flipping outliers. BpCR, by contrast, stays in a tight band with a
 standard deviation of about `r sprintf("%.3f", ds$bp_sd)`, roughly
-`r format(ds$ratio, big.mark=",")` times narrower. The two metrics describe the
-same underlying data, yet one is dominated by an arithmetic artefact and the other
-is not.
+`r format(ds$ratio, big.mark=",")` times narrower: the same underlying data, yet
+one metric is dominated by an arithmetic artefact and the other is not.
 
 Sprawl is the global norm rather than the exception. BpCR is positive in
 `r sprintf("%.0f", ds$shr_cp)`% of country-periods, and
 `r ds$ctry_pos` of `r ds$ctry_tot` countries (`r ds$ctry_pct`%) have a positive
 average BpCR over the period, meaning built-up area per capita is rising: cities
 are consuming more land per resident. The median country-period BpCR is
-`r sprintf("%+.4f", ds$med)`, and the official LCRPGR exceeds one (its sprawl
-threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
+`r sprintf("%+.4f", ds$med)`, and the official arithmetic LCRPGR ratio exceeds
+one (its sprawl threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
 is the same under either metric; the difference is that BpCR delivers it without
 the numerical instability.
 
@@ -529,7 +528,7 @@ to the next, crossing zero and spiking to large positive and negative values tha
 are hard to read as land-use behaviour. The BpCR series for the same countries are
 smooth and interpretable: most drift gradually towards balance, while the
 fastest-urbanising economies show the strongest sprawl earlier in the period
-before easing. The same data, read through a stable metric, become legible.
+before easing.
 
 # Empirical Strategy {#sec-strategy}
 
@@ -651,10 +650,9 @@ each other or to the 1,538 raw country-periods, and the difference between them 
 not arbitrary but follows exactly from how each equation is constructed. With
 collapsed GMM-style instruments, `plm::pgmm` substitutes zeros for instruments that
 are unavailable for a given country-period rather than dropping the row, a
-standard practice traced to @holtzeakin1988 and documented by @roodman2009, who
-notes that "in unbalanced panels, one also substitutes zeros for other missing
-values" and that the resulting instrument columns "correspond to a set of
-meaningful moment conditions" rather than a distortion of the data. Consequently
+standard practice traced to @holtzeakin1988 and documented by @roodman2009, under
+which the resulting instrument columns still correspond to a set of meaningful
+moment conditions rather than a distortion of the data. Consequently
 each country contributes a fixed number of rows to each equation, $T - k$, so that
 $N = 193 \times (T - k)$, where $T = 9$ is the number of epochs including the 1980
 base period used only to form the 1985 growth rates (@sec-data), and $k$ is the
@@ -817,7 +815,12 @@ split_two <- function(row) {
 coef_long <- do.call(rbind, lapply(seq_len(ncoef), function(i) split_two(mc[i, ])))
 gof <- mc[(ncoef + 1):nrow(mc), ]
 tab <- rbind(coef_long, gof)
-esc <- function(x) gsub("%", "\\%", x, fixed = TRUE)
+# escape % for LaTeX only; HTML needs the literal character
+esc <- if (knitr::is_latex_output()) {
+    function(x) gsub("%", "\\%", x, fixed = TRUE)
+} else {
+    identity
+}
 names(tab) <- esc(names(tab))
 tab[[1]] <- esc(tab[[1]])
 nb <- nrow(coef_long)
@@ -845,7 +848,7 @@ if (knitr::is_latex_output()) {
 \vspace{-1.0em}
 
 \footnotesize
-*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 5 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (differenced for Arellano-Bond; the larger stacked level-equation set for Blundell-Bond) and is therefore not directly comparable across columns or to the 1,538 raw country-periods.
+*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 5 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (the differenced-equation set for Arellano-Bond; the larger level-equation set for Blundell-Bond) and is therefore not directly comparable across columns or to the 1,538 raw country-periods.
 \normalsize
 
 Recall that BpCR is an annual logarithmic growth rate of built-up area per capita,
@@ -891,9 +894,12 @@ and 15 versus 21 instruments; the gap between the two counts is mechanical, not 
 contradiction (@sec-strategy). Both pass the diagnostic tests: the
 Hansen $J$ test does not reject the over-identifying restrictions ($p=0.44$ and
 $0.14$), AR(1) is significant while AR(2) is not (AR(2) $p=0.71$ and $0.47$), and
-the instrument counts (15 and 21) stay well below the 193 countries. The
-Blundell-Bond estimates are close to Arellano-Bond in sign and significance, so the
-findings are not an artefact of the chosen estimator.
+the instrument counts (15 and 21) stay well below the 193 countries.
+Blundell-Bond confirms the headline results, near-identical persistence
+($\rho = 0.59$) and a significant negative migration coefficient, but attenuates
+the density and income terms towards zero (income becomes insignificant); as its
+extra levels moments rest on a stationarity assumption a trending series can
+violate, we read the controls from the preferred Arellano-Bond column.
 
 ## Heterogeneity by Development Group
 
@@ -998,8 +1004,9 @@ than GMM here because the subgroups (44 to 101 countries) are too small for the
 deep-lag instruments to be reliable.
 
 Three patterns stand out. First, the compact-city effect of density is present in
-every group but strengthens markedly from the developed (about $-0.015$) through
-the developing ($-0.018$) to the least-developed countries ($-0.031$): where
+every group but strengthens markedly from the developed (about $-0.015$,
+significant only at the 10\% level) through the developing ($-0.018$) to the
+least-developed countries ($-0.031$, both at the 5\% level): where
 cities are still forming, denser settlement absorbs new residents most strongly.
 Second, the income-densification result, the paper's central finding, carries its
 expected negative sign in all three groups, so it is not a rich-country artefact;
@@ -1076,9 +1083,8 @@ estimation drops: 29 countries lack a 1985 value, namely 23 post-Soviet,
 ex-Yugoslav, and Czechoslovak successors that did not yet exist as separate
 reporting states, plus Eritrea, Ethiopia, Sudan, South Sudan, Timor-Leste, and
 Yemen, whose national accounts, on today's borders, similarly begin only after a
-later independence or border change (Eritrea seceded from Ethiopia in 1993, so UN
-SNAAMA reports both on present-day borders only from 1990). Two of those, Sudan
-and South Sudan (which split in 2011), additionally lack 1990--2005 values. Finally, the pooled
+later independence or border change; Sudan and South Sudan (which split in 2011)
+additionally lack 1990--2005 values. Finally, the pooled
 specification imposes a common slope, whereas @tbl-hetero shows the income and
 density relationships, though consistent in sign, vary in strength across groups.
 These point to natural extensions: a sub-national analysis exploiting the ADM2
