@@ -1281,7 +1281,7 @@ gmm_gt(
 
 :::: {style="font-size:0.8em; background:rgba(14,124,102,0.10); border-left:4px solid #0e7c66; border-radius:8px; padding:5px 11px; margin:7px 0;"}
 [<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#0e7c66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><rect x="3" y="9" width="7" height="12" rx="1"/><rect x="13" y="3" width="8" height="18" rx="1"/><path d="M6 13h1M6 17h1M16 7h2M16 11h2M16 15h2"/></svg> &nbsp;**ln(Urban Density)**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[DENSIFICATION]{style="background:#0e7c66; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
-[β₁ = `r ab_coef(2L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} **Compact-City Effect**: Denser cities use less new land per resident.<br>[**H1** ✓ Supported: Density → Less Land/Capita (−)]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+[β₁ = `r ab_coef(2L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} **Compact-City Effect**: Denser cities use less new land per resident.<br>[**H2** ✓ Supported: Density → Less Land/Capita (−)]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
 ::::
 
 :::: {style="font-size:0.8em; background:rgba(14,124,102,0.10); border-left:4px solid #0e7c66; border-radius:8px; padding:5px 11px; margin:7px 0;"}
@@ -1333,7 +1333,7 @@ Two tests confirm the model is valid. The Hansen J test checks our instruments �
 
 - **The official LCRPGR is unreliable.** A raw ratio that explodes when population growth is near zero (division instability) and explains almost nothing within countries (within R² ≈ 0.003).
 
-- **Our log-based BpCR is the better metric.** Symmetric and numerically stable (following Nicolau and Lu), it fits about **20× better** (within R² ≈ 0.065 static, ≈ 0.23 dynamic).
+- **Our log-based BpCR is the better metric.** Symmetric and numerically stable (following Nicolau and Lu), it fits about **20× better** (within R² ≈ 0.065 static, ≈ 0.13 dynamic).
 
 - **Robust drivers (Bias-Corrected GMM).** Denser cities densify (negative, highly significant); sprawl is **path-dependent** (ρ ≈ 0.6); net migration densifies; and **higher income densifies too** (negative, significant).
 
@@ -1361,11 +1361,11 @@ The bottom line: a better yardstick gives better answers. Thank you.
 
 ::: {style="font-size:1.5em; line-height:1.35;"}
 
-- **Lu, W. & Weng, Q. (2026).** From data inconsistency to reliable SDG 11.3.1 monitoring: A log-based framework for measuring urban land efficiency. *Land Use Policy*, 168, 108088.
+- **Lu, W. & Weng, Q. (2026).** From data inconsistency to reliable SDG 11.3.1 monitoring: A global multi-dataset assessment of land use efficiency. *Land Use Policy*, 168, 108088.
 - **Seto, K. C., et al. (2011).** A meta-analysis of global urban land expansion. *PLOS ONE*, 6(8).
 - **Oueslati, W., Alvanides, S. & Garrod, G. (2015).** Determinants of urban sprawl in European cities. *Urban Studies*, 52(9), 1594–1614.
 - **Nicolau, R., David, J., Caetano, M. & Pereira, J. M. C. (2019).** Ratio of Land Consumption Rate to Population Growth Rate: analysis of different formulations applied to mainland Portugal. *ISPRS Int. J. Geo-Information*, 8(1), 10.
-- **UN-Habitat. (2023).** *World Cities Report 2022: Envisaging the Future of Cities*.
+- **UN-Habitat. (2025).** *SDG Indicator 11.3.1 Metadata: Ratio of Land Consumption Rate to Population Growth Rate*. SDG indicator metadata, harmonized template v1.1.
 - **Pesaresi, M., Schiavina, M., Politis, P., Freire, S., Krasnodębska, K., Uhl, J. H., … Kemper, T. (2024).** Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and population survey data. *International Journal of Digital Earth*, 17(1). https://doi.org/10.1080/17538947.2024.2390454
 - **GHS-BUILT-S (R2023A).** European Commission, Joint Research Centre (JRC). Product: GHS-BUILT-S; epoch 2020; 100 m; Mollweide. © European Union, 1995–2025: CC BY 4.0.
 - **Schiavina, M., Melchiorri, M. & Pesaresi, M. (2023).** GHS-SMOD R2023A: GHS settlement layers, application of the Degree of Urbanisation methodology (stage I) to GHS-POP R2023A and GHS-BUILT-S R2023A, multitemporal (1975–2030). European Commission, JRC. doi:10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA
