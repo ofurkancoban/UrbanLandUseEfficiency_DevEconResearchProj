@@ -13,7 +13,7 @@ author:
         city: Oldenburg
         country: Germany
     note: |
-      The author used the Claude Opus 4.8 and Gemini 3.5 large language models for
+      The author used the Claude Opus 4.8 and Gemini 3.5 Flash large language models for
       improving the writing and for coding assistance; all analysis, results, and conclusions
       are the author's own.
 date: "June 26, 2026"
