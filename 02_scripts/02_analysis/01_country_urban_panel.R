@@ -77,10 +77,46 @@ un_gdp <- suppressMessages(read_csv("03_datasets/raw/un_gdp_per_capita.csv", sho
 panel <- panel |> left_join(un_gdp, by = c("iso3","year"))
 
 # ---- 3c. Net migration: UN DESA WPP 2024 (CNMR/10) ----------------------------
-# See 01_data_preprocessing/un_net_migration.R for the source pull.
-un_mig <- suppressMessages(read_csv("03_datasets/raw/un_net_migration.csv", show_col_types = FALSE)) |>
-  transmute(iso3, year, net_migr_pct)
-panel <- panel |> left_join(un_mig, by = c("iso3","year"))
+# See 01_data_preprocessing/un_net_migration.R for the source pull. The source
+# series is an ANNUAL rate (UN CNMR, net migrants per 1,000 population, rescaled
+# here to % of population).
+#
+# Migration is a FLOW, whereas density, urban share and GDP per capita are
+# levels. BpCR is the average annual growth over the five-year window (t-5, t],
+# so the matching migration control is the average annual rate over that SAME
+# window, not the single-year rate observed at the epoch endpoint. Taking the
+# endpoint year would let a one-year event stand in for five years: Kuwait's
+# 1990 rate of -71% (the Gulf War exodus, reversed by +34% in 1991) would
+# otherwise be treated as the migration experience of the whole 1985-1990 window.
+# net_migr_pct_yr keeps the endpoint-year rate for the robustness comparison.
+#
+# net_migr_nyr records how many annual rates the window mean averages over. It is
+# 5 for every epoch except 1980, where the WPP series itself begins and the
+# (1975, 1980] window catches only 1980, leaving a one-year rate. This is
+# harmless as the panel is used: 1980 is never a dependent-variable period (the
+# lagged dependent variable makes 1985 the first), and no reported regressor
+# reaches back to it, so the 1980 row serves only to supply BpCR history (the
+# lag base for 1985 and the deepest instrument level for the GMM estimators).
+# Do not "fix" this by setting the 1980 rate to NA: complete-case filtering would
+# then drop the 1980 rows entirely, costing the GMM estimators an epoch of
+# instrument depth. Check net_migr_nyr before using 1980 as an estimation period.
+un_mig_yr <- suppressMessages(read_csv("03_datasets/raw/un_net_migration.csv", show_col_types = FALSE)) |>
+  transmute(iso3, year, net_migr_pct_yr = net_migr_pct)
+epochs <- sort(unique(panel$year))
+un_mig_win <- map_dfr(epochs, function(y) {
+  un_mig_yr |>
+    filter(year > y - 5, year <= y) |>
+    group_by(iso3) |>
+    summarise(net_migr_pct = mean(net_migr_pct_yr, na.rm = TRUE),
+              net_migr_nyr = n(), .groups = "drop") |>
+    mutate(year = y)
+})
+panel <- panel |>
+  left_join(un_mig_yr, by = c("iso3","year")) |>
+  left_join(un_mig_win, by = c("iso3","year"))
+cat("net migration: window-mean rows:", sum(!is.na(panel$net_migr_pct)),
+    "| SD annual:", round(sd(panel$net_migr_pct_yr, na.rm = TRUE), 3),
+    "-> SD window:", round(sd(panel$net_migr_pct, na.rm = TRUE), 3), "\n")
 
 # ---- 3d. UN classifications: region (M49) + development group ----------------
 # region  = UN M49 region (continent). development = UN "more developed regions"
