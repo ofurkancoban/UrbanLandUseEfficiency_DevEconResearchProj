@@ -5,8 +5,8 @@
 
 % ── Patch elsarticle email label ───────────────────────────────────────
 \makeatletter
-\patchcmd{\printFirstPageNotes}{Email address:}{E-Mail Adress:}{}{}
-\patchcmd{\printFirstPageNotes}{Email addresses:}{E-Mail Adresses:}{}{}
+\patchcmd{\printFirstPageNotes}{Email address:}{E-Mail Address:}{}{}
+\patchcmd{\printFirstPageNotes}{Email addresses:}{E-Mail Addresses:}{}{}
 % Shrink elsarticle's fixed 36pt gap between the affiliation block and the
 % Abstract rule (\pprintMaketitle / \MaketitleBox both hard-code \vskip36pt).
 \patchcmd{\pprintMaketitle}{\vskip36pt}{\vskip8pt}{}{}
