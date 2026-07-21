@@ -1,6 +1,7 @@
+
 ---
 title: "Urban Land-Use Efficiency"
-subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers: 193 UN Member Countries x 1985-2020 Panel Data Analysis"
+subtitle: "A Stable Metric for SDG 11.3.1, and Why Per-Capita Designs Cannot Cleanly Identify Its Drivers: 193 UN Member States x 1985-2020 Panel Analysis"
 doc-type: "Seminar Paper"
 course-info: "Development Economics · SoSe 2026"
 lecturer: "Lecturer: Prof. Dr. Jürgen Bitzer"
@@ -19,22 +20,31 @@ author:
 date: "June 26, 2026"
 abstract: |
   The official SDG 11.3.1 indicator, the ratio of land consumption rate to
-  population growth rate (LCRPGR), is unstable: it divides by a growth rate that
-  approaches zero and mixes an arithmetic numerator with a logarithmic
-  denominator. We propose the Built-up per Capita Rate (BpCR), the log change in
-  built-up area per person, which equals the difference of two log growth rates
-  and is therefore well-defined for every country-period. Using a harmonised
-  global panel of 193 UN member states (1985–2020) built from GHSL built-up and
-  population grids under the Degree of Urbanisation, we first document where LCRPGR
-  breaks down and show that, on identical data, replacing it with BpCR raises
-  within-country explanatory power roughly nineteenfold. Estimating the drivers of
-  BpCR with two-way fixed-effects and dynamic-panel GMM, we find that built-up area
-  per capita rose in nearly two-thirds of country-periods, that per-capita land use
-  is strongly path-dependent, and that within countries higher density, income, and
-  net in-migration are each associated with less land consumed per resident, so
-  economic growth coincides with densification rather than sprawl. The
-  density association is strongest in the least-developed economies, while the
-  income result holds across all development groups.
+  population growth rate (LCRPGR), is unstable: it divides by a near-zero growth rate
+  and mixes an arithmetic numerator with a logarithmic denominator. We adopt the
+  Built-up per Capita Rate (BpCR), the log change in built-up area per person, a
+  difference of two log growth rates that is finite wherever urban built-up and
+  population are positive. On a
+  harmonised panel of 193 UN member states (1985–2020) built from GHSL grids under
+  the Degree of Urbanisation, we first show that, on identical data, no driver is
+  detectable at the 5% level even under the ratio's conservative log-form benchmark,
+  while the same design recovers precise associations once BpCR replaces it.
+
+  Estimating the drivers of BpCR with
+  two-way fixed-effects and dynamic-panel GMM, we find that built-up area per capita
+  rose in 63% of country-periods (67% of countries on average) and that per-capita
+  land use is clearly path-dependent, though its persistence is only bracketed, not
+  point-identified, once the dynamic model's failing moment conditions are respected.
+  The driver results are largely cautionary: in per-capita metrics of the BpCR family
+  the compact-city density coefficient is a measurement artefact (urban population
+  enters the metric negatively at $t$ and positively at $t-1$, so density inherits the
+  sign of the date it is measured at); income is indistinguishable from zero; and the
+  one association that survives every check, net in-migration, has a negative *sign*
+  that is close to mechanical (migration drives urban population, which sits in the
+  metric's denominator) but a *magnitude* that is behaviourally meaningful, the built
+  stock adjusting to migrants at only about a quarter the rate of population. The
+  contribution is thus primarily methodological, a stable metric and a demonstration
+  that per-capita designs can manufacture the very drivers they appear to detect.
 keywords:
   - SDG 11.3.1
   - Urban land-use efficiency
@@ -53,9 +63,10 @@ format:
       text: |
         \usepackage{makecell}
         \usepackage{float}
-        \geometry{top=2.8cm,bottom=2.8cm}
-        \floatplacement{figure}{H}
-        \floatplacement{table}{H}
+        \geometry{top=1.45cm,bottom=1.45cm,left=1.8cm,right=1.8cm}
+        \usepackage{placeins}
+        \floatplacement{figure}{ht}
+        \floatplacement{table}{!ht}
         \setlength{\floatsep}{6pt plus 2pt minus 2pt}
         \setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
         \setlength{\intextsep}{6pt plus 2pt minus 2pt}
@@ -139,55 +150,54 @@ pc <- if (knitr::is_latex_output()) "\\%" else "%" # percent sign, escaped for L
 
 # Introduction
 
-The world is urbanising rapidly: by the middle of this century close to
-two-thirds of humanity will live in cities, and almost all of the projected
-growth in built-up land will occur in developing countries
-[@gao2020]. The scale of expansion is striking: every year the world's
-built-up area grows by roughly the size of the Netherlands [@seto2012global].
-For development policy the central question is not whether cities expand, but how
-efficiently they do so, that is, how much additional land each new urban resident
-consumes.
-When built-up area grows in step with population cities stay compact; when it
-grows much faster they sprawl, paving over farmland for good, entrenching car
-dependence, raising the per-resident cost of infrastructure spread over more
-ground, and lifting per-capita emissions. Measuring land-use efficiency well is
-therefore a precondition for monitoring sustainable urbanisation.
+The world is urbanising rapidly: by 2050 about two in three people are projected to
+live in urban areas [@undesa2018wup], and the accompanying land expansion is
+striking, with global urban land cover forecast to grow by 1.2 million km$^2$
+between 2000 and 2030, an area about the size of South Africa [@seto2012global].
+This is not a developing-world phenomenon alone: the developed world is projected to
+add a comparable amount of new urban land [@gao2020]. For development policy the
+central question is not whether cities expand but how efficiently they do so, that
+is, how much additional land each new urban resident consumes. When built-up area
+grows in step with population cities stay compact; when it grows much faster they
+sprawl, paving over farmland, entrenching car dependence, raising per-resident
+infrastructure costs, and lifting per-capita emissions. Measuring land-use
+efficiency well is therefore a precondition for monitoring sustainable urbanisation.
 
-The United Nations monitors this through target 11.3 of its Sustainable
-Development Goals (SDGs), whose official indicator 11.3.1 is the ratio of the Land
-Consumption Rate to the Population Growth Rate (LCRPGR) [@unhabitat2025metadata].
-Because LCRPGR is the agreed global yardstick, its statistical properties are not
-a technical detail: they determine how every country's progress is judged and
-compared. Yet the indicator is fragile by construction: because the population-growth rate
-sits in the denominator, the ratio diverges and flips sign whenever population is
-roughly stable, so in exactly the countries where land-use efficiency matters most
-for policy it becomes uninformative.
+The United Nations monitors this through target 11.3 of its Sustainable Development
+Goals, whose official indicator 11.3.1 is the ratio of the Land Consumption Rate to
+the Population Growth Rate (LCRPGR) [@unhabitat2025metadata]. As the agreed global
+yardstick, its statistical properties determine how every country's progress is
+judged, yet it is fragile by construction: with the population-growth rate in the
+denominator, the ratio diverges and flips sign whenever population is roughly
+stable, so exactly where land-use efficiency matters most for policy it becomes
+uninformative.
 
 This paper makes three contributions. First, it documents, on a harmonised global
-dataset, that LCRPGR is statistically unstable and that its instability is
-concentrated where population growth is near zero. Second, it proposes a simple,
-log-based alternative, the Built-up per Capita Rate (BpCR), the logarithmic growth
-rate of built-up area per capita. As the difference of two logarithmic growth
-rates it is finite for every country-period and directly interpretable, and it
-reproduces the policy signal of LCRPGR where the latter is well-behaved.
-Third, using the stable metric, the paper estimates the economic and structural
-drivers of per-capita urban land use on a panel of 193 United Nations member
-states observed at five-year intervals between 1985 and 2020.
+dataset, that LCRPGR is statistically unstable, with its instability concentrated
+where population growth is near zero, and that the cost is not cosmetic: on
+identical data and specification, the official ratio leaves every driver
+undetectable at the 5% level while the log-based Built-up per Capita Rate (BpCR)
+recovers precise ones. Second, using this stable metric on a dynamic panel of 193
+United Nations member states (five-year intervals, 1985--2020; Arellano-Bond and
+Blundell-Bond GMM against the Nickell bias a static reading ignores), it finds that
+the behavioural drivers the design appears to identify are fragile once the metric's
+arithmetic is taken seriously: income is a null and the one surviving association,
+net in-migration, has a mechanical negative sign but a behaviourally informative
+magnitude. Third, it shows that in
+per-capita regressions of the BpCR family the negative density (compact-city)
+coefficient is an artefact of the metric's own arithmetic, a spurious correlation of
+the kind long known in statistics [@pearson1897; @kronmal1993] that arises because
+density is built from the same population term the metric itself contains and so
+inherits the sign of the date at which it is measured (@sec-strategy). This is a
+caution for per-capita designs like ours, not a claim about the footprint-area
+regressions on which much of the drivers literature rests.
 
-The empirical analysis builds the panel from satellite-based settlement data
-under the global Degree of Urbanisation standard, so that built-up area and
-population are measured consistently. To address the well-known downward bias of
-the lagged dependent variable in dynamic fixed-effects models, the persistence of
-per-capita land use is estimated with Arellano-Bond and Blundell-Bond generalised
-method of moments (GMM) estimators. Three results stand out. Sprawl is the global
-norm rather than the exception: built-up area per capita rises in a clear
-majority of country-periods. Per-capita land use is strongly path-dependent, with
-about three-fifths of one period's value carried into the next. And within
-countries, denser cities, net in-migration, and higher income are all associated
-with less land consumed per resident, indicating that, over time, economic growth
-is accompanied by densification rather than sprawl. These patterns largely hold
-across development groups, with the compact-city effect strongest in the
-least-developed economies.
+Empirically, one further headline fact stands alongside these three contributions:
+sprawl is the global norm rather than the exception, with built-up area per capita
+rising in a clear majority of country-periods. Beyond that, the main lesson is
+methodological, not substantive: per-capita land-use metrics can manufacture the
+drivers they seem to detect, and the results above should be read as a caution to
+that effect rather than as a catalogue of confirmed causes of sprawl.
 
 # Measurement Framework {#sec-measurement}
 
@@ -205,33 +215,27 @@ $$
 \text{LCR}_i=\frac{V_{i,t}-V_{i,t-z}}{V_{i,t-z}}\cdot\frac{1}{z},\qquad
 \text{PGR}_i=\frac{\ln(P_{i,t}/P_{i,t-z})}{z},
 $$
-where, for country $i$, $V_{i,t}$ is the urban built-up area at the
-end of the period and $V_{i,t-z}$ the built-up area at the
-start; $P_{i,t}$ and $P_{i,t-z}$ are the corresponding urban populations; $z$ is the
-length of the period in years; $\ln(\cdot)$ denotes the natural logarithm. The Land Consumption Rate $(\text{LCR})$ is thus
-the arithmetic growth of built-up area, expressed per year, and the Population
-Growth Rate $(\text{PGR})$ is the logarithmic (continuous) growth of population per
-year; the indicator $\text{LCRPGR}$ is their ratio. This arithmetic-LCR /
-logarithmic-PGR pairing is not our reading but the metadata's own operational
-specification: the UN-Habitat metadata and the accompanying JRC Land-Use-Efficiency
-tool define LCR as the simple annual rate of change of built-up area and PGR as the
-continuous (exponential) population-growth rate [@unhabitat2025metadata;
-@corbane2017lue], and @nicolau2019lcrpgr show formally that mixing the two scales
-is what destabilises the ratio. Two structural problems follow. **(1) Division by a near-zero denominator.** When
-population is roughly stable ($\text{PGR}\approx 0$) the ratio diverges towards
-$\pm\infty$ and flips sign, so small, ordinary demographic differences produce
-wild, uninterpretable values. **(2) Arithmetic-versus-logarithmic asymmetry.**
-The numerator is an arithmetic growth rate while the denominator is logarithmic,
-so the ratio is not symmetric and does not aggregate cleanly over time
-[@nicolau2019lcrpgr]. The result is a metric whose tails are dominated by an
-arithmetic artefact rather than by real land-use behaviour.
+where $V_{i,t}$ and $V_{i,t-z}$ are the urban built-up areas at the end and start
+of the period, $P_{i,t}$ and $P_{i,t-z}$ the corresponding urban populations, $z$
+the period length in years, and $\ln(\cdot)$ the natural logarithm. LCR is thus the
+*arithmetic* annual growth of built-up area and PGR the *logarithmic* growth of
+population; this arithmetic-LCR / logarithmic-PGR pairing is the metadata's own
+operational specification, not our reading [@unhabitat2025metadata;
+@corbane2017lue], and @nicolau2019lcrpgr show formally that mixing the two scales is
+what destabilises the ratio. Two structural problems follow. **(1) Division by a
+near-zero denominator:** when population is roughly stable ($\text{PGR}\approx 0$)
+the ratio diverges towards $\pm\infty$ and flips sign, so ordinary demographic
+differences produce wild, uninterpretable values. **(2) Arithmetic-versus-logarithmic
+asymmetry:** the arithmetic numerator and logarithmic denominator make the ratio
+non-symmetric, its tails dominated by an arithmetic artefact rather than real
+land-use behaviour [@nicolau2019lcrpgr].
 
 ## A Stable Metric: The Built-up per Capita Rate (BpCR)
 
 The UN-Habitat metadata itself concedes that the ratio is hard to interpret and
 offers built-up area per capita ($V/P$) as a secondary indicator
-[@unhabitat2025metadata]. That quantity is a level, a snapshot at one point in
-time. Following @Lu2026, we turn it into a trend by taking its annual growth in
+[@unhabitat2025metadata], a level at one point in time. Building on the log-based
+direction @Lu2026 advocate, we turn it into a trend by its annual growth in
 logarithmic form:
 $$
 \text{BpCR}_{i,t}=\frac{1}{z}\ln\!\left(\frac{V_{i,t}/P_{i,t}}{V_{i,t-z}/P_{i,t-z}}\right)
@@ -246,21 +250,23 @@ $\text{LCR}_i$ in that indicator. Replacing the arithmetic LCR with its
 logarithmic form is precisely what removes the arithmetic-versus-logarithmic
 asymmetry that destabilises LCRPGR.
 
-Because BpCR is the **difference of two logarithmic growth rates**, it is
-(i) finite and well-defined for every country-period (no division by ~0),
-(ii) symmetric (densification and sprawl are mirror images around zero),
-(iii) additively decomposable, and (iv) directly interpretable: $\text{BpCR}>0$
-means sprawl (more land per resident), $\text{BpCR}<0$ densification, and
-$\text{BpCR}=0$ land growing exactly in step with population. BpCR reproduces the
-policy signal of LCRPGR where the latter is well-behaved, but without the
-instability; it complements rather than contradicts the official indicator.
-
-In the empirical sections we benchmark BpCR against the logarithmic form of the
-ratio, $\text{LCRPGR}_{\log}=\text{LCR}_{i,\log}/\text{PGR}_{i,\log}$ (*LCRPGR
-(log)*). This is a deliberately conservative benchmark: already free of the
-arithmetic-versus-logarithmic asymmetry, it differs from BpCR only in being a ratio
-rather than a difference, so any instability it shows comes purely from dividing by
-a near-zero growth rate; the official arithmetic ratio would be more unstable still.
+As the **difference of two logarithmic growth rates**, BpCR is finite wherever urban
+built-up and population are positive, symmetric, additively decomposable, and
+directly interpretable:
+$\text{BpCR}>0$ is sprawl (more land per resident), $\text{BpCR}<0$ densification,
+$\text{BpCR}=0$ land growing in step with population. It is a *descriptive* quantity;
+the "efficiency" label it and the SDG target carry is normative, and lower BpCR is
+not unambiguously better, since extreme densification has welfare costs of its own.
+Where LCRPGR is well-behaved BpCR reproduces its policy signal, but the two are not
+interchangeable: BpCR stays informative in the near-zero-growth region where the
+ratio breaks down and, as @sec-results shows, recovers within-country relationships
+the ratio's instability hides. In the empirical sections we benchmark it
+against the *logarithmic* form of the ratio,
+$\text{LCRPGR}_{\log}=\text{LCR}_{i,\log}/\text{PGR}_{i,\log}$ (*LCRPGR (log)*), a
+deliberately conservative choice: already free of the arithmetic-versus-logarithmic
+asymmetry, it differs from BpCR only in being a ratio, so any instability it shows
+comes purely from the near-zero denominator; the official arithmetic ratio would be
+more unstable still.
 
 # Literature Review {#sec-literature}
 
@@ -270,72 +276,61 @@ paper sits at their intersection.
 
 ## Drivers of Urban Land Expansion
 
-@seto2011meta synthesise 326 remote-sensing studies of global urban land
-expansion between 1970 and 2000. They document that urban land has grown faster
-than urban population almost everywhere, and that the expansion is driven mainly
-by income in most regions and by population growth in India and Africa.
-@oueslati2015sprawl move from description to econometrics, estimating the
-determinants of sprawl on a panel of 282 European cities (1990, 2000, 2006)
-within a monocentric-city framework. They find that rising income and population
-both enlarge the urban footprint, and that cities keep spreading even where
-population is flat. Together these studies establish income and population as the
-leading drivers of urban land use, but they work mostly across cities or countries
-and at a single cross-section, leaving open whether the same relationships hold
-within a country as it develops over time.
+@seto2011meta synthesise 326 remote-sensing studies (1970--2000) and document that
+urban land has grown faster than urban population almost everywhere, driven mainly
+by income and, in India and Africa, by population growth. @oueslati2015sprawl
+estimate the determinants of sprawl on 282 European cities and find that rising
+income and population both enlarge the footprint, with cities spreading even where
+population is flat. Together these establish income and population as the leading
+drivers, but they work across cities or countries at a single cross-section,
+leaving open whether the same relationships hold *within* a country over time.
 
 ## Critiques of the Indicator: Formula and Data
 
-@nicolau2019lcrpgr assess the SDG 11.3.1 formula itself, comparing the official
-LCRPGR with a land-use-efficiency-derived alternative at the municipality level in
-mainland Portugal. They conclude that the LCRPGR formula is structurally unstable
-and that a logarithmic, efficiency-based alternative is more robust.
-@Lu2026 broaden the question to data sensitivity, evaluating land-use efficiency
-across six built-up and four population datasets for 176 countries over
-2000--2020. They show that efficiency estimates swing widely with the choice of
-dataset and argue that a log-based framework is needed for reliable monitoring.
-In the same vein, @zhong2025 propose a more reliable, complete, and equitable
-global land-use-efficiency assessment, again stressing that data and methodological
-choices shape the resulting picture of urban sustainability. This strand
-establishes that the choice of metric, and not only the choice of data, can change
-the conclusions drawn about sustainable urbanisation.
+@nicolau2019lcrpgr show formally that the SDG 11.3.1 formula is structurally
+unstable and that a logarithmic, efficiency-based alternative is more robust.
+@Lu2026 show that efficiency estimates swing widely with the choice among six
+built-up and four population datasets and argue for a log-based framework, and
+@zhong2025 similarly stress that data and methodological choices shape the
+resulting picture. This strand establishes that the choice of metric, not only of
+data, can change the conclusions drawn about sustainable urbanisation.
 
 ## Research Gap and Contribution
 
 Our contribution sits at the intersection of the two strands. On measurement, we
-adopt the log-based metric that both @nicolau2019lcrpgr and @Lu2026 recommend, in
-the form of BpCR. On method, we make it dynamic: a two-way fixed-effects panel with
-Arellano-Bond and Blundell-Bond GMM, estimated on 193 United Nations member states
-over 1985--2020, that measures the persistence of per-capita
-land use and its economic drivers.
+adopt the specific log-based BpCR formulation @Lu2026 propose, in the spirit of the
+log-based alternative @nicolau2019lcrpgr more generally recommend. On method, we make
+it dynamic: a two-way fixed-effects panel with Arellano-Bond and Blundell-Bond GMM,
+estimated on 193 United Nations member states over 1985--2020, that examines the
+persistence of per-capita land use and probes its purported economic drivers, most of
+which, as the Results section shows, turn out not to survive scrutiny.
 
 # Data {#sec-data}
 
 ## Data Sources
 
-The empirical analysis draws on three official, global data providers, the same
-sources used in international SDG monitoring. Built-up area, population, and the
-urban mask come from the **Global Human Settlement Layer (GHSL)** of the European
-Commission's Joint Research Centre [@pesaresi2024ghsl; @schiavina2023smod].
-Within GHSL we use three products: GHS-BUILT-S for built-up surface, classified
-from Landsat and Sentinel-2 imagery by machine learning; GHS-POP, which
-disaggregates census counts onto that built-up surface; and GHS-SMOD, which
-applies the Degree of Urbanisation (DEGURBA) method to flag urban cells. The
-layers are available at five-year epochs; we use the observed epochs from 1980 to
-2020 (the 1980 layers serve only as the base period for the 1985 growth rates, so
-the estimation sample itself spans 1985--2020) and discard the 2025 and 2030
-modelled projections. Administrative units come
-from the **Global Administrative Unit Layers (GAUL)** of the UN Food and
-Agriculture Organization [@gaul2024], which provide UN-validated, politically
-neutral country boundaries with global coverage. Socio-economic controls come from
+The empirical analysis draws on three official, global providers, the same sources
+used in international SDG monitoring. Built-up area, population, and the urban mask
+come from the **Global Human Settlement Layer (GHSL)** of the European Commission's
+Joint Research Centre [@pesaresi2024ghsl; @schiavina2023smod]: GHS-BUILT-S for
+built-up surface, GHS-POP for population disaggregated onto it, and GHS-SMOD for the
+Degree of Urbanisation (DEGURBA) classification that flags urban cells. We use the
+five-year layers from 1975 to 2020, discarding the modelled 2025 and 2030
+projections, with 1975 serving only as the base for the 1980 growth rate (so BpCR is
+observed over 1980--2020 and, after the lagged dependent variable, the estimation
+sample spans 1985--2020). Administrative units come from the **Global Administrative
+Unit Layers (GAUL)** of the UN FAO [@gaul2024], giving UN-validated, politically
+neutral boundaries. Socio-economic controls come from
 the **United Nations**: GDP per capita in constant 2020 US dollars from UN SNAAMA
-and international net migration as a share of population from UN DESA World Population Prospects
-2024 [@unsd2025snaama; @undesa2024wpp]. For the heterogeneity analysis we classify countries into United Nations development groups, developed economies, developing economies, and least-developed countries (LDCs), using the UN M49 regional classification together with the UN Committee for Development Policy LDC list [@unsd2024m49] (obtained through the `countrycode` R package).
-
-@tbl-data summarises the technical characteristics of each dataset.
+and international net migration as a share of population from UN DESA World Population
+Prospects 2024 [@unsd2025snaama; @undesa2024wpp]. For the heterogeneity analysis we
+classify countries into UN development groups (developed, developing, and
+least-developed) using the UN M49 regions and the UN Committee for Development Policy
+LDC list [@unsd2024m49]. @tbl-data summarises each dataset and the coverage used.
 
 ```{r}
 #| label: tbl-data
-#| tbl-cap: "Dataset specifications. GHSL grids use the World Mollweide projection (ESRI:54009); built-up and population at 100 m, the SMOD urban mask at 1 km. Vector and tabular sources show their native form."
+#| tbl-cap: "Dataset specifications. GHSL grids use the World Mollweide projection (ESRI:54009); built-up and population at 100 m, the SMOD urban mask at 1 km. The Years column reports the coverage used in this study, not each source's native span: the GHSL products span 1975-2030 natively, of which we take 1975-2020 (the 1975 layers serving only as the base for the 1980 growth rate) and discard the modelled 2025 and 2030 projections; the UN series (SNAAMA 1970-2024, WPP 1950-2023) are read only over the epochs the panel needs (@sec-data)."
 data.frame(
     Dataset = c(
         "GHS-BUILT-S R2023A", "GHS-POP R2023A", "GHS-SMOD R2023A",
@@ -349,8 +344,8 @@ data.frame(
         "WGS84 (EPSG:4326)", "--", "--", "--"
     ),
     Years = c(
-        "1975-2030, 5-yr", "1975-2030, 5-yr", "1975-2030, 5-yr",
-        "2024/2025", "1970-2024", "1950-2023", "2024"
+        "1975-2020, 5-yr", "1975-2020, 5-yr", "1975-2020, 5-yr",
+        "2024/2025", "1985-2020, 5-yr", "1980-2020, annual", "2024"
     ),
     Variable = c(
         "Built-up area (m2/cell)", "Population (persons/cell)",
@@ -363,7 +358,7 @@ data.frame(
         format = out_fmt, booktabs = TRUE, escape = TRUE, linesep = "",
         align = c("l", "l", "l", "l", "l", "l", "l")
     ) |>
-    kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down"))
+    kableExtra::kable_styling(latex_options = c("scale_down"))
 ```
 
 ## Constructing the Panel Following the UN Metadata
@@ -399,48 +394,54 @@ Degree of Urbanisation (1 km); cells coded 21 or higher count as urban.
 panel (c) is urban. The gold line is the GAUL country boundary.
 ](../04_outputs/figures/metadata_layers.png){#fig-layers width=74%}
 
+*Components and aggregation.* The unit of analysis is the country, so for each
+country-period we sum urban built-up area $V$ and urban population $P$ across cells
+*before* forming any rate (the metadata's aggregate-then-rate rule): averaging
+city-level ratios would let a small town with a near-zero denominator dominate the
+national figure. Boundaries are held fixed at their current GAUL definition for
+every epoch, so each country is a constant spatial footprint and the within-country
+changes reflect land-use dynamics rather than shifting borders.
 
-*Components and aggregation.* Our unit of analysis is the country, so we aggregate
-the urban cells to the national level, aggregating the *components* rather than the
-metric: for each country-period we sum urban built-up area $V$ and urban population
-$P$ before forming any rate. This follows the metadata's aggregate-then-rate rule;
-averaging city-level ratios would let a small town with a near-zero population
-denominator dominate the national figure, whereas summing components first keeps
-the national rate well-defined. Boundaries are held fixed at their current GAUL
-definition for every epoch, so each country is a constant spatial footprint and
-the within-country changes we study reflect land-use dynamics rather than shifting
-borders; both the GHSL grids and the UN series are keyed to present-day states.
+*Rates and controls.* From these national totals we form LCRPGR and BpCR as
+defined in @sec-measurement. The two urban controls come from the same GHSL/SMOD
+layers: **urban density** is urban population per urban-cell area, in logs (a
+settlement density, discussed in @sec-strategy), and **urban population share** is
+urban population divided by national total population. The remaining controls are international: **GDP per
+capita** (constant 2020 US dollars, logs) from UN SNAAMA and **net migration**
+(international, share of population) from UN DESA WPP 2024. All variables align to
+the same country-period grid.
 
-*Rates and indicators.* From these national totals we form the Land Consumption
-Rate (arithmetic growth of built-up area), the Population Growth Rate (logarithmic
-growth of population), their ratio LCRPGR, the built-up-per-capita level, and BpCR
-as the logarithmic growth of built-up area per capita (@sec-measurement).
+The resulting panel is unbalanced: it nominally spans 193 United Nations member
+states, but not fully evenly. Sudan and South Sudan contribute only three of eight
+epochs, part of the 37 GDP-missing country-periods discussed below (@sec-limitations),
+and Tuvalu only one, DEGURBA flagging no urban centre there until recent decades; that
+single-period case is the one the within estimator drops for lack of variation.
+@tbl-flow traces how the record narrows
+from the observed BpCR series to each estimator's sample. Two
+points carry through the rest of the paper: the fixed-effects columns drop Tuvalu as
+a single-period within-singleton (1,499 observations, 192 countries), while the GMM
+columns keep all 193 countries and report genuinely non-zero rows (1,307 and 1,500),
+net of the structural zero-padding `plm::pgmm` assigns to data-sparse countries
+(@sec-strategy).
 
-*Control variables.* The two urban controls are computed from the same GHSL/SMOD
-layers. **Urban density** is national urban population divided by urban land area,
-the area of urban cells (distinct from, and about ten times larger than, the
-built-up surface in the dependent variable), used in logs. **Urban population
-share** is urban population divided by national total population. The remaining
-controls come from international sources: **GDP per capita** (constant 2020 US
-dollars, logs) from UN SNAAMA and **net migration** (international, share of population) from UN
-DESA WPP 2024. All variables align to the same country-period grid.
-
-The resulting dataset is an unbalanced panel, complete for most but not all
-country-periods, of 193 United Nations member states across eight five-year
-epochs from 1985 to 2020, giving 1,538
-country-periods with an observed BpCR. Because BpCR is a growth rate, each epoch's
-value is computed against the preceding five-year grid: the 1985 BpCR uses the
-1980 GHSL layers as its base, the 1990 value uses 1985, and so on, so the eight
-1985--2020 BpCR observations are formed from the 1980--2020 grids. The common
-working sample used across specifications keeps country-periods with the lagged
-dependent variable and all four controls present (complete-case filtering), which
-reduces the sample to 1,499 country-period observations; this is the sample size
-reported for the static and fixed-effects columns in @sec-results. The GMM
-estimators are fit on this same working sample, but, as detailed in
-@sec-strategy, their internal instrument construction does not drop
-country-periods with a valid dependent variable, so the Arellano-Bond and
-Blundell-Bond observation counts differ from 1,499 and from each other for
-reasons unrelated to missing data.
+```{r}
+#| label: tbl-flow
+#| tbl-cap: "Sample flow, from the observed BpCR series to each estimator's working sample. Arellano-Bond and Blundell-Bond figures are genuinely non-zero rows, net of structural zero-padding for data-sparse countries (@sec-strategy)."
+data.frame(
+  Stage = c("Dependent variable eligible (1985-2020)", "Complete-case working sample",
+            "Fixed-effects estimation", "Arellano-Bond (differenced equation)",
+            "Blundell-Bond (level equation)", "Clean-timing common sample"),
+  `Country-periods` = c("1,538", "1,500", "1,499", "1,307", "1,500", "1,336"),
+  Countries = c("193", "193", "192", "193", "193", "--"),
+  Note = c("1980 epoch is lag base only", "lag DV and four controls present",
+           "Tuvalu singleton dropped", "of $193\\times7$ nominal",
+           "of $193\\times8$ nominal", "t, t-1, t-2 all observed"),
+  check.names = FALSE
+) |>
+  knitr::kable(format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
+    align = c("l", "r", "r", "l")) |>
+  kableExtra::kable_styling(font_size = 9)
+```
 
 # Descriptive Statistics {#sec-descriptive}
 
@@ -489,33 +490,29 @@ knitr::kable(tab,
     format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "r", "r", "r", "r", "r", "r"), row.names = FALSE
 ) |>
-    kableExtra::kable_styling(latex_options = c("HOLD_position"), font_size = 9)
+    kableExtra::kable_styling(font_size = 9)
 ```
 
-@tbl-desc reports summary statistics over the full 1985--2020 sample, and even
-before any regression the raw data reveal why the choice of metric matters. Over
-the `r format(ds$n, big.mark=",")` country-periods, LCRPGR (log) has a standard deviation of about
-`r round(ds$lcr_sd)` and ranges from roughly `r round(ds$lcr_lo)` to
-`r round(ds$lcr_hi)`: its division by a near-zero population-growth rate produces
-enormous, sign-flipping outliers. BpCR, by contrast, stays in a tight band with a
-standard deviation of about `r sprintf("%.3f", ds$bp_sd)`, roughly
-`r format(ds$ratio, big.mark=",")` times narrower: the same underlying data, yet
-one metric is dominated by an arithmetic artefact and the other is not.
-
-Sprawl is the global norm rather than the exception. BpCR is positive in
-`r sprintf("%.0f", ds$shr_cp)`% of country-periods, and
-`r ds$ctry_pos` of `r ds$ctry_tot` countries (`r ds$ctry_pct`%) have a positive
-average BpCR over the period, meaning built-up area per capita is rising: cities
-are consuming more land per resident. The median country-period BpCR is
-`r sprintf("%+.4f", ds$med)`, and the official arithmetic LCRPGR ratio exceeds
-one (its sprawl threshold) in `r sprintf("%.0f", ds$shr_l1)`% of cases. The qualitative message
-is the same under either metric; the difference is that BpCR delivers it without
-the numerical instability.
+@tbl-desc reports summary statistics, and even before any regression the raw data
+reveal why the metric matters. Over the `r format(ds$n, big.mark=",")`
+country-periods, LCRPGR (log) has a standard deviation of about `r round(ds$lcr_sd)`
+and ranges from roughly `r round(ds$lcr_lo)` to `r round(ds$lcr_hi)`, its near-zero
+denominator producing enormous sign-flipping outliers, whereas BpCR stays in a
+tight band (standard deviation about `r sprintf("%.4f", ds$bp_sd)`, roughly
+`r format(ds$ratio, big.mark=",")` times narrower) on the same data. Sprawl is the
+global norm in *direction*: BpCR is positive in `r sprintf("%.0f", ds$shr_cp)`% of
+country-periods and `r ds$ctry_pos` of `r ds$ctry_tot` countries (`r ds$ctry_pct`%)
+have a positive average, and the official arithmetic ratio exceeds its sprawl
+threshold of one in `r sprintf("%.0f", ds$shr_l1)`% of cases. The typical *magnitude*
+is nonetheless modest: the median country-period BpCR is
+`r sprintf("%+.4f", ds$med)`, about `r sprintf("%.1f", 100*ds$med)`% more land per
+resident per year, so sprawl is pervasive but slow. The qualitative message is the
+same under either metric; BpCR simply delivers it without the instability.
 
 
 ```{r}
 #| label: fig-trends
-#| out-width: 88%
+#| out-width: 56%
 #| fig-cap: "Country trajectories for seven regional representatives, 1985--2020. (a) LCRPGR (log) swings erratically across its zero and unity reference lines; (b) BpCR is smooth on the same data, with the fastest-urbanising economies showing the strongest early sprawl."
 knitr::include_graphics(
     if (knitr::is_latex_output()) {
@@ -525,13 +522,11 @@ knitr::include_graphics(
     }
 )
 ```
-Country trajectories make the contrast concrete (@fig-trends). For a set of
-regional representatives, LCRPGR (log) swings erratically from one period
-to the next, crossing zero and spiking to large positive and negative values that
-are hard to read as land-use behaviour. The BpCR series for the same countries are
-smooth and interpretable: most drift gradually towards balance, while the
-fastest-urbanising economies show the strongest sprawl earlier in the period
-before easing.
+Country trajectories make the contrast concrete (@fig-trends): LCRPGR (log) swings
+erratically, crossing zero and spiking to large positive and negative values hard
+to read as land-use behaviour, whereas the BpCR series for the same countries are
+smooth and interpretable, most drifting gradually towards balance while the
+fastest-urbanising economies show the strongest early sprawl.
 
 # Empirical Strategy {#sec-strategy}
 
@@ -539,29 +534,14 @@ before easing.
 drives *within-country* changes in per-capita urban land use over time, and how
 persistent they are. The measurement one is whether the official SDG 11.3.1
 indicator captures this reliably, or whether the choice of metric changes the
-conclusions. We formalise these in five hypotheses (@tbl-hyp).
-
-```{r}
-#| label: tbl-hyp
-#| tbl-cap: "Hypotheses"
-data.frame(
-    ` ` = c("H1", "H2", "H3", "H4", "H5"),
-    Hypothesis = c(
-        "BpCR captures land-use efficiency more reliably than LCRPGR",
-        "Higher urban density is associated with less land per capita",
-        "Higher income is associated with less land per capita",
-        "International net in-migration densifies cities",
-        "Per-capita land use is path-dependent"
-    ),
-    Expected = c("Better Fit", "$-$", "$-$", "$-$", "$+$"),
-    check.names = FALSE
-) |>
-    knitr::kable(
-        format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
-        align = c("c", "l", "c")
-    ) |>
-    kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9)
-```
+conclusions. The measurement question is settled by **H1**, a metric-property
+comparison rather than a behavioural hypothesis: BpCR captures land-use efficiency
+more reliably (a better statistical fit) than LCRPGR. The substantive question is
+formalised in four testable behavioural hypotheses on the drivers of BpCR, each with
+a sign expected a priori: **H2**, higher urban density lowers land per capita ($-$);
+**H3**, higher income lowers it ($-$); **H4**, international net in-migration lowers
+it ($-$); and **H5**, per-capita land use is path-dependent ($+$). We keep these
+fixed labels throughout.
 
 ## Specification
 
@@ -571,7 +551,7 @@ $\text{Metric} \in \{\text{LCRPGR}_{\log}, \text{BpCR}\}$ (we use the conservati
 log form of the ratio, @sec-measurement) we estimate a two-way fixed-effects model
 without dynamics:
 $$
-\small \text{Metric}_{i,t} = \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t} + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}.
+\small \text{Metric}_{i,t} = \beta_1\ln(\text{UrbDens})_{i,t-1} + \beta_2\,\text{UrbShare}_{i,t-1} + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}.
 $$ {#eq-static}
 Because the data, controls, and fixed effects are held identical, any difference
 between the LCRPGR (log) and BpCR estimates of @eq-static is attributable to the
@@ -581,92 +561,93 @@ In the **dynamic** stage, having established BpCR as the usable metric, we add i
 own lag to measure path-dependence, so the dependent variable is now specifically
 BpCR:
 $$
-\small \text{BpCR}_{i,t} = \rho\,\text{BpCR}_{i,t-1} + \beta_1\ln(\text{UrbDens})_{i,t} + \beta_2\,\text{UrbShare}_{i,t} + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}.
+\small \text{BpCR}_{i,t} = \rho\,\text{BpCR}_{i,t-1} + \beta_1\ln(\text{UrbDens})_{i,t-1} + \beta_2\,\text{UrbShare}_{i,t-1} + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}.
 $$ {#eq-dynamic}
 The coefficient $\rho$ measures how strongly a country's per-capita land use
 persists from one period to the next (H5).
 
-In both specifications the country fixed effects $\mu_i$ absorb all time-invariant
-national characteristics (geography, institutions, the initial level of
-urbanisation), so identification comes from changes *within* a country over time
-rather than from comparisons *between* countries. The period fixed effects
-$\delta_t$ absorb global shocks common to all countries in a given epoch
-(technology, the global business cycle, and any epoch-specific features of the
-satellite record). Standard errors are clustered by country to allow for serial
-correlation within a country's series. The pooled models cluster on a large number
-of countries, so cluster-robust inference is reliable there; in the
-development-group splits of @sec-results the number of clusters is smaller (44 to
-101 countries) and only eight periods are observed, so those subgroup standard
-errors, while still clustered, should be read as somewhat less precise.
+The country fixed effects $\mu_i$ absorb all time-invariant national
+characteristics, so identification comes from changes *within* a country over time,
+not comparisons *between* countries; the period fixed effects $\delta_t$ absorb
+global shocks common to all countries in an epoch. Standard errors are clustered by
+country. Cluster-robust inference is reliable in the pooled models but less so in
+the development-group splits (@sec-results), where the number of clusters is smaller
+(44 to 101 countries) and only eight periods are observed.
 
 Each regressor has a clear theoretical link to land consumed per resident.
-**Urban density** captures the compact-city mechanism: where settlement is already
-dense there is less room and less need to expand outward, so new residents are
-accommodated within the existing footprint (H2).^[The per-capita dependent variable
-and the per-area density control share the population term, so a common population
-shock could move both mechanically. The direction is informative: such a shock
-biases the density coefficient toward the negative sign we estimate (so H2 is read
-with caution) but biases the income coefficient toward positive, working *against*
-the negative H3 result, which is therefore conservative. As a check, entering
-density with a one-period lag (breaking the contemporaneous link) leaves income and
-migration unchanged but flips the density coefficient, confirming the compact-city
-estimate is partly mechanical whereas the income result is not. The built-up
-surface in the dependent variable is also only about a tenth of the urban land area
-in the control, so the two are far from collinear.] **GDP per capita** is
-ambiguous a priori: cross-country evidence links income to sprawl, while within a
-country income can fund densification; our design tests which force dominates
-(H3), a contrast developed in @sec-discussion. **Net migration**, measured nationally, captures
-*international* migration: in-migrants settle in the existing stock, so demand is
-absorbed by densification faster than the footprint grows (H4); internal
-rural-to-urban migration is not observed (@sec-discussion). Finally, the **lagged
-dependent variable** captures path-dependence, since the long-lived building stock,
-road network, and zoning make per-capita land use persist (H5). H1 concerns the
-metric and is addressed by comparing the LCRPGR and BpCR runs.
+**Urban density** captures the compact-city mechanism (H2), though ours is a
+*settlement* density (population per urban-cell area, about ten times the built-up
+surface), not the conventional built-up density, chosen to keep the dependent
+variable's built-up term $V$ out of the control, a choice weighed in @sec-results.
+**Urban population share** captures the stage of urbanisation. Testing either
+requires care, because both are built from the urban population count that also sits
+inside the dependent variable. Writing BpCR out in full,
+$$
+\text{BpCR}_{i,t}=\tfrac{1}{z}\big[\ln V_{i,t}-\ln P^{u}_{i,t}-\ln V_{i,t-1}+\ln P^{u}_{i,t-1}\big],
+$$ {#eq-decomp}
+urban population enters negatively at $t$ and positively at $t-1$, so either control
+inherits the sign of the date at which it is measured: contemporaneous timing pushes
+it toward a spurious *negative* (compact-city) sign, lagged timing toward a same-signed
+spurious *positive*, and only $t-2$ shares no term with the *contemporaneous*
+$\text{BpCR}_{i,t}$ (it does share one with the lagged dependent variable
+$\text{BpCR}_{i,t-1}$ in the dynamic model, a collinearity that affects precision, not
+the identification logic, since $\text{BpCR}_{i,t-1}$ is a regressor, not the
+estimation target). We adopt $t-1$ for
+the main specifications (keeping the sample intact and permitting the dynamic GMM) and
+check every urban-form conclusion against the clean $t-2$ timing (@sec-results).
+**GDP per capita** is ambiguous a priori: cross-country evidence links income to
+sprawl, while within a country income can fund densification; our design tests
+which force dominates (H3), a contrast developed in @sec-discussion. It shares only
+*total* population with BpCR, through its per-capita denominator, a weak one-signed
+entanglement that biases its coefficient toward positive and leaves any negative
+estimate conservative. **Net migration**, measured nationally, captures
+*international* migration and is expected to lower per-capita land if the built stock
+adjusts more slowly than population to arriving residents (H4). A caveat symmetric to
+the density one applies: migration *drives* population growth, which enters BpCR
+negatively through the PGR term (@eq-decomp), so a mechanical channel runs from more
+migration to lower BpCR. It is not the literal identity that afflicts density and
+urban share, since the dependent variable uses *urban* population while the control
+is *national* migration and built-up area does respond (the decomposition below);
+but the channel is real, so we read the coefficient as a partly-mechanical
+conditional association. Internal rural-to-urban migration is not observed
+(@sec-discussion). Finally, the **lagged dependent variable** captures
+path-dependence (H5). H1 concerns the metric and is addressed by comparing the
+LCRPGR and BpCR runs.
 
 ## Dynamic-Panel Estimation and the Nickell Bias
 
-Adding a lagged dependent variable to a fixed-effects model introduces a
-well-known problem. The within (demeaning) transformation that removes $\mu_i$
-makes the transformed lagged regressor mechanically correlated with the
-transformed error, biasing the estimate of $\rho$ downward; the bias is of order
-$1/T$ and is therefore substantial in a panel with only eight periods such as
-ours. To correct it we use generalised method of moments (GMM) estimators
-designed for dynamic panels.
+Adding a lagged dependent variable to a fixed-effects model biases $\rho$
+downward: the within transformation that removes $\mu_i$ correlates the transformed
+lagged regressor with the transformed error, a bias of order $1/T$ that is
+substantial with only eight periods. We correct it with GMM estimators for dynamic
+panels. The **Arellano-Bond** [@arellano1991] (difference) estimator first-differences
+away the fixed effects and instruments the differenced lagged term with deeper level
+lags (lags two to five of BpCR); the **Blundell-Bond** [@blundell1998] (system)
+estimator adds a levels equation instrumented by past differences, gaining efficiency
+when the series is persistent. Only the lagged dependent variable is instrumented; the four controls
+are treated as strictly exogenous, a simplification (income in particular is
+plausibly jointly determined with land use), so the control coefficients are
+conditional associations rather than clean exogenous effects (@sec-discussion). We
+take **Arellano-Bond as preferred** and report Blundell-Bond alongside, both in two
+steps with Windmeijer-corrected standard errors [@windmeijer2005] and a collapsed
+instrument matrix (one column per lag distance).
 
-The **Arellano-Bond** (difference) estimator first-differences the equation to
-eliminate the country fixed effects and instruments the differenced lagged term
-with deeper lags in levels (lags two to five of BpCR). The **Blundell-Bond** (system) estimator augments this
-with a second, levels equation in which the lagged term is instrumented by its own
-past differences; this added moment information makes it more efficient when the
-series is persistent, as BpCR is. In both estimators only the lagged dependent
-variable is instrumented; the four controls are treated as strictly exogenous,
-which is a simplification, since income in particular is plausibly jointly
-determined with land use, so the control coefficients are best read as conditional
-associations rather than cleanly exogenous effects (@sec-discussion). We treat
-**Arellano-Bond as the preferred
-specification** and report Blundell-Bond alongside it as a robustness comparison.
-Both are estimated in two steps with Windmeijer-corrected standard errors [@windmeijer2005], and the
-instrument matrix is collapsed (one column per lag distance) to keep the instrument count from proliferating with the time dimension.
-
-The two estimators report observation counts that are not directly comparable to
-each other or to the 1,538 raw country-periods, and the difference between them is
-not arbitrary but follows exactly from how each equation is constructed. With
-collapsed GMM-style instruments, `plm::pgmm` substitutes zeros for instruments that
-are unavailable for a given country-period rather than dropping the row, a
-standard practice traced to @holtzeakin1988 and documented by @roodman2009, under
-which the resulting instrument columns still correspond to a set of meaningful
-moment conditions rather than a distortion of the data. Consequently
-each country contributes a fixed number of rows to each equation, $T - k$, so that
-$N = 193 \times (T - k)$, where $T = 9$ is the number of epochs including the 1980
-base period used only to form the 1985 growth rates (@sec-data), and $k$ is the
-number of periods the transformation costs: $k = 2$ for the differenced equation
-(one period lost because the lagged dependent variable itself is unavailable in
-the first epoch, one more lost to differencing) and $k = 1$ for the level equation
-(no differencing loss, only the lagged-dependent-variable period). This gives
-$N_{AB} = 193 \times 7 = 1{,}351$ and $N_{\text{level}} = 193 \times 8 = 1{,}544$,
-so that $N_{\text{level}} - N_{AB} = 193 \times (2 - 1) = 193$ exactly: the level equation
-recovers precisely one additional period per country, no more and no less. Exact
-counts are reported in @sec-results.
+The two estimators' nominal equation sizes, $N_{AB}=193\times7=1{,}351$ and
+$N_{\text{level}}=193\times8=1{,}544$, are balanced-grid figures, not complete-case
+totals: `plm::pgmm` zero-substitutes only unavailable deep-lag *instruments*
+[@holtzeakin1988; @roodman2009], never a control, so any country-period missing one
+is dropped before estimation, not zero-filled. That substitution, though, forces
+every country into an identical nominal $T-k$ row count regardless of how much real
+data it contributed, padding concentrated entirely in the 30 data-sparse countries
+(chiefly the GDP-missing ones, plus the single-period Tuvalu). @tbl-flow and
+@tbl-gmm report the genuinely non-zero counts directly instead: 1,307
+(Arellano-Bond) and 1,500 (Blundell-Bond level), 97% of each nominal figure.
+Blundell-Bond's is one row above the 192-country fixed-effects sample (1,499):
+its level equation needs no within-country variation to form a valid row, so it
+alone recovers the single-period Tuvalu case that the fixed-effects singleton
+correction must drop, while every other country contributes identically to both.
+Arellano-Bond's is lower, the extra period first-differencing consumes on top of
+the lag.
 
 Because the models are estimated in two steps, over-identifying restrictions are
 assessed with the robust **Hansen** $J$ test, for which a $p$-value above 0.10 does
@@ -700,30 +681,45 @@ sp <- panel |>
     filter(year <= 2020, !is.na(bpcr), !is.na(lcrpgr_log)) |>
     arrange(iso3, year) |>
     group_by(iso3) |>
-    mutate(bpcr_L = lag(bpcr)) |>
+    mutate(
+        bpcr_L = lag(bpcr), ln_urban_density_L = lag(ln_urban_density),
+        urban_pop_share_L = lag(urban_pop_share)
+    ) |>
     ungroup() |>
     filter(
         !is.na(ln_urban_density), !is.na(urban_pop_share),
-        !is.na(ln_gdp_pc), !is.na(net_migr_pct), !is.na(bpcr_L)
+        !is.na(ln_gdp_pc), !is.na(net_migr_pct), !is.na(bpcr_L),
+        !is.na(ln_urban_density_L), !is.na(urban_pop_share_L)
     )
-ctrl <- "ln_urban_density + urban_pop_share + ln_gdp_pc + net_migr_pct"
+ctrl <- "ln_urban_density_L + urban_pop_share_L + ln_gdp_pc + net_migr_pct"
 mL <- feols(as.formula(paste("lcrpgr_log ~", ctrl, "| iso3 + year")), sp, vcov = ~iso3)
 mB <- feols(as.formula(paste("bpcr ~", ctrl, "| iso3 + year")), sp, vcov = ~iso3)
 r2L <- round(r2(mL)["wr2"], 4)
 r2B <- round(r2(mB)["wr2"], 4)
-r2ratio <- round(r2(mB)["wr2"] / r2(mL)["wr2"])
+# Detectability, not explained variance, is the comparable quantity across two
+# different dependent variables: t-statistics are scale-free, R^2 shares are not.
+tL <- coeftable(mL)
+tB <- coeftable(mB)
+maxtL <- max(abs(tL[, 3]))
+tmigL <- tL["net_migr_pct", 3]
+tmigB <- tB["net_migr_pct", 3]
 ```
 
-With the official LCRPGR as the dependent variable, the model is essentially
-uninformative: the within $R^2$ is only `r sprintf("%.3f", r2L)` and not a
-single control is statistically significant, because the metric's arithmetic
-tail outliers swamp any systematic variation. Replacing the dependent variable
-with BpCR, and changing nothing else, raises the within $R^2$ to
-`r sprintf("%.3f", r2B)`, roughly `r r2ratio` times higher, and the coefficients
-become significant and correctly signed: denser cities, richer countries, and
-higher in-migration are all associated with less land per capita. This is the
-clearest evidence for H1: the choice of metric, not the data, determines whether
-the relationships can be detected at all.
+With the official LCRPGR as the dependent variable, the model detects almost nothing
+at conventional levels: no control is distinguishable from zero at the 5% level, the
+largest $t$-statistic is `r sprintf("%.2f", maxtL)` (GDP, significant only at 10%),
+and the point estimates are implausibly large and imprecise, because the metric's
+tail outliers swamp any systematic variation. Replacing the dependent variable with
+BpCR and changing nothing else inverts the picture: the *same* net-migration
+variable, noise under the ratio ($t = `r sprintf("%.2f", tmigL)`$), becomes one of
+the most precisely estimated coefficients in the paper ($t = `r sprintf("%.2f", tmigB)`$,
+computed from the unrounded estimate and so not exactly reproducible from @tbl-static's
+four-decimal entries). @tbl-static also reports the within $R^2$
+(`r sprintf("%.3f", r2L)` against `r sprintf("%.3f", r2B)`), but we read the contrast
+as one of **detectability, not explained variance**, the two being variances of
+different dependent variables: holding data, controls, and fixed effects identical,
+the ratio buries the economic signal in outlier noise while the log difference
+recovers it. That is the evidence for H1.
 
 ```{r}
 #| label: tbl-static
@@ -739,8 +735,8 @@ sev <- function(m, v) {
     sprintf("(%.4f)", ct[v, 2])
 }
 vars <- c(
-    ln_urban_density = "ln(Urban Density)", net_migr_pct = paste0("Net Migration (", pc, " Pop)"),
-    ln_gdp_pc = "ln(GDP per capita)", urban_pop_share = "Urban Pop. Share"
+    ln_urban_density_L = "ln(Urban Density)[t−1]", net_migr_pct = paste0("Net Migration (", pc, " Pop)"),
+    ln_gdp_pc = "ln(GDP per capita)", urban_pop_share_L = "Urban Pop. Share[t−1]"
 )
 # two physical rows per variable (estimate, then SE) so zebra shading fills cleanly
 body <- do.call(rbind, lapply(names(vars), function(v) {
@@ -769,7 +765,7 @@ k <- knitr::kable(rbind(body, gof),
     format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "c", "c")
 ) |>
-    kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9) |>
+    kableExtra::kable_styling(font_size = 9) |>
     kableExtra::row_spec(c(coef_grey, gof_grey), background = "#efefef") |>
     kableExtra::row_spec(nb, hline_after = TRUE)
 if (out_fmt == "latex") {
@@ -829,80 +825,195 @@ tab[[1]] <- esc(tab[[1]])
 nb <- nrow(coef_long)
 coef_grey <- as.vector(sapply(which(seq_len(ncoef) %% 2 == 1), function(k) c(2 * k - 1, 2 * k)))
 gof_grey <- nb + which(seq_len(nrow(gof)) %% 2 == 1)
+notes_gmm <- c(
+    "*** p<0.01, ** p<0.05, * p<0.1.",
+    "Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer correction (Windmeijer, 2005) in the GMM columns, where the lagged dependent variable is instrumented by lags 2 to 5 of BpCR with a collapsed instrument matrix."
+)
 kbl <- knitr::kable(tab,
     format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", rep("c", ncol(tab) - 1)), row.names = FALSE
 ) |>
-    kableExtra::kable_styling(latex_options = c("HOLD_position", "scale_down")) |>
+    kableExtra::kable_styling(latex_options = c("scale_down"), font_size = 8) |>
     kableExtra::row_spec(c(coef_grey, gof_grey), background = "#efefef") |>
     kableExtra::row_spec(nb, hline_after = TRUE) |>
     kableExtra::column_spec(6, border_right = TRUE) |>
     kableExtra::add_header_above(c(" " = 1, "Fixed Effects" = 5, "GMM (Bias-Corrected)" = 2)) |>
     kableExtra::add_header_above(c(" " = 1, "Dependent variable: BpCR" = 7))
-x <- as.character(kbl)
 if (knitr::is_latex_output()) {
+    kbl <- kbl |> kableExtra::footnote(
+        general = notes_gmm, general_title = "",
+        footnote_as_chunk = FALSE, escape = FALSE, threeparttable = TRUE
+    )
+    x <- as.character(kbl)
     x <- sub("(Period FE[^\n]*\\\\\\\\)", "\\1\n\\\\midrule", x) # LaTeX-only mid-rule
     cat(x)
 } else {
-    cat("```{=html}\n", x, "\n```\n", sep = "") # raw HTML so pandoc does not re-parse the table
+    x <- as.character(kbl)
+    cat("```{=html}\n", x,
+        "\n<p style=\"font-size:.8rem;color:#4b5563;margin:.3rem 0 1rem;text-align:left\">",
+        gsub("<", "&lt;", paste(notes_gmm, collapse = " ")),
+        "</p>\n```\n",
+        sep = ""
+    )
 }
 ```
 
-\vspace{-1.0em}
+*Path-dependence (H5).* The lagged term is positive and significant in every
+estimator, so per-capita land use is unambiguously path-dependent; its precise
+magnitude, though, we do not pin down, and report as a range rather than a point.
+The @bond2002 bracket bounds a consistent $\rho$ between the downward-biased within
+estimate ($`r sprintf("%.2f", gmm$rho_check$fe)`$) and the upward-biased pooled OLS
+($`r sprintf("%.2f", gmm$rho_check$ols)`$). The estimates within it disagree
+informatively: the full-model difference GMM ($`r sprintf("%.2f", gmm$rho_check$ab)`$,
+@tbl-gmm) even falls below the lower bound, but its Hansen test fails, so we do not
+read it. Removing the density and urban-share controls, which are arithmetically
+entangled with BpCR (@eq-decomp) and contaminate $\rho$ in the differenced equation,
+restores moment validity and lifts the estimate: @tbl-rholadder puts it between
+$0.34$ and $0.46$ across the specifications whose Hansen tests clear the threshold,
+close to the value the @nickell1981 correction implies
+($`r sprintf("%.2f", gmm$rho_check$implied_T8)`$); the first-stage $F$ of
+`r sprintf("%.1f", gmm$rho_check$first_stage_F)` does not indicate a weak-instrument
+problem. (The system estimator lands nearby, at $0.45$, but since its own Hansen test
+fails we treat that as coincidence, not corroboration.) We conclude that persistence
+is substantial, plausibly a third to a half of one period's growth, but decline to
+report a single coefficient, since the full-model moment failure is exactly why the
+data do not pin one down.
 
-\footnotesize
-*Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by country in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 5 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (the differenced-equation set for Arellano-Bond; the larger level-equation set for Blundell-Bond) and is therefore not directly comparable across columns or to the 1,538 raw country-periods.
-\normalsize
+```{r}
+#| label: tbl-rholadder
+#| tbl-cap: "Persistence and its diagnostics as controls enter (difference GMM). Each row adds controls to the same AR(1) dynamic model on the same sample; Arellano-Bond standard errors in parentheses. The Bond (2002) bracket is [FE within, pooled OLS], and the last column is the Arellano-Bond Hansen over-identification p-value. The clean specifications (through income) clear the test and lie inside the bracket; only the arithmetically entangled density and urban-share controls (bottom row) push the estimate below the bracket, and neither this row's Hansen test nor Blundell-Bond's clears the conventional threshold. The full row is the model whose control coefficients @tbl-gmm reports."
+rl <- as.data.frame(gmm$rho_ladder, stringsAsFactors = FALSE, check.names = FALSE)
+rl <- rl[, c("Specification", "Pooled OLS", "FE (within)", "Arellano-Bond", "AB in bracket", "AB Hansen (p)")]
+knitr::kable(rl,
+    format = out_fmt, booktabs = TRUE, escape = TRUE, linesep = "",
+    align = c("l", "r", "r", "r", "c", "r"), row.names = FALSE
+) |>
+    kableExtra::kable_styling(latex_options = c("scale_down"), font_size = 9) |>
+    kableExtra::row_spec(4, background = "#efefef")
+```
 
-Recall that BpCR is an annual logarithmic growth rate of built-up area per capita,
-so a coefficient measures the change in that growth rate and the coefficients on
-logged regressors are semi-elasticities.
+*Net migration (H4).* Of the four drivers, net in-migration is the only one whose
+association is not overturned as an artefact. We read its coefficient primarily from
+**fixed effects** ($-0.0064$), immune to the Hansen concerns above since it needs no
+instruments; Arellano-Bond corroborates closely ($-0.0062$) despite its own marginal
+Hansen test, and Blundell-Bond, whose Hansen test fails outright, lands nearby
+($-0.0052$, @tbl-gmm) but carries no independent weight here. The coefficient is
+negative, highly significant, and stable across development groups (@tbl-hetero) and
+timings (@tbl-timingfe). Its interpretation
+needs care in two directions. The negative *sign* is close to mechanical: net
+migration is itself a strong driver of urban population, which enters BpCR negatively
+(@eq-decomp), so once construction lags population over the five-year window a
+negative coefficient follows almost by construction. But the result is not *merely*
+mechanical, and we do not dismiss it as such. The decomposition^[The three figures are
+the net-migration coefficient from one and the same two-way fixed-effects
+specification (identical controls, fixed effects, and sample) estimated on each
+additive component of BpCR in turn, the population growth rate PGR(log), the land
+growth rate LCR(log), and BpCR itself; since
+$\text{BpCR}=\text{LCR}_{\log}-\text{PGR}_{\log}$ by construction, the identity carries
+to the coefficients ($0.24-0.88=-0.64$, in percentage points a year, i.e. 100 times
+the raw $-0.0064$ of @tbl-gmm).] shows a one-point rise in net in-migration going with
+urban population growth higher by about
+`r sprintf("%.2f", 100*gmm$mig_decomp$pgr[[1]])` percentage points a year *and*
+built-up growth higher by about `r sprintf("%.2f", 100*gmm$mig_decomp$lcr[[1]])`, so
+per-capita land falls by the difference
+($`r sprintf("%.2f", 100*gmm$mig_decomp$bpcr[[1]])`$). That built-up response is a
+genuine behavioural elasticity, not part of any identity, and its size relative to
+population, cities building for migrants at only about a quarter the rate over five
+years, is the informative, behaviourally meaningful content of the result, a
+structural fact about how slowly the built stock adjusts. What the negative
+coefficient alone does *not* license is reading it as evidence that migration
+triggers deliberate densification, a claim H4 never made and this design cannot test.
+Migrants also plausibly select into fast-building economies, so treating
+migration as strictly exogenous is a genuine simplification, but two checks bound its
+cost. It passes a Wooldridge lead test (future migration does not predict current
+BpCR, $p=`r sprintf("%.2f", gmm$mig_exog$lead[["Pr(>|t|)"]])`$), and relaxing the
+assumption barely moves the estimate: treated as *predetermined* and instrumented by
+its own lags it returns
+$`r sprintf("%.4f", gmm$mig_exog$predeterm$coef[["Estimate"]])`$ against the baseline
+$-0.0062$, and only the fully *endogenous* treatment, resting on deep lags of a short
+panel, attenuates it (to
+$`r sprintf("%.4f", gmm$mig_exog$endo$coef[["Estimate"]])`$, insignificant). Strict
+exogeneity is thus a simplification, not a material source of bias here; because
+selection still cannot be ruled out, we report the coefficient as a conditional
+association, not a causal effect. It is, moreover, only the *international* channel:
+the internal rural-to-urban migration that dominates urban growth in developing and
+least-developed countries is unobserved here (@sec-discussion), so even this
+association captures the smaller part of the migration story.
 
-*Path-dependence (H5).* In the preferred Arellano-Bond estimate of @eq-dynamic, the
-lagged term is large and highly significant, $\rho = 0.61$: about three-fifths of a
-country's per-capita land-use growth carries into the next period, and more than a
-third still remains two periods later ($0.61^2 \approx 0.37$). The GMM estimate is
-nearly three times the fixed-effects estimate ($\rho = 0.23$), exactly the
-direction and magnitude the Nickell bias predicts; sprawl, once underway, is
-sticky.
+*Urban density (H2).* Entered at $t-1$, density is *positive* under fixed effects
+($+0.014$, significant) and Arellano-Bond ($+0.037$, significant) but essentially zero
+under Blundell-Bond ($-0.001$, insignificant), so the estimators disagree and density
+is not robustly identified in the GMM; we do not rely on its magnitude. (Its $t-1$
+value is $+0.009$, insignificant, on the smaller common-timing sample of
+@tbl-timingfe, against $+0.014$ on the full 1,499; both small and positive.) The
+*negative* compact-city coefficient appears only under contemporaneous timing, a
+spurious sign from @eq-decomp; the arithmetically clean $t-2$ coefficient is $+0.011$
+($p<0.05$), which is a weak but genuine result, past *settlement* density goes with
+slightly *more* land per capita, the opposite of the compact-city direction. The $t-1$
+and $t-2$ estimates are themselves statistically indistinguishable from one another, so
+we do not read $t-1$ as showing the theory's predicted contamination *in excess of* a
+clean baseline; @eq-decomp predicts only that $t-1$'s bias runs the same, non-negative
+direction as the clean estimate, not a specific magnitude above it, and the sharply
+identified part of the evidence is the large sign reversal between $t$ and the lagged
+timings, not a $t-1$-versus-$t-2$ comparison. That
+control is settlement density (population per urban-cell area), though, not the
+*built-up* density the compact-city mechanism turns on, which shares *both* $V$ and
+the population term of BpCR, is even more entangled with it (@eq-decomp), and so is
+not cleanly identifiable in a per-capita design. We therefore neither confirm nor
+refute the built-up compact-city mechanism; we show that the negative coefficient
+routinely reported for it is a timing artefact, and that the one clean density
+estimate available points, weakly, against it. @tbl-timingfe also shows net migration
+immovable across all three timings ($-0.006$ throughout), the mark of a control that
+shares no growth term with the dependent variable.
 
-*Urban density (H2).* Log urban density enters at $-0.052$ and highly significant:
-holding income and migration fixed, a 10% higher density is associated with roughly
-$0.005$ lower annual BpCR, sizeable against a median BpCR of about $0.004$: the
-compact-city mechanism, where dense settlement accommodates new residents by
-building up rather than out.
+```{r}
+#| label: tbl-timingfe
+#| tbl-cap: "Clean-timing check (two-way fixed effects, one common sample): the two population-sharing controls entered contemporaneously (t), lagged (t-1), and double-lagged (t-2). The t-2 double lag costs each country a further epoch, so the common sample is 1,336 country-periods, not the main model's 1,499. Only the t-2 column shares no term with the dependent variable (@eq-decomp) and is therefore the arithmetically clean reading. Urban density flips from a spurious negative at t to a small positive at the clean t-2, while net migration is immovable across all three timings. Estimate with standard error in parentheses."
+tf <- as.data.frame(gmm$timing_fe, stringsAsFactors = FALSE, check.names = FALSE)
+tf[-1] <- lapply(tf[-1], function(x) gsub("<br>", " ", x, fixed = TRUE))
+if (knitr::is_latex_output()) tf[] <- lapply(tf, function(x) gsub("%", "\\%", x, fixed = TRUE))
+knitr::kable(tf,
+    format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
+    align = c("l", "c", "c", "c"),
+    col.names = c("", "Both $t$", "Both $t\\text{-}1$", "Both $t\\text{-}2$ (clean)"),
+    row.names = FALSE
+) |>
+    kableExtra::kable_styling(latex_options = "scale_down", font_size = 9) |>
+    kableExtra::row_spec(2, background = "#efefef") |>
+    kableExtra::add_header_above(c(" " = 1, "Timing of density and urban share" = 3))
+```
 
-*Income (H3).* Log GDP per capita enters negative and significant at $-0.014$: a
-doubling of income is associated with about $0.010$ lower annual BpCR. This is the
-paper's central substantive result: over time, as a country grows richer, its
-per-capita land use falls, consistent with income funding infill, vertical
-development, and tighter regulation (we contrast this with the cross-section in
-@sec-discussion).
+*Income (H3).* Log GDP per capita carries its expected negative sign in every
+specification but is **not** significant in the preferred column ($-0.006$,
+$p = 0.17$) or elsewhere; the sign is stable, the precision is not. We therefore do
+**not** claim H3 is supported and read the sign as suggestive only, noting that part
+of its apparent significance in earlier single-year-migration versions was migration
+variation, absorbed once the flow is window-matched (@sec-data).
 
-*Net migration (H4).* International net migration is negative and marginally
-significant ($-0.0005$): each additional percentage point is associated with
-slightly lower per-capita land use, consistent with in-migrants being absorbed into
-the existing stock faster than the footprint expands. This is the international
-channel only; internal migration is unobserved (@sec-discussion).
+*Urban population share.* Once lagged, the stage of urbanisation is insignificant, so
+what matters is the urban *form* a country builds, not how far along the transition
+it already is.
 
-*Urban population share.* The level of urbanisation is insignificant once the
-other drivers are controlled, indicating that what matters is the urban *form*
-(how densely a country builds) rather than the *stage* of urbanisation (how urban
-it already is).
-
-
-
-The two estimators use 1,351 (Arellano-Bond) and 1,544 (Blundell-Bond) observations
-and 15 versus 21 instruments; the gap between the two counts is mechanical, not a
-contradiction (@sec-strategy). Both pass the diagnostic tests: the
-Hansen $J$ test does not reject the over-identifying restrictions ($p=0.44$ and
-$0.14$), AR(1) is significant while AR(2) is not (AR(2) $p=0.71$ and $0.47$), and
-the instrument counts (15 and 21) stay well below the 193 countries.
-Blundell-Bond confirms the headline results, near-identical persistence
-($\rho = 0.59$) and a significant negative migration coefficient, but attenuates
-the density and income terms towards zero (income becomes insignificant); as its
-extra levels moments rest on a stationarity assumption a trending series can
-violate, we read the controls from the preferred Arellano-Bond column.
+A word on the over-identification tests is in order, because in the *full* model
+they are not comfortable: with only 15 and 21 instruments (so this is not instrument
+proliferation) neither clears the conventional threshold, the Arellano-Bond Hansen
+$J$ at $p=0.05$ and Blundell-Bond at $p=0.01$. We do not paper over it: a failing
+Hansen
+test leaves the over-identifying restrictions unvalidated, so the *full-model* GMM
+estimates, $\rho$ in particular, cannot be read as consistent, and we do not
+interpret them. Nothing load-bearing rests on those columns. The four control
+coefficients are read from the **fixed-effects columns**, which need no instrument
+validity; Arellano-Bond agrees with them in sign throughout, and in significance for
+the two coefficients that are significant at all, density and migration. Only
+migration, though, also matches closely in magnitude ($-0.0064$ vs $-0.0062$,
+@tbl-gmm); density's magnitude diverges sharply between the two estimators (as
+already noted above), and income's and urban share's estimates, being insignificant
+in both columns, are too imprecise for their (also divergent) magnitudes to carry
+much weight either way. GMM enters only to bound the Nickell bias on
+$\rho$, which we report as a range (@tbl-rholadder), never from the full model but
+from the moment-valid specifications whose own Hansen tests clear the threshold; even
+there we decline a point estimate, for the reasons given above. AR(2) holds
+throughout ($p=0.76$).
 
 ## Heterogeneity by Development Group
 
@@ -910,7 +1021,7 @@ violate, we read the controls from the preferred Arellano-Bond column.
 ```{r}
 #| label: tbl-hetero
 #| results: asis
-#| tbl-cap: "Heterogeneity: static two-way fixed-effects BpCR model by United Nations development group (same estimation sample as the static metric comparison above)."
+#| tbl-cap: "Heterogeneity: static two-way fixed-effects BpCR model by United Nations development group (same estimation sample as the static metric comparison above). The density and urban-share coefficients are entered at t-1 and carry the timing artefact of @eq-decomp; they are shown for completeness but not interpreted (the large LDC urban-share value collapses to insignificance at the clean t-2 timing). Only the net-migration row is read from this table."
 suppressMessages({
     library(fixest)
     library(dplyr)
@@ -919,13 +1030,17 @@ sph <- panel |>
     filter(year <= 2020, !is.na(bpcr), !is.na(lcrpgr_log)) |>
     arrange(iso3, year) |>
     group_by(iso3) |>
-    mutate(bpcr_L = lag(bpcr)) |>
+    mutate(
+        bpcr_L = lag(bpcr), ln_urban_density_L = lag(ln_urban_density),
+        urban_pop_share_L = lag(urban_pop_share)
+    ) |>
     ungroup() |>
     filter(
         !is.na(ln_urban_density), !is.na(urban_pop_share), !is.na(ln_gdp_pc),
-        !is.na(net_migr_pct), !is.na(bpcr_L), !is.na(income_group)
+        !is.na(net_migr_pct), !is.na(bpcr_L), !is.na(ln_urban_density_L),
+        !is.na(urban_pop_share_L), !is.na(income_group)
     )
-ctrl <- "ln_urban_density + urban_pop_share + ln_gdp_pc + net_migr_pct"
+ctrl <- "ln_urban_density_L + urban_pop_share_L + ln_gdp_pc + net_migr_pct"
 fit <- function(g) {
     feols(as.formula(paste("bpcr ~", ctrl, "| iso3 + year")),
         filter(sph, income_group == g),
@@ -946,8 +1061,8 @@ sev <- function(m, v) {
 }
 nC <- function(g) as.character(n_distinct(filter(sph, income_group == g)$iso3))
 vars <- c(
-    ln_urban_density = "ln(Urban Density)", net_migr_pct = paste0("Net Migration (", pc, " Pop)"),
-    ln_gdp_pc = "ln(GDP per capita)", urban_pop_share = "Urban Pop. Share"
+    ln_urban_density_L = "ln(Urban Density)[t−1]", net_migr_pct = paste0("Net Migration (", pc, " Pop)"),
+    ln_gdp_pc = "ln(GDP per capita)", urban_pop_share_L = "Urban Pop. Share[t−1]"
 )
 body <- do.call(rbind, lapply(names(vars), function(v) {
     data.frame(
@@ -977,7 +1092,7 @@ k <- knitr::kable(rbind(body, gof),
     format = out_fmt, booktabs = TRUE, escape = FALSE, linesep = "",
     align = c("l", "c", "c", "c")
 ) |>
-    kableExtra::kable_styling(latex_options = "HOLD_position", font_size = 9) |>
+    kableExtra::kable_styling(font_size = 9) |>
     kableExtra::row_spec(c(coef_grey, gof_grey), background = "#efefef") |>
     kableExtra::row_spec(nb, hline_after = TRUE) |>
     kableExtra::add_header_above(c(" " = 1, "Dependent variable: BpCR" = 3))
@@ -998,98 +1113,121 @@ if (out_fmt == "latex") {
 }
 ```
 
-The pooled model imposes a common slope on a very heterogeneous set of countries:
-the response of urban land use to income need not be the same in Germany as in
-Nigeria. @tbl-hetero relaxes this by estimating the static model of @eq-static
-separately for the three United Nations development groups, on the same
-estimation sample as @tbl-static. We use the static fixed-effects estimator rather
-than GMM here because the subgroups (44 to 101 countries) are too small for the
-deep-lag instruments to be reliable.
+The pooled model imposes a common slope on a heterogeneous set of countries.
+@tbl-hetero relaxes this by estimating the static model of @eq-static separately for
+the three UN development groups on the same sample as @tbl-static, using the static
+fixed-effects estimator because the subgroups (44 to 101 countries) are too small
+for the deep-lag GMM instruments to be reliable.
 
-Three patterns stand out. First, the compact-city effect of density is present in
-every group but strengthens markedly from the developed (about $-0.015$,
-significant only at the 10\% level) through the developing ($-0.018$) to the
-least-developed countries ($-0.031$, both at the 5\% level): where
-cities are still forming, denser settlement absorbs new residents most strongly.
-Second, the income-densification result, the paper's central finding, carries its
-expected negative sign in all three groups, so it is not a rich-country artefact;
-it is estimated most precisely in the developed and developing groups (significant
-at the 5\% level) and is larger but noisier in the small least-developed subsample
-(significant only at the 10\% level). Third, net migration densifies in the
-developed and developing groups but is insignificant, and wrongly signed, for the
-least-developed countries, consistent with international migration mattering little
-there relative to the internal rural-to-urban flows that our national measure
-cannot capture.
+Three patterns stand out. First, and most important, the net-migration association
+is negative, highly significant, and near-identical across all three groups (about
+$-0.0065$ in each, $p<0.01$), so the headline result is not confined to any
+development stage. Second, income carries its expected negative sign in every group
+but is not significant in any of them, consistent with the null in the pooled
+model. Third, the urban-form coefficients (density and urban share) in this table are
+entered at $t-1$ and so carry the same timing artefact as the main model (@eq-decomp,
+@tbl-timingfe): we show them for completeness but do not interpret them, and read
+only migration from the table. The starkest illustration is the large, significant
+urban-share coefficient among the least-developed countries ($+0.112$); re-estimated
+at the clean $t-2$ timing on that sub-sample it falls to $+0.045$ and loses
+significance ($p=0.16$), exactly the collapse the artefact predicts, so it is a
+measurement artefact, not a genuine least-developed-country effect, and none of the
+urban-form terms reproduces the compact-city negative sign.
 
 ## Hypotheses
 
-Taken together, the results broadly support the five hypotheses, with two
-qualifications noted below. The metric comparison supports **H1** (BpCR is the
-more reliable, better-fitting metric); the dynamic model supports **H3** (income
-reduces land per capita, within countries) and **H5** (per-capita land use is
-strongly path-dependent). **H2** (density reduces land per capita) is supported in
-sign and significance but should be read with caution: because the per-capita
-dependent variable and the per-area density control share the population term, part
-of the contemporaneous compact-city estimate is mechanical, and the coefficient
-flips when density is entered with a lag (see the footnote in @sec-strategy).
-**H4** (international in-migration densifies) holds in the developed and developing
-groups but not in the least-developed countries, where the relevant internal
-rural-to-urban migration is unobserved.
+The metric comparison supports **H1** (BpCR is the more reliable, better-fitting
+metric), and the dynamic model supports **H5** in direction (per-capita land use is
+path-dependent), though the magnitude of persistence is only bracketed, not
+point-identified (@sec-results).
+**H4** (international in-migration is associated with less land per capita) is
+supported empirically, but only partially as originally intended: it is the one
+association that survives every estimator, group, and timing, yet its negative
+*sign* is close to mechanical (migration drives urban population, which enters BpCR
+negatively), so it is not evidence of deliberate densification the way H4 was framed;
+its *magnitude*, the slower five-year adjustment of the built stock relative to
+population, is nonetheless a genuine behavioural quantity (@sec-results). The other
+two hypotheses are not supported. **H2** (density reduces
+land per capita): the negative compact-city coefficient conventionally reported is a
+measurement artefact (@eq-decomp), turning positive and significant at the clean $t-2$
+timing, so the one clean estimate available points weakly *against* the compact-city
+direction rather than merely being silent on it; because the proper compact-city
+variable (built-up density) is even more entangled, though, we read this as tentative
+rather than as refuting compact cities outright.
+**H3** (income reduces land per capita) carries a
+consistently negative sign but cannot be distinguished from zero, so we read it as
+suggestive only.
 
 # Discussion {#sec-discussion}
 
 ## Interpretation and Relation to the Literature
 
-The headline result is that, *within* a country, higher income is associated with
-*less* land consumed per urban resident. This only seems to contradict the
-established literature, in which richer countries are the more sprawled ones,
-because the two findings operate on different margins. *Across* countries at a
-point in time, higher income coincides with larger footprints through bigger
-dwellings and car-based mobility, the cross-sectional pattern documented by
-@seto2011meta and @oueslati2015sprawl. *Within* a country over time, by contrast,
-growing richer is associated with densification, as income funds infill, vertical
-construction, redevelopment, and tighter land-use regulation. Our country fixed
-effects isolate this second margin, which cross-sectional designs cannot recover,
-so we extend rather than overturn the drivers literature: the sign of the income
-relationship depends on whether one compares countries or follows one over time.
-The development-group analysis in @tbl-hetero sharpens this: the income
-relationship is negative in every group, but the compact-city density channel is
-markedly stronger in the developing and least-developed economies, where urban
-form is still being set, than in the already-dense developed group.
+Our results are, above all, a caution about reading behavioural drivers off
+per-capita metrics. @seto2011meta and @oueslati2015sprawl identify income and
+population growth as the leading drivers of urban expansion; on BpCR, once its
+arithmetic is respected, none survives as a clean *sign*-identified behavioural
+driver. Migration, the only association left standing, has a negative sign that is
+close to mechanical, because migration drives urban population, which enters BpCR
+negatively, so a negative coefficient follows almost by construction once the built
+stock lags population. Its magnitude, however, is a genuine behavioural quantity: the
+decomposition shows built-up area grows with migration at only about a quarter the
+rate of population, a real measure of how slowly land tracks people (@sec-results). Income is a null, negative everywhere but
+indistinguishable from zero, in part because measuring migration over the dependent
+variable's five-year window absorbs variation that earlier single-year specifications
+left for income to pick up (@sec-data).
 
-The results also bear directly on the measurement debate. @nicolau2019lcrpgr argue
-on formal grounds that the official LCRPGR ratio is unstable, and @Lu2026 show that
-land-use-efficiency estimates are highly sensitive to the underlying data; our
-single-dataset metric comparison (@tbl-static) adds the complementary demonstration
-that the choice of metric, and not only the choice of data, can determine the
-conclusions one draws about sustainable urbanisation.
+The urban-form finding is a methodological caution (@sec-results): any per-capita
+regression controlling for density at the dependent variable's own date recovers a
+negative compact-city coefficient whether or not the mechanism exists, because
+population enters BpCR with opposite signs at $t$ and $t-1$ (@eq-decomp); the
+mechanism proper, resting on the still more entangled built-up density, is not
+identifiable this way. On measurement, where @nicolau2019lcrpgr argue formally that
+LCRPGR is unstable and @Lu2026 show its estimates are data-sensitive, our
+single-dataset comparison (@tbl-static) adds that the choice of metric, not only of
+data, can determine the conclusions drawn about sustainable urbanisation.
 
-## Limitations and Future Research
+## Limitations and Future Research {#sec-limitations}
 
 Several caveats apply. First, the estimates are associations, not causal effects:
-the GMM corrects the lagged-DV bias and the fixed effects absorb a large class of
-confounders, but the controls may still be correlated with omitted determinants of
-land use. Second, the five-year epochs capture medium-run trajectories rather than
-short-run adjustment. Third, the analysis area uses a fixed urbanisation threshold
-(GHS-SMOD of at least 21); alternative thresholds would shift the urban boundary
-and could affect the levels, if not the within-country patterns. Fourth, the
-satellite-based layers and national economic aggregates carry measurement error; in
-particular, net migration is national and so reflects international migration only,
-missing the internal rural-to-urban flows that often dominate urban expansion in
-developing countries, so the migration channel is likely understated. The panel
-also applies present-day boundaries retroactively: for the post-Soviet,
-ex-Yugoslav, and Czechoslovak successors, pre-dissolution quantities are
-reconstructed within today's borders, but a GDP control is unavailable wherever the
-country did not yet exist as a separate reporting unit. This leaves 37
-country-periods across 29 countries without a GDP control, which complete-case
-estimation drops: 29 countries lack a 1985 value, namely 23 post-Soviet,
-ex-Yugoslav, and Czechoslovak successors that did not yet exist as separate
-reporting states, plus Eritrea, Ethiopia, Sudan, South Sudan, Timor-Leste, and
-Yemen, whose national accounts, on today's borders, similarly begin only after a
-later independence or border change; Sudan and South Sudan (which split in 2011)
-additionally lack 1990--2005 values. Finally, the pooled
-specification imposes a common slope, whereas @tbl-hetero shows the income and
-density relationships, though consistent in sign, vary in strength across groups.
+the fixed effects absorb a large class of confounders and the GMM corrects the
+lagged-DV bias, but the controls are treated as strictly exogenous. For migration
+this simplification is bounded (@sec-results): it passes a lead test and is
+invariant to a predetermined treatment, yet selection into fast-building economies
+cannot be fully ruled out, so we read it as a conditional association. For density
+the within/first-difference divergence is consistent with a violation of strict
+exogeneity (though measurement error could also contribute), which is why we read
+its sign from the clean $t-2$ timing rather than interpret its GMM magnitude. Income
+we do not interpret in any case, so its exogeneity is moot. Second, the five-year
+epochs capture
+medium-run trajectories rather than short-run adjustment. Third, and more seriously,
+the urban area uses a fixed threshold (SMOD at least 21) on the *multitemporal* mask,
+so a cell's urban membership is recomputed each epoch: when a low-density fringe cell
+first crosses the threshold, its land and residents enter the urban set together,
+mechanically raising measured per-capita land at the margin. This composition effect
+can inflate the descriptive "sprawl is the norm" finding; it bears less on the
+within-country coefficients, identified net of country and period fixed effects,
+though it is not fully absorbed by them. A fixed final-epoch mask and alternative
+thresholds are the natural robustness reanalyses and the main measurement extension
+of this work.
+Fourth, and most consequentially, our net-migration series is national and captures
+*international* migration only, whereas the dominant engine of urban growth and
+sprawl, especially in developing and least-developed countries, is *internal*
+rural-to-urban migration, which is unobserved here. The surviving migration
+association thus captures only the smaller international slice; the principal
+migration driver of urban land use lies outside the design entirely, a further
+reason we do not present this as identifying the main drivers of sprawl. This scope
+limitation is also, more precisely, an omitted-variable concern: if internal
+migration correlates with international net migration within a country over time
+and independently affects BpCR, the international coefficient is not fully
+insulated from it. We cannot rule this out without ADM2-level data, but the likely
+direction is informative: since internal migration plausibly lowers BpCR through the
+same absorption channel as international migration, a positive within-country
+correlation between the two would inflate our coefficient's magnitude rather than
+reverse its sign, so the qualitative finding is more robust to this omission than its
+precise size. Fifth, the panel applies present-day boundaries
+retroactively, so a GDP control is unavailable wherever a country did not yet exist
+as a separate reporting unit, leaving 37 country-periods, mostly 1985 successor
+states, that complete-case estimation drops.
 These point to natural extensions: a sub-national analysis exploiting the ADM2
 detail in the data, which would also measure internal migration
 directly;^[A first such case study, for Germany at the *Kreis* level, is provided as supplementary material at <https://ofurkancoban.github.io/UrbanLandUseEfficiency_DevEconResearchProj/05_paper/supplementary.pdf>.]
@@ -1098,25 +1236,50 @@ practical, stable complement to LCRPGR in official SDG 11.3.1 monitoring.
 
 # Conclusion {#sec-conclusion}
 
-Urban sprawl is real and measurable: across 1985--2020, built-up area per capita
-rose in almost two-thirds of country-periods. The difficulty is
-not the phenomenon but the yardstick. The official LCRPGR is unstable by
-construction, producing sign-flipping outliers exactly where land-use efficiency
-matters most; our log-based Built-up per Capita Rate is finite and
-interpretable for every country-period and reproduces the policy signal without the
-instability, raising within-country explanatory power by a factor of about
-`r r2ratio` on identical data.
+Urban sprawl is real and measurable, if modest in pace: across 1985--2020, built-up
+area per capita rose in 63% of country-periods (67% of countries on average), though
+by a slow median of about 0.4% a year. The difficulty is not the phenomenon but the
+yardstick. The official LCRPGR is unstable by construction, producing
+sign-flipping outliers exactly where land-use efficiency matters most; our log-based
+Built-up per Capita Rate is finite and interpretable for every country-period with an
+observed urban settlement and
+recovers, on identical data, an economic signal the official ratio leaves
+statistically undetectable at the 5% level. That demonstration, rather than the
+metric itself, is our contribution to the measurement debate.
 
 Using this stable metric on a dynamic panel of 193 United Nations member states, we
-find that per-capita urban land use is strongly path-dependent and, within
-countries, declines with urban density, net in-migration, and income, so that
-economic growth over time is accompanied by densification rather than sprawl. The
-income result is the more robust of the two associations; the density association,
-while consistent in sign, is partly mechanical (@sec-strategy) and should be read
-as suggestive of the compact-city channel rather than as a clean causal estimate.
-The contribution is as much methodological as substantive. For monitoring
+find per-capita urban land use clearly path-dependent, though its persistence is only
+bracketed once the dynamic model's failing moment conditions are respected. The
+search for behavioural drivers is, tellingly, mostly negative: the negative density
+coefficient widely cited as compact-city evidence is an artefact of the metric's own
+arithmetic (and the mechanism proper, resting on the even more entangled built-up
+density, is not cleanly testable in a per-capita design); income cannot be
+distinguished from zero; and the one association that survives, net in-migration, has
+a mechanical negative sign but a behaviourally meaningful magnitude, a descriptive
+regularity robust across estimator, timing, and the checks of @sec-results, though
+still a single reduced-form association to be weighted accordingly. The substantive
+contribution is thus modest and the methodological one central: for monitoring
 sustainable urbanisation, the choice of metric is not a technicality but a
-precondition for drawing the right conclusions.
+precondition for drawing the right conclusions, and per-capita metrics can manufacture
+the very drivers they appear to detect.
+
+# Data and Code Availability {.unnumbered}
+
+All data are drawn from open, official sources (GHSL, GAUL, and the UN series cited
+in @sec-data), and the complete pipeline that builds the panel and produces every
+result is openly available in the replication repository
+(<https://github.com/ofurkancoban/UrbanLandUseEfficiency_DevEconResearchProj>).
+For space, several further supporting analyses referenced in the text are reported
+there rather than in the paper, and leave the conclusions unchanged: the four-way
+Arellano-Bond timing decomposition (the fixed-effects clean-timing check itself is
+@tbl-timingfe here); the strict-exogeneity diagnostics for density (within versus
+first-difference, plain-OLS and predetermined/endogenous instrumenting) and for
+migration (the Wooldridge lead test and predetermined/endogenous treatments); the
+instrument-depth robustness for $\rho$; the net-migration outlier robustness
+(single-outlier and crisis-country exclusion, and endpoint-year timing) and its
+small-cluster wild cluster bootstrap; the income-timing check; and the panel
+unit-root and incremental-Hansen tests underlying the choice between the difference
+and system GMM estimators.
 
 # References {.unnumbered}
 

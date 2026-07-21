@@ -2345,8 +2345,9 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#data-and-method" id="toc-data-and-method" class="nav-link active" data-scroll-target="#data-and-method"><span class="header-section-number">1</span> Data and Method</a></li>
   <li><a href="#drivers-of-per-capita-land-use" id="toc-drivers-of-per-capita-land-use" class="nav-link" data-scroll-target="#drivers-of-per-capita-land-use"><span class="header-section-number">2</span> Drivers of Per-Capita Land Use</a></li>
-  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">3</span> Limitations</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">4</span> Conclusion</a></li>
+  <li><a href="#sec-timing-deu" id="toc-sec-timing-deu" class="nav-link" data-scroll-target="#sec-timing-deu"><span class="header-section-number">3</span> Timing and the Compact-City Artefact</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">4</span> Limitations</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5</span> Conclusion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="supplementary.pdf"><i class="bi bi-file-earmark-pdf"></i>Supplementary (PDF)</a></li><li><a href="paper.html"><i class="bi bi-file-earmark-text"></i>Main paper (HTML)</a></li><li><a href="paper.pdf"><i class="bi bi-file-earmark-pdf"></i>Main paper (PDF)</a></li><li><a href="../04_presentation/presentation.html"><i class="bi bi-easel"></i>Presentation (slides)</a></li><li><a href="../04_presentation/presentation.pdf"><i class="bi bi-file-earmark-pdf"></i>Presentation (PDF)</a></li><li><a href="https://github.com/ofurkancoban/UrbanLandUseEfficiency_DevEconResearchProj"><i class="bi bi-file-earmark-zip"></i>Replication Package</a></li></ul></div></nav>
@@ -2356,7 +2357,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Urban Land-Use Efficiency</h1>
-<p class="subtitle lead">Supplementary Material · Sub-national Case Study: Germany (Kreis Level) : 400 German Districts x 1990-2020 Panel Data Analysis</p>
+<p class="subtitle lead">Supplementary Material · Sub-national Case Study: Germany (Kreis Level), Why Per-Capita Designs Cannot Cleanly Identify Its Drivers : 400 German Districts x 2000-2020 Panel Data Analysis</p>
 </div>
 
 
@@ -2390,7 +2391,7 @@ window.Quarto = {
 <div>
   <div class="abstract">
     <div class="block-title">Abstract</div>
-    <p>This supplement replicates the paper’s driver analysis for the Built-up per Capita Rate (BpCR) at the sub-national level, using Germany (district / <em>Kreis</em> level) as a case study, and brings in internal (within-country) migration, which the national analysis cannot observe. It asks whether the within-country income-densification and path-dependence results survive at a finer spatial scale.</p>
+    <p>This supplement replicates the paper’s driver analysis for the Built-up per Capita Rate (BpCR) at the sub-national level, using Germany (district / <em>Kreis</em> level) as a case study, and brings in internal (within-country) migration, which the national analysis cannot observe. It asks whether the within-country income, densification, and path-dependence results survive at a finer spatial scale.</p>
   </div>
 </div>
 
@@ -2421,7 +2422,7 @@ Figure 1: Building the analysis input following the SDG 11.3.1 metadata at the 
 </section>
 <section id="drivers-of-per-capita-land-use" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Drivers of Per-Capita Land Use</h1>
-<p>We estimate the drivers of BpCR at the district level exactly as in the main paper: a two-way fixed-effects model built up control-by-control, then Arellano-Bond (difference) and Blundell-Bond (system) GMM that add the lagged dependent variable to capture path-dependence and correct its Nickell bias. The key addition relative to the national models is <strong>internal (within-country) net migration</strong>, the INKAR <em>Binnenwanderungssaldo</em>, which the national panel (international migration only) cannot observe.</p>
+<p>We estimate the drivers of BpCR at the district level exactly as in the main paper: a two-way fixed-effects model built up control-by-control, then Arellano-Bond <span class="citation" data-cites="arellano1991">(<a href="#ref-arellano1991" role="doc-biblioref">Arellano and Bond 1991</a>)</span> (difference) and Blundell-Bond <span class="citation" data-cites="blundell1998">(<a href="#ref-blundell1998" role="doc-biblioref">Blundell and Bond 1998</a>)</span> (system) GMM that add the lagged dependent variable to capture path-dependence and correct its Nickell bias. The key addition relative to the national models is <strong>internal (within-country) net migration</strong>, the INKAR <em>Binnenwanderungssaldo</em>, which the national panel (international migration only) cannot observe.</p>
 <div id="tbl-gmm" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gmm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -2469,93 +2470,93 @@ GMM (Bias-Corrected)
 <tbody>
 <tr class="odd">
 <td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">BpCR[t−1]</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.2487***</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.2266***</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.2240***</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.2219***</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">+0.2191***</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.7085***</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.8497***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.3461***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.4026***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.4023***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.4124***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">+0.3939***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.1687***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.1479*</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;"></td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0424)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0457)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0445)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0446)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">(0.0435)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.1221)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0566)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0469)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0362)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0360)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0343)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">(0.0347)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0432)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0812)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">ln(Urban Density)</td>
+<td style="text-align: left;">ln(Urban Density)[t−1]</td>
 <td style="text-align: center;"></td>
-<td style="text-align: center;">-0.0079</td>
-<td style="text-align: center;">-0.0083</td>
-<td style="text-align: center;">-0.0091</td>
-<td style="text-align: center; border-right: 1px solid;">-0.0080</td>
-<td style="text-align: center;">-0.0443***</td>
-<td style="text-align: center;">-0.0003</td>
+<td style="text-align: center;">+0.0441***</td>
+<td style="text-align: center;">+0.0440***</td>
+<td style="text-align: center;">+0.0467***</td>
+<td style="text-align: center; border-right: 1px solid;">+0.0452***</td>
+<td style="text-align: center;">+0.0562***</td>
+<td style="text-align: center;">-0.0049***</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: center;"></td>
-<td style="text-align: center;">(0.0056)</td>
-<td style="text-align: center;">(0.0056)</td>
-<td style="text-align: center;">(0.0058)</td>
-<td style="text-align: center; border-right: 1px solid;">(0.0057)</td>
-<td style="text-align: center;">(0.0054)</td>
-<td style="text-align: center;">(0.0007)</td>
+<td style="text-align: center;">(0.0041)</td>
+<td style="text-align: center;">(0.0041)</td>
+<td style="text-align: center;">(0.0038)</td>
+<td style="text-align: center; border-right: 1px solid;">(0.0034)</td>
+<td style="text-align: center;">(0.0043)</td>
+<td style="text-align: center;">(0.0011)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Internal Net Migration (% Pop)</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0003*</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0003*</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">-0.0003*</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0000</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0000</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">-0.0001</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0001</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0001</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0006</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0002)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0002)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">(0.0002)</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0001)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0002)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0001)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">(0.0001)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0001)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0005)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ln(GDP per capita)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
-<td style="text-align: center;">-0.0019</td>
-<td style="text-align: center; border-right: 1px solid;">-0.0023</td>
-<td style="text-align: center;">-0.0021</td>
-<td style="text-align: center;">-0.0004</td>
+<td style="text-align: center;">+0.0079***</td>
+<td style="text-align: center; border-right: 1px solid;">+0.0086***</td>
+<td style="text-align: center;">+0.0017</td>
+<td style="text-align: center;">-0.0037***</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
-<td style="text-align: center;">(0.0016)</td>
+<td style="text-align: center;">(0.0017)</td>
 <td style="text-align: center; border-right: 1px solid;">(0.0017)</td>
-<td style="text-align: center;">(0.0018)</td>
-<td style="text-align: center;">(0.0005)</td>
+<td style="text-align: center;">(0.0017)</td>
+<td style="text-align: center;">(0.0007)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Urban Pop. Share</td>
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Urban Pop. Share[t−1]</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">-0.0112</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0263**</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0017***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">+0.0274***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.0134**</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0049***</td>
 </tr>
 <tr class="even">
 <td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;"></td>
@@ -2563,27 +2564,27 @@ GMM (Bias-Corrected)
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;"></td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">(0.0109)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0107)</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0006)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">(0.0050)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0068)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0015)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Observations</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">2,394</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">2,394</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">2,394</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">2,394</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">2,394</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,995</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">2,394</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,995</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,995</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,995</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">1,995</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,596</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,995</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Within R$^2$</td>
-<td style="text-align: center;">0.065</td>
-<td style="text-align: center;">0.070</td>
-<td style="text-align: center;">0.074</td>
-<td style="text-align: center;">0.075</td>
-<td style="text-align: center; border-right: 1px solid;">0.078</td>
+<td style="text-align: center;">0.094</td>
+<td style="text-align: center;">0.253</td>
+<td style="text-align: center;">0.253</td>
+<td style="text-align: center;">0.266</td>
+<td style="text-align: center; border-right: 1px solid;">0.284</td>
 <td style="text-align: center;">–</td>
 <td style="text-align: center;">–</td>
 </tr>
@@ -2614,8 +2615,8 @@ GMM (Bias-Corrected)
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">–</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">–</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">–</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">11</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">17</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">10</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">16</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Hansen (p)</td>
@@ -2624,7 +2625,7 @@ GMM (Bias-Corrected)
 <td style="text-align: center;">–</td>
 <td style="text-align: center;">–</td>
 <td style="text-align: center; border-right: 1px solid;">–</td>
-<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">0.00</td>
 <td style="text-align: center;">0.00</td>
 </tr>
 <tr class="odd">
@@ -2634,8 +2635,8 @@ GMM (Bias-Corrected)
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">–</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">–</td>
 <td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important; border-right: 1px solid;">–</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">0.03</td>
-<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">0.00</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">0.01</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">0.07</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">AR(2) (p)</td>
@@ -2644,8 +2645,8 @@ GMM (Bias-Corrected)
 <td style="text-align: center;">–</td>
 <td style="text-align: center;">–</td>
 <td style="text-align: center; border-right: 1px solid;">–</td>
-<td style="text-align: center;">0.30</td>
-<td style="text-align: center;">0.01</td>
+<td style="text-align: center;">0.00</td>
+<td style="text-align: center;">0.03</td>
 </tr>
 </tbody>
 </table>
@@ -2653,27 +2654,145 @@ GMM (Bias-Corrected)
 </figure>
 </div>
 <p><em>Note:</em> *** p&lt;0.01, ** p&lt;0.05, * p&lt;0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction <span class="citation" data-cites="windmeijer2005">(<a href="#ref-windmeijer2005" role="doc-biblioref">Windmeijer 2005</a>)</span> in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (the differenced-equation set for Arellano-Bond; the larger level-equation set for Blundell-Bond). Sample: 399 of Germany’s 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined. </p>
-<p>Three points emerge. First, per-capita land use is <strong>strongly path-dependent</strong> at the district level too: the lagged dependent variable is large and significant (<span class="math inline">\(\rho \approx 0.71\)</span>), echoing the persistence found across countries. Second, the <strong>income</strong> coefficient is negative in every specification, matching the sign of the national income-densification result, but it does not reach statistical significance in this shorter panel, so the district evidence is consistent with the national finding rather than an independent confirmation of it. Third, <strong>internal net migration</strong> enters with an essentially zero coefficient that is only marginally significant (10% level) in the fixed-effects columns and insignificant in the GMM: six five-year epochs give little power to identify a within-district migration channel. Urban density, insignificant in the fixed-effects columns, turns significantly negative in the Arellano-Bond column (<span class="math inline">\(-0.044\)</span>), mirroring the national compact-city estimate; as in the main paper, this coefficient shares the population term with the dependent variable and is read as partly mechanical rather than as clean evidence.</p>
+<p>Three points emerge. First, per-capita land use is <strong>path-dependent</strong> at the district level too: the lagged dependent variable is positive and significant in every fixed-effects specification (<span class="math inline">\(\rho \approx 0.39\)</span> in the full model), echoing the persistence found across countries, so that result is not an artefact of country-level aggregation; we read persistence from these columns rather than from the dynamic-GMM point estimate, whose own specification tests fail below, the same standard the main paper applies to its own Hansen-failing full-model estimate. Second, the <strong>income</strong> coefficient is <em>positive</em> and significant under fixed effects (+0.0079 in the +GDP column), the opposite sign from the persistently negative, though insignificant, national estimate; it turns insignificant in Arellano-Bond and negative and significant in Blundell-Bond, so no stable income effect emerges from this shorter panel either, but it is not the same null found nationally. Third, <strong>internal net migration</strong>, the flow the national panel cannot observe, enters with an essentially zero coefficient: six five-year epochs give little power to identify a within-district migration channel, and unlike the national international-migration result it is not robust across specifications.</p>
+<p><em>The GMM does not survive the correct timing.</em> With the controls dated <span class="math inline">\(t-1\)</span>, the district Arellano-Bond estimator fails both of its specification tests (Hansen and AR(2) reject), where the same estimator with contemporaneous controls passes them. We report the columns for completeness but draw no conclusion from them: at this scale, with the controls correctly timed, the differenced equation retains too few epochs for the deep-lag moment conditions to hold. The fixed-effects columns, which need no instrument validity, carry the district evidence.</p>
 </section>
-<section id="limitations" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Limitations</h1>
+<section id="sec-timing-deu" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Timing and the Compact-City Artefact</h1>
+<p>The main paper’s central methodological claim is that urban density and urban population share are arithmetically entangled with BpCR, which contains urban population negatively at <span class="math inline">\(t\)</span> and positively at <span class="math inline">\(t-1\)</span>, so each control inherits the sign of the date at which it is measured. The German districts provide an independent test of that claim on different data, at a different scale, with a different migration control. <a href="#tbl-timing-deu" class="quarto-xref">Table 2</a> re-estimates the fixed-effects model under the three timings on one common sample.</p>
+<div id="tbl-timing-deu" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-timing-deu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 2: Timing of the two population-sharing controls at the German Kreis level: two-way fixed effects on the common sample where t, t-1 and t-2 are all observed. Only the t-2 column shares no term with the dependent variable.
+</figcaption>
+<div aria-describedby="tbl-timing-deu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table cell caption-top table-sm table-striped small">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="3" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Dependent variable: BpCR (fixed effects)
+</div></th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="3" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Timing of density / urban share
+</div></th>
+</tr>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Term</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Both t</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Both t-1</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Both t-2 (clean)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">BpCR[t−1]</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.2021***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.2261***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.0569</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;"></td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0707)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0378)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0446)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ln(Urban Density)</td>
+<td style="text-align: center;">-0.0294***</td>
+<td style="text-align: center;">+0.0438***</td>
+<td style="text-align: center;">+0.0310***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">(0.0067)</td>
+<td style="text-align: center;">(0.0046)</td>
+<td style="text-align: center;">(0.0041)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Internal Net Migration (% Pop)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0004**</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.0003</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.0002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;"></td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0002)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0002)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0002)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ln(GDP per capita)</td>
+<td style="text-align: center;">-0.0014</td>
+<td style="text-align: center;">+0.0080***</td>
+<td style="text-align: center;">+0.0076***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">(0.0021)</td>
+<td style="text-align: center;">(0.0021)</td>
+<td style="text-align: center;">(0.0020)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Urban Pop. Share</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">-0.0442***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.0233***</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">+0.0428***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;"></td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0130)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0072)</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">(0.0066)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(239, 239, 239, 255) !important;">Observations</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,596</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,596</td>
+<td style="text-align: center; background-color: rgba(239, 239, 239, 255) !important;">1,596</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Urban density reproduces the national pattern closely. It is <strong><span class="math inline">\(-0.029\)</span></strong> (<span class="math inline">\(p&lt;0.01\)</span>) when measured contemporaneously, <strong><span class="math inline">\(+0.044\)</span></strong> at <span class="math inline">\(t-1\)</span>, and <strong><span class="math inline">\(+0.031\)</span></strong> (<span class="math inline">\(p&lt;0.01\)</span>) at the mechanically clean <span class="math inline">\(t-2\)</span> timing, the same sign sequence as the national <span class="math inline">\(-0.024\)</span>, <span class="math inline">\(+0.009\)</span>, and <span class="math inline">\(+0.011\)</span> (<span class="math inline">\(p&lt;0.05\)</span>). Urban share shows the same sign flip at <span class="math inline">\(t\)</span> and <span class="math inline">\(t-1\)</span> (<span class="math inline">\(-0.044\)</span>, then <span class="math inline">\(+0.023\)</span>) but diverges at the clean timing: <strong><span class="math inline">\(+0.043\)</span></strong> (<span class="math inline">\(p&lt;0.01\)</span>) here against an insignificant <span class="math inline">\(-0.012\)</span> nationally, so unlike density its clean-timing reading does not replicate. The persistence term itself loses significance here (<span class="math inline">\(+0.057\)</span>, against a stable <span class="math inline">\(0.20\)</span>–<span class="math inline">\(0.25\)</span> nationally), likely the extra sample loss from a second lag; we do not read <span class="math inline">\(\rho\)</span> from this column. The district-level accounting check gives the same signature as the national one: regressing BpCR on urban population at <span class="math inline">\(t\)</span> and <span class="math inline">\(t-1\)</span> within districts returns <span class="math inline">\(-0.011\)</span> and <span class="math inline">\(+0.013\)</span>, equal and opposite. Since these are different data, a different country, a different spatial scale, and a different migration control, the density reproduction is strong evidence that the compact-city sign in per-capita land-use regressions is arithmetic rather than economic, exactly as the main paper argues. <strong>H2 finds no support here either.</strong></p>
+</section>
+<section id="limitations" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Limitations</h1>
 <p>Several limitations qualify this case study and mark it as a corroborating local illustration rather than a stand-alone causal analysis.</p>
 <p><em>Coverage and matching.</em> GAUL districts are matched to INKAR by name (399 of Germany’s 400 districts); the only exclusion, Freyung-Grafenau, has no urban-classified cells and hence no defined BpCR. The match relies on a cleaned base name with an area-based rule for same-named city/rural twins rather than an official code, so it is accurate here but would need a code crosswalk to be fully automatic in other settings.</p>
-<p><em>Short, recent panel.</em> The INKAR controls are available only from 1995, so the estimation window is six five-year epochs (1995–2020). This is shorter than the national panel and, together with the five-year spacing, means the models speak to medium-run trajectories rather than short-run adjustment. The brevity matters most for the dynamic estimators: because the GHSL series used here begins in 1985 (BpCR from 1990), the deeper lags that instrument the Arellano-Bond difference equation are available only from 2000 onward, so the GMM is estimated on fewer periods than the within (fixed-effects) columns even though the latter retain all of 1995–2020.</p>
-<p><em>GMM diagnostics.</em> The Arellano-Bond difference estimator is well behaved: the Hansen test does not reject the instruments, first-order serial correlation is present and second-order is absent, as required. The Blundell-Bond system estimator, by contrast, is rejected at this fine and short scale (its Hansen and AR(2) tests fail), so we treat Arellano-Bond as the preferred dynamic estimator and read Blundell-Bond only as a sign-and-significance cross-check.</p>
-<p><em>Internal migration.</em> The internal net-migration control (INKAR <em>Binnenwanderungssaldo</em>) is the within-country flow the national analysis cannot observe, but within districts its coefficient is essentially zero, at best marginally significant (10% level) in the fixed-effects columns and insignificant in the GMM. A plausible reading is that any clearer migration-densification association is cross-sectional (denser districts attract internal migrants), a pattern this within-district design does not test formally; six epochs in any case give little power to identify such a dynamic.</p>
+<p><em>Short, recent panel.</em> The INKAR controls are available only from 1995, so BpCR is estimable over six five-year epochs (1995–2020), shorter than the national panel. A further epoch is lost to lagging: 1995’s urban population share is observed, but its 1990 lag is not, since the INKAR series itself starts only in 1995, so every column in <a href="#tbl-gmm" class="quarto-xref">Table 1</a> runs on 2000–2020 (five epochs, 1995 district-periods, not the full 2,394), and the models speak to medium-run trajectories rather than short-run adjustment. Differencing costs Arellano-Bond one epoch more, retaining 2005–2020 only.</p>
+<p><em>GMM diagnostics.</em> Once the population-sharing controls are correctly dated at <span class="math inline">\(t-1\)</span>, neither dynamic estimator survives its specification tests at this scale: the Arellano-Bond Hansen and AR(2) tests both reject, as do Blundell-Bond’s. Arellano-Bond passes both with contemporaneous controls, an artefact per <a href="#sec-timing-deu" class="quarto-xref">Section 3</a> and so no comfort; Blundell-Bond fails regardless of timing, a feature of the system estimator here, not a timing artefact. The reason is mechanical: lagging the controls costs the district panel an epoch, leaving the differenced equation too few periods for deep-lag moments to hold. We therefore draw the district conclusions from the fixed-effects columns, which require no instrument validity, and report the GMM columns only for completeness. This is a limitation of the district panel’s length, not a challenge to the national GMM, which is estimated on eight epochs and passes its AR(2) test comfortably.</p>
+<p><em>Internal migration.</em> The internal net-migration control (INKAR <em>Binnenwanderungssaldo</em>) is the within-country flow the national analysis cannot observe, and it was the main reason for building this case study. It does not deliver: within districts its coefficient is essentially zero, and it is not robust to the timing of the other controls (<a href="#tbl-timing-deu" class="quarto-xref">Table 2</a>). This is a substantive disappointment rather than a technicality, since the national paper’s strongest result is the <em>international</em> migration channel and the natural conjecture is that internal flows work the same way. A plausible reading is that any clearer migration-densification association is cross-sectional (denser districts attract internal migrants), a pattern this within-district design does not test formally; four to six epochs in any case give little power. Identifying the internal channel convincingly would need a longer or finer panel, and remains the most valuable extension of the national analysis.</p>
 <p><em>Measurement and scope.</em> As in the main paper, the built-up and population layers are satellite-based estimates, the urban area is defined at a fixed Degree-of-Urbanisation threshold (GHS-SMOD of at least 21), and present-day GAUL boundaries are applied throughout; the income and migration controls are administrative aggregates. The estimates are associations, not causal effects, and they describe a single country, so they illustrate rather than establish external validity.</p>
 </section>
-<section id="conclusion" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Conclusion</h1>
-<p>This supplement takes the paper’s driver analysis to the sub-national (German district) scale, across 2394 district-periods. The headline replication is path-dependence: per-capita urban land use is strongly persistent within districts (Arellano-Bond <span class="math inline">\(\rho \approx 0.71\)</span>), echoing the finding across countries, so this result is not an artefact of country-level aggregation. The income coefficient is negative throughout, in line with the sign of the national income-densification result, but it remains statistically insignificant in this short six-epoch panel; the district evidence therefore corroborates the direction of the national finding without independently establishing it.</p>
-<p>The case study also adds the internal migration that the national analysis cannot see. The within-country net-migration flow enters with an essentially zero coefficient, at best marginally significant in the fixed-effects columns and insignificant in the GMM; identifying that channel convincingly would require a longer panel. Taken together, the German evidence confirms the strong persistence of per-capita land use at a scale the national panel cannot reach, and is directionally consistent with, though not conclusive on, the income-densification channel.</p>
+<section id="conclusion" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Conclusion</h1>
+<p>This supplement takes the paper’s driver analysis to the sub-national (German district) scale, across 2394 district-periods, and delivers one clear replication, one reversal, and one disappointment.</p>
+<p>The replication is the paper’s central methodological finding, and it is the most valuable thing here. Urban density is significantly <em>negative</em> when measured at the same date as the dependent variable and significantly <em>positive</em> at every timing that is not, including the arithmetically clean <span class="math inline">\(t-2\)</span> specification; the district accounting check reproduces the national one almost exactly (<a href="#sec-timing-deu" class="quarto-xref">Section 3</a>). Different data, different country, different scale, different migration measure, same signature. That the compact-city coefficient in per-capita land-use regressions is an artefact of the metric’s own arithmetic is therefore not a quirk of the global panel.</p>
+<p>The reversal is income: positive and significant under fixed effects, unlike the persistently negative, insignificant national estimate, though it flips again under Blundell-Bond and drops to insignificance under Arellano-Bond, so no single stable effect emerges, but it is not simply the national null repeating. Path-dependence replicates (<span class="math inline">\(\rho \approx 0.39\)</span> under fixed effects, in the range of the national estimates), though only there at this panel length, since the dynamic-GMM estimator fails its own specification tests. The disappointment is internal migration: the flow this case study was built to observe is essentially zero within districts and not robust across specifications, so the national international-migration result finds no sub-national echo. Whether that reflects a different channel or simply insufficient power is a question a longer district panel would answer.</p>
 </section>
 <section id="references" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-arellano1991" class="csl-entry" role="listitem">
+Arellano, Manuel, and Stephen Bond. 1991. <span>“Some Tests of Specification for Panel Data: Monte Carlo Evidence and an Application to Employment Equations.”</span> <em>The Review of Economic Studies</em> 58 (2): 277–97. <a href="https://doi.org/10.2307/2297968">https://doi.org/10.2307/2297968</a>.
+</div>
 <div id="ref-bbsr2024inkar" class="csl-entry" role="listitem">
 BBSR. 2024. <em><span>INKAR</span>: Indikatoren Und Karten Zur Raum- Und Stadtentwicklung</em>. Federal Institute for Research on Building, Urban Affairs and Spatial Development (BBSR), Bonn. <a href="https://www.inkar.de/">https://www.inkar.de/</a>.
+</div>
+<div id="ref-blundell1998" class="csl-entry" role="listitem">
+Blundell, Richard, and Stephen Bond. 1998. <span>“Initial Conditions and Moment Restrictions in Dynamic Panel Data Models.”</span> <em>Journal of Econometrics</em> 87 (1): 115–43. <a href="https://doi.org/10.1016/S0304-4076(98)00009-8">https://doi.org/10.1016/S0304-4076(98)00009-8</a>.
 </div>
 <div id="ref-coban2026inkar" class="csl-entry" role="listitem">
 Çoban, Ömer Furkan. 2026. <em><span class="nocase">inkaR</span>: Download and Analyze Spatial Development Data from <span>INKAR</span></em>. <a href="https://doi.org/10.32614/CRAN.package.inkaR">https://doi.org/10.32614/CRAN.package.inkaR</a>.

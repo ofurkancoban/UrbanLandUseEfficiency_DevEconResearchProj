@@ -13,8 +13,11 @@ This project
 
 - (1) shows that the **official SDG 11.3.1 indicator (LCRPGR) is
   statistically unstable**,
-- (2) proposes a stable, log-based replacement, the
-  **Built-up per Capita Rate (BpCR)**, and
+- (2) adopts the stable, log-based replacement proposed by Lu & Weng (2026), the
+  **Built-up per Capita Rate (BpCR)** (the general case for a log alternative is
+  made by both Nicolau et al. (2019) and Lu & Weng), and
+  shows what it is worth: on identical data, the official ratio leaves every
+  driver undetectable at the 5% level while BpCR recovers precise ones, and
 - (3) estimates the **economic drivers** of
   urban land use across a harmonised satellite panel of **193 UN member states,
   1985–2020**, using two-way fixed effects and dynamic-panel GMM, with a
@@ -90,8 +93,11 @@ single, **urban-scale** panel built under the EU/UN **Degree of Urbanisation**
 | **UN DESA WPP 2024**               | International net migration; national total population | UN download                |
 | **UN M49 / `countrycode`**       | Region & development group                             | R package                  |
 
-Coverage: **193 UN member states**, 5-year epochs **1985–2020**. Full bibliographic
-citations are in `04_presentation/references.bib`.
+Coverage: **193 UN member states**. BpCR is observed at nine 5-year epochs,
+**1980–2020**, formed from the 1975–2020 GHSL grids; after the lagged dependent
+variable and complete-case filtering the estimation sample is **1,499**
+country-periods on 192 countries over eight epochs, **1985–2020**. Full
+bibliographic citations are in `04_presentation/references.bib`.
 
 > Earlier WDI-population / WGI-governance machinery has been removed; the project
 > now relies on the GHSL satellite panel with UN controls only.
@@ -128,9 +134,13 @@ country.
 **The metric matters.** On the same data, LCRPGR's instability shows up in its
 extreme tails, whereas BpCR is well-behaved across all country-periods; sprawl is
 real and measurable but is over- and under-stated by LCRPGR exactly where $\text{PGR}$
-is small. On identical data, replacing LCRPGR with BpCR raises the within-country
-explanatory power **roughly twenty-fold** (within $R^2$ about 0.003 → 0.065) and
-turns uninformative coefficients into significant, interpretable ones.
+is small. The comparison is about **detectability, not explained variance**: with
+identical data, controls and fixed effects, *no* driver is distinguishable from
+zero under the official ratio (largest $|t| = 1.66$), while the same net-migration
+variable goes from $t = -1.12$ under LCRPGR to $t = -5.04$ under BpCR. We do not
+quote a ratio of the two within $R^2$ values (0.003 vs 0.212): they are shares of
+the variance of *different* dependent variables, so their quotient is not a
+meaningful quantity.
 
 **Sprawl is the global norm.** A majority of countries show $\text{BpCR} > 0$ over
 1985–2020: built-up area is growing faster than urban population for most of the
@@ -138,33 +148,51 @@ world.
 
 **Economic drivers (Arellano-Bond GMM; dependent variable BpCR):**
 
-| Driver                      | Coef.          | Reading                                                                                                                     |
-| --------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| BpCR (t−1), ρ             | +0.61\*\*\*    | Strong path-dependence; ~60% of last period's BpCR persists. GMM ρ ≈ 3× the FE estimate, confirming the FE Nickell bias. |
-| ln(Urban density)           | −0.052\*\*\*  | Compact-city effect: denser cities consume less new land per resident.                                                      |
-| Int'l net migration (% pop) | −0.0005\*     | In-migrants pack into the existing stock faster than built-up grows.                                                        |
-| ln(GDP per capita)          | −0.014\*\*    | Within-country, richer countries**densify, not sprawl**: growth ≠ sprawl.                                            |
-| Urban population share      | −0.031 (n.s.) | The*level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use.    |
+| Driver                       | Coef.          | Reading                                                                                                                       |
+| ---------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| BpCR (t−1), ρ                | +0.21\*\* (0.10) | Path-dependence. **Do not read ρ from this column**: it is imprecise and its moments are marginal. It sits *just* below the Bond (2002) bracket [FE 0.26, OLS 0.48], but that crossing is meaningless on its own (gap 0.04 vs SE 0.10). The evidence is the *pattern*: as the entangled controls enter, ρ slides 0.46 → 0.21 while its SE grows 0.07 → 0.10 and the Hansen p slides 0.42 → 0.05, in step. In a clean AR(1): AB = 0.46 (0.07) vs within 0.25, a +0.20 correction (≈3 SE), exactly what Nickell (1981) predicts for T=8, with Nickell-implied (0.45), AB (0.46) and BB (0.45) all agreeing. **≈ half of last period's growth persists.** |
+| Int'l net migration (% pop)  | −0.0062\*\*\*   | **The robust correlate.** Consistent with in-migrants being absorbed into the existing stock faster than built-up grows: urban population moves +0.88 pp/yr with migration, built-up only +0.24 pp/yr. Passes a strict-exogeneity test and is invariant to a predetermined treatment, but migrants may select into fast-building economies, so this is a conditional association, not a causal effect. |
+| ln(Urban density) (t−1)      | +0.037\*\*\*    | *Not* a compact-city effect: see the timing artefact below.                                                                  |
+| ln(GDP per capita)           | −0.006 (n.s.)  | Sign negative in every specification and group, but never significant once migration is measured over the right window.       |
+| Urban population share (t−1) | +0.035 (n.s.)  | The *level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use.             |
 
 Estimation sample 1,499 country-periods; Arellano-Bond uses 1,351 and Blundell-Bond
-1,544 observations (15 vs 21 collapsed instruments). Sargan/Hansen and AR(2) tests
-pass (instruments valid). `*** p<0.01, ** p<0.05, * p<0.1`.
+1,544 observations (15 vs 21 collapsed instruments). AR(2) passes comfortably
+(p = 0.76); the AB Hansen test is borderline (p = 0.05), driven by the deepest
+lags, and a shallower instrument set clears it while leaving every conclusion in
+place. Blundell-Bond is rejected (Hansen p = 0.01; the incremental Hansen test on
+its added level moments rejects at 5%), so Arellano-Bond is the preferred column
+**for the controls**. The weak-instrument objection that difference GMM invites is
+addressed directly rather than assumed away: first-stage F = 14.4, and in the
+clean AR(1) the estimator moves *away* from the within estimate by exactly the
+Nickell-predicted amount, which weak instruments could not do (they would pull it
+toward within). The full model's low ρ is caused by the entangled controls, not by
+the instruments.
+`*** p<0.01, ** p<0.05, * p<0.1`.
 
-> The within-country income → densification result **complements** the
-> cross-sectional income → sprawl literature: across countries richer places have
-> sprawled historically, but *within* a country, getting richer over time is
-> associated with denser, not more sprawling, urban land use.
+> **The compact-city coefficient is arithmetic, not economics.** By construction
+> $\text{BpCR}_t=\frac{1}{z}[\ln V_t-\ln P_t-\ln V_{t-1}+\ln P_{t-1}]$, so urban
+> population enters *negatively* at $t$ and *positively* at $t-1$. Density and
+> urban share are built from that same count, so each inherits the sign of the
+> date it is measured at (verified directly: regressing BpCR on $\ln P_t$ and
+> $\ln P_{t-1}$ gives −0.103 and +0.106, equal and opposite). Lagging by one
+> period does not fix this, it flips the bias. Only a $t-2$ control shares no term
+> with BpCR: there density is **+0.011**, still not negative. **H2 is rejected.**
 
-**Heterogeneity (by UN development group).** The income–densification link is
-negative in all three groups, most precise in the developed and developing
-economies; the compact-city density effect is strongest in the least-developed
-countries (where urban form is still being set); and international net migration
-densifies in the developed and developing groups but not in LDCs, where internal
-rural-to-urban migration (unobserved here) dominates. A sub-national German
-case study (`05_paper/supplementary.qmd`) replicates the driver analysis at the
-*Kreis* level: path-dependence is confirmed (Arellano-Bond ρ ≈ 0.71), while the
-income coefficient stays negative but is not significant in the short
-six-epoch district panel.
+**Heterogeneity (by UN development group).** These are **static FE** estimates and
+are reported against a pooled column fitted with the *same* estimator and sample,
+so they are not comparable to the GMM figures in the table above (see
+"Why the density coefficient jumps from FE to GMM" in the paper). Net in-migration
+is negative and significant in *all three* groups at nearly identical magnitudes
+(−0.0065, −0.0062, −0.0066, against a pooled −0.0064), which is why we treat it as
+the robust finding. Income is negative everywhere but significant nowhere. The
+positive lagged-density coefficient (pooled static +0.010) is carried entirely by
+the developing group (+0.017); the urban-share channel survives only in the LDCs
+(+0.112). A sub-national German case study
+(`05_paper/supplementary.qmd`) independently reproduces the timing artefact on
+different data and at a different scale (density −0.029 at $t$, +0.031 at the
+clean $t-2$), while internal migration turns out to be essentially zero within
+districts.
 
 *(All figures are reproduced from the committed data by the pipeline; coefficient
 chips in the slides are generated directly from the GMM output, so they never go

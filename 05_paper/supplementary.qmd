@@ -1,6 +1,6 @@
 ---
 title: "Urban Land-Use Efficiency"
-subtitle: "A Stable Metric for SDG 11.3.1 and Its Economic and Structural Drivers: 400 German Districts x 1990-2020 Panel Data Analysis"
+subtitle: "A Stable Metric for SDG 11.3.1, and Why Per-Capita Designs Cannot Cleanly Identify Its Drivers: 400 German Districts x 2000-2020 Panel Data Analysis"
 case-study: "Sub-national Case Study: Germany (Kreis Level)"
 doc-type: "Supplementary Material"
 course-info: "Development Economics · SoSe 2026"
@@ -23,7 +23,7 @@ abstract: |
   This supplement replicates the paper's driver analysis for the Built-up per Capita
   Rate (BpCR) at the sub-national level, using Germany (district / *Kreis* level) as
   a case study, and brings in internal (within-country) migration, which the national
-  analysis cannot observe. It asks whether the within-country income-densification
+  analysis cannot observe. It asks whether the within-country income, densification,
   and path-dependence results survive at a finer spatial scale.
 keywords:
   - SDG 11.3.1
@@ -43,7 +43,7 @@ format:
       text: |
         \usepackage{makecell}
         \usepackage{float}
-        \geometry{top=3cm,bottom=3cm}
+        \geometry{top=2.5cm,bottom=2.5cm}
         \floatplacement{figure}{H}
         \floatplacement{table}{H}
         \setlength{\floatsep}{6pt plus 2pt minus 2pt}
@@ -54,7 +54,7 @@ format:
       model: 3p
       cite-style: authoryear
   html:
-    subtitle: "Supplementary Material · Sub-national Case Study: Germany (Kreis Level) : 400 German Districts x 1990-2020 Panel Data Analysis"
+    subtitle: "Supplementary Material · Sub-national Case Study: Germany (Kreis Level), Why Per-Capita Designs Cannot Cleanly Identify Its Drivers : 400 German Districts x 2000-2020 Panel Data Analysis"
     theme: [litera, theme.scss]
     embed-resources: true
     include-in-header:
@@ -112,7 +112,20 @@ library(here); library(dplyr); library(readr); library(fixest)
 d_all <- read_csv(here("03_datasets/processed/deu_kreis_casestudy.csv"), show_col_types = FALSE) |>
     # INKAR reports the Binnenwanderungssaldo per 1,000 inhabitants; rescale to
     # percent of population so the coefficient scale matches the national control
-    dplyr::mutate(int_migr = int_migr / 10)
+    dplyr::mutate(int_migr = int_migr / 10) |>
+    # As in the main paper: BpCR contains urban population negatively at t and
+    # positively at t-1, so density and urban share (both built from that count)
+    # inherit the sign of the date they are measured at. Main models use t-1;
+    # t-2 shares no term with BpCR and is the mechanically clean check.
+    dplyr::arrange(key, year) |>
+    dplyr::group_by(key) |>
+    dplyr::mutate(
+        ln_density_L = dplyr::lag(ln_density),
+        urban_pop_share_L = dplyr::lag(urban_pop_share),
+        ln_density_L2 = dplyr::lag(ln_density, 2),
+        urban_pop_share_L2 = dplyr::lag(urban_pop_share, 2)
+    ) |>
+    dplyr::ungroup()
 d <- dplyr::filter(d_all, year >= 1995)
 # format-aware table output: LaTeX for the PDF, HTML for the web build
 out_fmt <- if (knitr::is_latex_output()) "latex" else "html"
@@ -171,8 +184,9 @@ actually used: panel (b) kept only where panel (c) is urban.
 
 We estimate the drivers of BpCR at the district level exactly as in the main paper:
 a two-way fixed-effects model built up control-by-control, then Arellano-Bond
-(difference) and Blundell-Bond (system) GMM that add the lagged dependent variable
-to capture path-dependence and correct its Nickell bias. The key addition relative
+[@arellano1991] (difference) and Blundell-Bond [@blundell1998] (system) GMM that
+add the lagged dependent variable to capture path-dependence and correct its
+Nickell bias. The key addition relative
 to the national models is **internal (within-country) net migration**, the INKAR
 *Binnenwanderungssaldo*, which the national panel (international migration only)
 cannot observe.
@@ -186,23 +200,26 @@ stars <- function(p) ifelse(is.na(p),"",ifelse(p<.01,"***",ifelse(p<.05,"**",ife
 fc    <- function(est,se,p) ifelse(is.na(est),"",sprintf("%+.4f%s<br>(%.4f)",est,stars(p),se))
 fmt_w <- function(x) ifelse(is.na(x),"–",sprintf("%.3f",x))
 fmt_p <- function(x) ifelse(is.na(x),"–",sprintf("%.2f",x))
-fe_terms <- c("bpcr_L","ln_density","int_migr","ln_gdp","urban_pop_share")
-term_lab <- c("BpCR[t−1]","ln(Urban Density)","Internal Net Migration (% Pop)","ln(GDP per capita)","Urban Pop. Share")
-gmm_keep <- c("lag(bpcr, 1)","ln_density","int_migr","ln_gdp","urban_pop_share")
-ctl <- "ln_density + int_migr + ln_gdp + urban_pop_share"
-d2 <- filter(d, !is.na(bpcr_L))   # bpcr_L comes from the full series, so 1995 is kept (lag = BpCR 1990)
+fe_terms <- c("bpcr_L","ln_density_L","int_migr","ln_gdp","urban_pop_share_L")
+term_lab <- c("BpCR[t−1]","ln(Urban Density)[t−1]","Internal Net Migration (% Pop)","ln(GDP per capita)","Urban Pop. Share[t−1]")
+gmm_keep <- c("lag(bpcr, 1)","ln_density_L","int_migr","ln_gdp","urban_pop_share_L")
+ctl <- "ln_density_L + int_migr + ln_gdp + urban_pop_share_L"
+d2 <- filter(d, !is.na(bpcr_L), !is.na(ln_density_L), !is.na(urban_pop_share_L))  # lagged controls exist from 2000
 fe_col <- function(m){ ct<-coeftable(m)
   vapply(fe_terms, function(v) if(v %in% rownames(ct)) fc(ct[v,1],ct[v,2],ct[v,4]) else "", character(1)) }
 ff <- function(rhs) feols(as.formula(paste("bpcr ~",rhs,"| key + factor(year)")), d2, vcov=~key)
-b1<-ff("bpcr_L"); b2<-ff("bpcr_L + ln_density"); b3<-ff("bpcr_L + ln_density + int_migr")
-b4<-ff("bpcr_L + ln_density + int_migr + ln_gdp"); b5<-ff("bpcr_L + ln_density + int_migr + ln_gdp + urban_pop_share")
-# GMM panel includes the 1990 base row (NA controls) so the lag and deeper-lag instruments reach back
-pd <- pdata.frame(as.data.frame(d_all |> arrange(key,year) |> mutate(t=as.integer(factor(year)))), index=c("key","t"))
+b1<-ff("bpcr_L"); b2<-ff("bpcr_L + ln_density_L"); b3<-ff("bpcr_L + ln_density_L + int_migr")
+b4<-ff("bpcr_L + ln_density_L + int_migr + ln_gdp"); b5<-ff("bpcr_L + ln_density_L + int_migr + ln_gdp + urban_pop_share_L")
+# GMM panel starts at 1995: with the controls dated t-1, the 1990 base row has no
+# lagged controls at all and makes the instrument matrix singular. Even from 1995
+# the differenced equation retains few epochs, and the diagnostics below reject;
+# the district conclusions are read from the FE columns (see Limitations).
+pd <- pdata.frame(as.data.frame(filter(d_all, year >= 1995) |> arrange(key,year) |>
+                                mutate(t=as.integer(factor(year)))), index=c("key","t"))
 gmm_col <- function(tr){
   m <- pgmm(as.formula(paste("bpcr ~ lag(bpcr,1) +",ctl,"| lag(bpcr,2:3)")),
             data=pd, effect="twoways", model="twosteps", transformation=tr, collapse=TRUE)
   s <- summary(m, robust=TRUE); cf <- s$coefficients
-  if (tr=="d") rho_ab <<- cf["lag(bpcr, 1)", 1]
   list(coef=vapply(gmm_keep, function(v) fc(cf[v,1],cf[v,2],cf[v,4]), character(1)),
        nobs=sum(lengths(m$residuals)), ninst=ncol(m$W[[1]]),
        hansen=s$sargan$p.value, ar1=s$m1$p.value, ar2=s$m2$p.value)
@@ -255,21 +272,103 @@ if (knitr::is_latex_output()) {
 *Note:* \*\*\* p<0.01, \*\* p<0.05, \* p<0.1. Standard errors in parentheses: clustered by district in the fixed-effects columns; two-step GMM with the Windmeijer finite-sample correction [@windmeijer2005] in the Arellano-Bond and Blundell-Bond columns. The lagged dependent variable is instrumented by lags 2 to 3 of BpCR, with the instrument matrix collapsed. In the GMM columns the Observations row reports post-transformation equation observations (the differenced-equation set for Arellano-Bond; the larger level-equation set for Blundell-Bond). Sample: 399 of Germany's 400 districts; Freyung-Grafenau is excluded because no cell reaches the urban threshold (SMOD of at least 21), leaving its urban built-up and population at zero and BpCR undefined.
 \normalsize
 
-Three points emerge. First, per-capita land use is **strongly path-dependent** at
-the district level too: the lagged dependent variable is large and significant
-($\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the persistence found across countries. Second, the
-**income** coefficient is negative in every specification, matching the sign of
-the national income-densification result, but it does not reach statistical
-significance in this shorter panel, so the district evidence is consistent with
-the national finding rather than an independent confirmation of it. Third,
-**internal net migration** enters with an essentially zero coefficient that is
-only marginally significant (10\% level) in the fixed-effects columns and
-insignificant in the GMM: six five-year epochs give little power to identify a
-within-district migration channel. Urban density, insignificant in the
-fixed-effects columns, turns significantly negative in the Arellano-Bond column
-($-0.044$), mirroring the national compact-city estimate; as in the main paper,
-this coefficient shares the population term with the dependent variable and is
-read as partly mechanical rather than as clean evidence.
+Three points emerge. First, per-capita land use is **path-dependent** at the
+district level too: the lagged dependent variable is positive and significant in
+every fixed-effects specification ($\rho \approx `r sprintf("%.2f", coef(b5)["bpcr_L"])`$
+in the full model), echoing the persistence found across countries, so that
+result is not an artefact of country-level aggregation; we read persistence from
+these columns rather than from the dynamic-GMM point estimate, whose own
+specification tests fail below, the same standard the main paper applies to its
+own Hansen-failing full-model estimate. Second, the **income** coefficient is
+*positive* and significant under fixed effects
+(`r sprintf("%+.4f", coef(b4)["ln_gdp"])` in the +GDP column), the opposite sign
+from the persistently negative, though insignificant, national estimate; it turns
+insignificant in Arellano-Bond and negative and significant in Blundell-Bond, so
+no stable income effect emerges from this shorter panel either, but it is not the
+same null found nationally. Third, **internal net migration**, the flow the
+national panel cannot observe, enters with an essentially zero coefficient: six
+five-year epochs give little power to identify a within-district migration
+channel, and unlike the national international-migration result it is not robust
+across specifications.
+
+*The GMM does not survive the correct timing.* With the controls dated $t-1$, the
+district Arellano-Bond estimator fails both of its specification tests (Hansen and
+AR(2) reject), where the same estimator with contemporaneous controls passes them.
+We report the columns for completeness but draw no conclusion from them: at this
+scale, with the controls correctly timed, the differenced equation retains too few
+epochs for the deep-lag moment conditions to hold. The fixed-effects columns, which
+need no instrument validity, carry the district evidence.
+
+# Timing and the Compact-City Artefact {#sec-timing-deu}
+
+The main paper's central methodological claim is that urban density and urban
+population share are arithmetically entangled with BpCR, which contains urban
+population negatively at $t$ and positively at $t-1$, so each control inherits the
+sign of the date at which it is measured. The German districts provide an
+independent test of that claim on different data, at a different scale, with a
+different migration control. @tbl-timing-deu re-estimates the fixed-effects model
+under the three timings on one common sample.
+
+```{r}
+#| label: tbl-timing-deu
+#| results: asis
+#| tbl-cap: "Timing of the two population-sharing controls at the German Kreis level: two-way fixed effects on the common sample where t, t-1 and t-2 are all observed. Only the t-2 column shares no term with the dependent variable."
+cs <- dplyr::filter(d_all, !is.na(bpcr_L), !is.na(ln_gdp), !is.na(int_migr),
+                    !is.na(ln_density), !is.na(urban_pop_share),
+                    !is.na(ln_density_L), !is.na(urban_pop_share_L),
+                    !is.na(ln_density_L2), !is.na(urban_pop_share_L2))
+one <- function(dv, sv) {
+  m <- feols(as.formula(paste("bpcr ~ bpcr_L +", dv, "+ int_migr + ln_gdp +", sv,
+                              "| key + factor(year)")), cs, vcov = ~key)
+  ct <- coeftable(m)
+  c(fc(ct["bpcr_L",1], ct["bpcr_L",2], ct["bpcr_L",4]),
+    fc(ct[dv,1], ct[dv,2], ct[dv,4]),
+    fc(ct["int_migr",1], ct["int_migr",2], ct["int_migr",4]),
+    fc(ct["ln_gdp",1], ct["ln_gdp",2], ct["ln_gdp",4]),
+    fc(ct[sv,1], ct[sv,2], ct[sv,4]),
+    format(nobs(m), big.mark = ","))
+}
+tlab <- c("BpCR[t−1]","ln(Urban Density)","Internal Net Migration (% Pop)",
+          "ln(GDP per capita)","Urban Pop. Share","Observations")
+tt <- data.frame(Term = tlab,
+  `Both t` = one("ln_density","urban_pop_share"),
+  `Both t-1` = one("ln_density_L","urban_pop_share_L"),
+  `Both t-2 (clean)` = one("ln_density_L2","urban_pop_share_L2"),
+  check.names = FALSE, stringsAsFactors = FALSE)
+ncf <- 5L
+tl <- do.call(rbind, lapply(seq_len(ncf), function(i) split_two(tt[i,])))
+ta <- rbind(tl, tt[(ncf+1):nrow(tt),])
+names(ta) <- esc(names(ta)); ta[[1]] <- esc(ta[[1]])
+nbf <- nrow(tl)
+cg <- as.vector(sapply(which(seq_len(ncf)%%2==1), function(k) c(2*k-1,2*k)))
+kk <- knitr::kable(ta, format=out_fmt, booktabs=TRUE, escape=FALSE, linesep="",
+                   align=c("l", rep("c", ncol(ta)-1)), row.names=FALSE) |>
+  kableExtra::kable_styling(latex_options="HOLD_position", font_size=9) |>
+  kableExtra::row_spec(c(cg, nbf+1), background="#efefef") |>
+  kableExtra::row_spec(nbf, hline_after=TRUE) |>
+  kableExtra::add_header_above(c(" "=1, "Timing of density / urban share"=3)) |>
+  kableExtra::add_header_above(c(" "=1, "Dependent variable: BpCR (fixed effects)"=3))
+if (knitr::is_latex_output()) cat(as.character(kk)) else cat("```{=html}\n", as.character(kk), "\n```\n", sep="")
+```
+
+Urban density reproduces the national pattern closely. It is
+**$-0.029$** ($p<0.01$) when measured contemporaneously, **$+0.044$** at
+$t-1$, and **$+0.031$** ($p<0.01$) at the mechanically clean $t-2$ timing, the
+same sign sequence as the national $-0.024$, $+0.009$, and $+0.011$ ($p<0.05$).
+Urban share shows the same sign flip at $t$ and $t-1$ ($-0.044$, then $+0.023$)
+but diverges at the clean timing: **$+0.043$** ($p<0.01$) here against an
+insignificant $-0.012$ nationally, so unlike density its clean-timing reading
+does not replicate. The persistence term itself loses significance here
+($+0.057$, against a stable $0.20$--$0.25$ nationally), likely the extra sample
+loss from a second lag; we do not read $\rho$ from this column. The
+district-level accounting check gives the same
+signature as the national one: regressing BpCR on urban population at $t$ and
+$t-1$ within districts returns $-0.011$ and $+0.013$, equal and opposite. Since
+these are different data, a different country, a different spatial scale, and a
+different migration control, the density reproduction is strong evidence that
+the compact-city sign in per-capita land-use regressions is arithmetic rather
+than economic, exactly as the main
+paper argues. **H2 finds no support here either.**
 
 # Limitations
 
@@ -283,30 +382,42 @@ base name with an area-based rule for same-named city/rural twins rather than an
 official code, so it is accurate here but would need a code crosswalk to be
 fully automatic in other settings.
 
-*Short, recent panel.* The INKAR controls are available only from 1995, so the
-estimation window is six five-year epochs (1995--2020). This is shorter than the
-national panel and, together with the five-year spacing, means the models speak to
-medium-run trajectories rather than short-run adjustment. The brevity matters most
-for the dynamic estimators: because the GHSL series used here begins in 1985 (BpCR
-from 1990), the deeper lags that instrument the Arellano-Bond difference equation
-are available only from 2000 onward, so the GMM is estimated on fewer periods than
-the within (fixed-effects) columns even though the latter retain all of 1995--2020.
+*Short, recent panel.* The INKAR controls are available only from 1995, so BpCR
+is estimable over six five-year epochs (1995--2020), shorter than the national
+panel. A further epoch is lost to lagging: 1995's urban population share is
+observed, but its 1990 lag is not, since the INKAR series itself starts only in
+1995, so every column in @tbl-gmm runs on 2000--2020 (five epochs,
+`r nrow(d2)` district-periods, not the full 2,394), and the models speak to
+medium-run trajectories rather than short-run adjustment. Differencing costs
+Arellano-Bond one epoch more, retaining 2005--2020 only.
 
-*GMM diagnostics.* The Arellano-Bond difference estimator is well behaved: the
-Hansen test does not reject the instruments, first-order serial correlation is
-present and second-order is absent, as required. The Blundell-Bond system
-estimator, by contrast, is rejected at this fine and short scale (its Hansen and
-AR(2) tests fail), so we treat Arellano-Bond as the preferred dynamic estimator and
-read Blundell-Bond only as a sign-and-significance cross-check.
+*GMM diagnostics.* Once the population-sharing controls are correctly dated at
+$t-1$, neither dynamic estimator survives its specification tests at this scale:
+the Arellano-Bond Hansen and AR(2) tests both reject, as do Blundell-Bond's.
+Arellano-Bond passes both with contemporaneous controls, an artefact per
+@sec-timing-deu and so no comfort; Blundell-Bond fails regardless of timing, a
+feature of the system estimator here, not a timing artefact. The reason is
+mechanical: lagging the controls costs the district panel an epoch, leaving the
+differenced equation too few periods for deep-lag moments to hold.
+We therefore draw the district conclusions from the fixed-effects columns, which
+require no instrument validity, and report the GMM columns only for completeness.
+This is a limitation of the district panel's length, not a challenge to the
+national GMM, which is estimated on eight epochs and passes its AR(2) test
+comfortably.
 
 *Internal migration.* The internal net-migration control (INKAR
 *Binnenwanderungssaldo*) is the within-country flow the national analysis cannot
-observe, but within districts its coefficient is essentially zero, at best
-marginally significant (10\% level) in the fixed-effects columns and insignificant
-in the GMM. A plausible reading is that any clearer migration-densification
-association is cross-sectional (denser districts attract internal migrants), a
-pattern this within-district design does not test formally; six epochs in any case
-give little power to identify such a dynamic.
+observe, and it was the main reason for building this case study. It does not
+deliver: within districts its coefficient is essentially zero, and it is not
+robust to the timing of the other controls (@tbl-timing-deu). This is a
+substantive disappointment rather than a technicality, since the national paper's
+strongest result is the *international* migration channel and the natural
+conjecture is that internal flows work the same way. A plausible reading is that
+any clearer migration-densification association is cross-sectional (denser
+districts attract internal migrants), a pattern this within-district design does
+not test formally; four to six epochs in any case give little power. Identifying
+the internal channel convincingly would need a longer or finer panel, and remains
+the most valuable extension of the national analysis.
 
 *Measurement and scope.* As in the main paper, the built-up and population layers
 are satellite-based estimates, the urban area is defined at a fixed Degree-of-Urbanisation
@@ -318,23 +429,32 @@ so they illustrate rather than establish external validity.
 # Conclusion
 
 This supplement takes the paper's driver analysis to the sub-national (German
-district) scale, across `r nrow(d)` district-periods. The headline replication is
-path-dependence: per-capita urban land use is strongly persistent within districts
-(Arellano-Bond $\rho \approx `r sprintf("%.2f", rho_ab)`$), echoing the finding
-across countries, so this result is not an artefact of country-level aggregation.
-The income coefficient is negative throughout, in line with the sign of the
-national income-densification result, but it remains statistically insignificant
-in this short six-epoch panel; the district evidence therefore corroborates the
-direction of the national finding without independently establishing it.
+district) scale, across `r nrow(d)` district-periods, and delivers one clear
+replication, one reversal, and one disappointment.
 
-The case study also adds the internal migration that the national analysis cannot
-see. The within-country net-migration flow enters with an essentially zero
-coefficient, at best marginally significant in the fixed-effects columns and
-insignificant in the GMM; identifying that channel convincingly would require a
-longer panel. Taken together, the German evidence confirms the strong persistence
-of per-capita land use at a scale the national panel cannot reach, and is
-directionally consistent with, though not conclusive on, the income-densification
-channel.
+The replication is the paper's central methodological finding, and it is the most
+valuable thing here. Urban density is significantly *negative* when measured at
+the same date as the dependent variable and significantly *positive* at every
+timing that is not, including the arithmetically clean $t-2$ specification; the
+district accounting check reproduces the national one almost exactly
+(@sec-timing-deu). Different data, different country, different scale, different
+migration measure, same signature. That the compact-city coefficient in
+per-capita land-use regressions is an artefact of the metric's own arithmetic is
+therefore not a quirk of the global panel.
+
+The reversal is income: positive and significant under fixed effects, unlike
+the persistently negative, insignificant national estimate, though it flips
+again under Blundell-Bond and drops to insignificance under Arellano-Bond, so
+no single stable effect emerges, but it is not simply the national null
+repeating. Path-dependence replicates
+($\rho \approx `r sprintf("%.2f", coef(b5)["bpcr_L"])`$ under fixed effects, in
+the range of the national estimates), though only there at this panel length,
+since the dynamic-GMM estimator fails its own specification tests. The
+disappointment is internal migration: the flow this
+case study was built to observe is essentially zero within districts and not
+robust across specifications, so the national international-migration result finds
+no sub-national echo. Whether that reflects a different channel or simply
+insufficient power is a question a longer district panel would answer.
 
 # References {.unnumbered}
 
