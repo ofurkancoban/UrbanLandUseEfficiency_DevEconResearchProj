@@ -309,5 +309,41 @@ the author's encrypted credentials are absent:
 ## 12. Attribution
 
 GHSL data © European Union, 1995–2025 (CC BY 4.0); cite Pesaresi et al. (2024).
-GAUL © FAO (CC BY 4.0). UN data © United Nations. See `references.bib` for the
-full, citable reference list.
+GAUL © FAO (CC BY 4.0). UN data © United Nations. Full BibTeX source:
+`04_presentation/references.bib`.
+
+## 13. References
+
+- Arellano, M., Bond, S. (1991). Some tests of specification for panel data: Monte Carlo evidence and an application to employment equations. *The Review of Economic Studies*, 58(2), 277–297. https://doi.org/10.2307/2297968
+- BBSR (2024). *INKAR: Indikatoren und Karten zur Raum- und Stadtentwicklung*. Federal Institute for Research on Building, Urban Affairs and Spatial Development (BBSR), Bonn. https://www.inkar.de/
+- Blundell, R., Bond, S. (1998). Initial conditions and moment restrictions in dynamic panel data models. *Journal of Econometrics*, 87(1), 115–143. https://doi.org/10.1016/S0304-4076(98)00009-8
+- Bond, S. R. (2002). Dynamic panel data models: A guide to micro data methods and practice. *Portuguese Economic Journal*, 1(2), 141–162. https://doi.org/10.1007/s10258-002-0009-9
+- Cameron, A. C., Gelbach, J. B., Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. *The Review of Economics and Statistics*, 90(3), 414–427. https://doi.org/10.1162/rest.90.3.414
+- Çoban, Ö. F. (2026). *inkaR: Download and Analyze Spatial Development Data from INKAR* (R package version 0.6.2). https://doi.org/10.32614/CRAN.package.inkaR
+- Corbane, C., Politis, P., Siragusa, A., Kemper, T., Pesaresi, M. (2017). *LUE User Guide: A tool to calculate the Land Use Efficiency and the SDG 11.3 indicator with the Global Human Settlement Layer* (JRC108026). Publications Office of the European Union, Luxembourg. https://doi.org/10.2760/212689
+- FAO (2024). *The Global Administrative Unit Layers (GAUL) 2024*. Food and Agriculture Organization of the United Nations. Administrative boundaries, levels 0–2; CC BY 4.0. https://data.apps.fao.org/catalog/dataset/global-administrative-unit-layers-gaul-2024
+- Gao, J., O'Neill, B. C. (2020). Mapping global urban land for the 21st century with data-driven simulations and Shared Socioeconomic Pathways. *Nature Communications*, 11(1), 2302. https://doi.org/10.1038/s41467-020-15788-7
+- Holtz-Eakin, D., Newey, W., Rosen, H. S. (1988). Estimating vector autoregressions with panel data. *Econometrica*, 56(6), 1371–1395. https://doi.org/10.2307/1913103
+- Kronmal, R. A. (1993). Spurious correlation and the fallacy of the ratio standard revisited. *Journal of the Royal Statistical Society: Series A (Statistics in Society)*, 156(3), 379–392. https://doi.org/10.2307/2983064
+- Lu, W., Weng, Q. (2026). From data inconsistency to reliable SDG 11.3.1 monitoring: A global multi-dataset assessment of land use efficiency. *Land Use Policy*, 168, 108088. https://doi.org/10.1016/j.landusepol.2026.108088
+- Nickell, S. (1981). Biases in dynamic models with fixed effects. *Econometrica*, 49(6), 1417–1426. https://doi.org/10.2307/1911408
+- Nicolau, R., David, J., Caetano, M., Pereira, J. M. C. (2019). Ratio of Land Consumption Rate to Population Growth Rate: Analysis of different formulations applied to mainland Portugal. *ISPRS International Journal of Geo-Information*, 8(1), 10. https://doi.org/10.3390/ijgi8010010
+- Oueslati, W., Alvanides, S., Garrod, G. (2015). Determinants of urban sprawl in European cities. *Urban Studies*, 52(9), 1594–1614. https://doi.org/10.1177/0042098015577773
+- Pearson, K. (1897). Mathematical contributions to the theory of evolution. On a form of spurious correlation which may arise when indices are used in the measurement of organs. *Proceedings of the Royal Society of London*, 60, 489–498. https://doi.org/10.1098/rspl.1896.0076
+- Pesaresi, M., Schiavina, M., Politis, P., Freire, S., Krasnodębska, K., Uhl, J. H., Kemper, T., et al. (2024). Advances on the Global Human Settlement Layer by joint assessment of Earth Observation and population survey data. *International Journal of Digital Earth*, 17(1). https://doi.org/10.1080/17538947.2024.2390454
+- Roodman, D. (2009). How to do xtabond2: An introduction to difference and system GMM in Stata. *The Stata Journal*, 9(1), 86–136. https://doi.org/10.1177/1536867X0900900106
+- Schiavina, M., Melchiorri, M., Pesaresi, M. (2023). *GHS-SMOD R2023A - GHS settlement layers, application of the Degree of Urbanisation methodology (stage I) to GHS-POP R2023A and GHS-BUILT-S R2023A, multitemporal (1975-2030)*. European Commission, Joint Research Centre (JRC). https://doi.org/10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA
+- Seto, K. C., Fragkias, M., Güneralp, B., Reilly, M. K. (2011). A meta-analysis of global urban land expansion. *PLOS ONE*, 6(8), e23777. https://doi.org/10.1371/journal.pone.0023777
+- Seto, K. C., Güneralp, B., Hutyra, L. R. (2012). Global forecasts of urban expansion to 2030 and direct impacts on biodiversity and carbon pools. *Proceedings of the National Academy of Sciences*, 109(40), 16083–16088. https://doi.org/10.1073/pnas.1211658109
+- UN DESA WPP (2024). *World Population Prospects 2024*. https://population.un.org/wpp/
+- UN M49 / UN-CDP (2024). *Standard Country or Area Codes for Statistical Use (M49) and UN-CDP Least Developed Countries list*. https://unstats.un.org/unsd/methodology/m49/
+- UN SNAAMA (2025). *National Accounts Main Aggregates Database: GDP per capita, constant 2020 prices in US dollars*. https://unstats.un.org/unsd/snaama/
+- UN-Habitat (2025). *SDG Indicator 11.3.1 Metadata: Ratio of Land Consumption Rate to Population Growth Rate*. SDG indicator metadata, harmonized template v1.1, United Nations Human Settlements Programme (UN-Habitat). Last updated 2025-04-23. https://unstats.un.org/sdgs/metadata/files/Metadata-11-03-01.pdf
+- United Nations, Department of Economic and Social Affairs, Population Division (2019). *World Urbanization Prospects: The 2018 Revision* (ST/ESA/SER.A/420). United Nations, New York. https://population.un.org/wup/
+- Windmeijer, F. (2005). A finite sample correction for the variance of linear efficient two-step GMM estimators. *Journal of Econometrics*, 126(1), 25–51. https://doi.org/10.1016/j.jeconom.2004.02.005
+- Worldometer (2024). *World Population Clock: Current World Population*. Real-time projection based on UN DESA World Population Prospects 2024. https://www.worldometers.info/world-population/
+- Zhong, C., Peng, L., Yu, J., Swan, I., Li, H. (2025). Toward more reliable, complete, and equitable global urban land use efficiency assessments. *Communications Earth & Environment*, 6, 1055. https://doi.org/10.1038/s43247-025-03033-2
+
+Full BibTeX entries (with DOIs and additional metadata) are in
+`04_presentation/references.bib`, shared by the paper, supplementary, and
+presentation.
