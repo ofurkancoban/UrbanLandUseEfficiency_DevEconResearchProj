@@ -306,13 +306,7 @@ the author's encrypted credentials are absent:
 > `02_scripts/00_setup/02_configure_secrets.R` shows how to cache your own the
 > same way, if you want to skip re-authenticating on every `--gee` run.
 
-## 12. Attribution
-
-GHSL data © European Union, 1995–2025 (CC BY 4.0); cite Pesaresi et al. (2024).
-GAUL © FAO (CC BY 4.0). UN data © United Nations. Full BibTeX source:
-`04_presentation/references.bib`.
-
-## 13. References
+## 12. References
 
 - Arellano, M., Bond, S. (1991). Some tests of specification for panel data: Monte Carlo evidence and an application to employment equations. *The Review of Economic Studies*, 58(2), 277–297. https://doi.org/10.2307/2297968
 - BBSR (2024). *INKAR: Indikatoren und Karten zur Raum- und Stadtentwicklung*. Federal Institute for Research on Building, Urban Affairs and Spatial Development (BBSR), Bonn. https://www.inkar.de/
