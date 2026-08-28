@@ -17,17 +17,30 @@
 # ==============================================================================
 #
 # Usage:
-#   Rscript run_pipeline.R              # run all steps, skipping done ones
+#   Rscript run_pipeline.R              # interactive: asks whether to download
+#                                        #   raw data or reuse the committed panel
+#                                        #   (see PROMPT below); non-interactive
+#                                        #   shells default to the committed panel
 #   Rscript run_pipeline.R --force      # re-run every step (ignore existing output)
 #   Rscript run_pipeline.R --gee        # also run the Google Earth Engine steps
-#                                        #   (needs credentials; see 00_setup)
+#                                        #   (needs credentials; see 00_setup);
+#                                        #   skips the prompt below
+#   Rscript run_pipeline.R --no-gee     # skip the prompt, use the committed panel
+#                                        #   (same effect as answering "no")
 #   Rscript run_pipeline.R --no-render  # stop before rendering presentation/paper
+#
+# PROMPT: when run from a terminal without --gee/--no-gee, the pipeline asks
+# once whether to (1) reuse the committed processed panel (fast, no downloads,
+# no Earth Engine account) or (2) re-download and rebuild every raw input from
+# source (GEE collections + web downloads; needs EE credentials, can take
+# hours). Piped/non-interactive runs (cron, CI, `Rscript ... < /dev/null`)
+# cannot answer a prompt, so they skip it and default to (1).
 #
 # NOTE: raw-rebuild steps (marked raw = TRUE) re-create the raw inputs - either
 # GEE collections (need decrypted Earth Engine credentials, can take HOURS) or
 # web downloads (GAUL 2025 boundaries, GHS-SMOD raster, UN GDP/migration). They
-# are SKIPPED by default because the repo ships the processed panels + figures.
-# Pass --gee to rebuild ALL raw inputs from their sources.
+# are SKIPPED unless RUN_GEE ends up TRUE (via --gee or the prompt), because
+# the repo ships the processed panels + figures.
 #
 # ONE-TIME SETUP (not part of this orchestrator; run manually if needed):
 #   02_scripts/00_setup/02_configure_secrets.R   -> writes encrypted *.enc creds
@@ -45,6 +58,7 @@ setwd(here::here())
 args      <- commandArgs(trailingOnly = TRUE)
 FORCE     <- "--force"     %in% args
 RUN_GEE   <- "--gee"       %in% args
+NO_GEE    <- "--no-gee"    %in% args
 NO_RENDER <- "--no-render" %in% args
 
 hr <- function(ch = "=") cat(strrep(ch, 78), "\n", sep = "")
@@ -56,9 +70,28 @@ for (d in c("03_datasets/processed", "03_datasets/raw",
             "04_outputs/figures", "04_outputs/tables"))
   dir.create(here::here(d), recursive = TRUE, showWarnings = FALSE)
 
+panel_committed <- file.exists(here::here("03_datasets/processed/reg_panel_urban.csv"))
+
+# Ask once whether to download raw data or reuse the committed panel, but only
+# when there is an actual choice (the committed panel exists), the caller has
+# not already decided via a flag, and a human can plausibly answer (a real
+# terminal on stdin; piped/cron/CI runs get FALSE here and fall through).
+if (!RUN_GEE && !NO_GEE && panel_committed && isatty(stdin())) {
+  cat("A committed processed panel already exists ",
+      "(03_datasets/processed/reg_panel_urban.csv).\n\n",
+      "  [1] Use it as-is - fast, no downloads, no Earth Engine account needed (default)\n",
+      "  [2] Re-download and rebuild ALL raw inputs from source\n",
+      "      (GEE collections + web downloads; needs EE credentials, can take hours)\n\n",
+      sep = "")
+  cat("Choice [1/2, Enter = 1]: ")
+  ans <- tryCatch(readLines(con = "stdin", n = 1), error = function(e) "")
+  if (identical(trimws(ans), "2")) RUN_GEE <- TRUE
+  cat("\n")
+}
+
 # Pre-flight: committed mode needs the committed panel. If it is missing and the
 # user did not ask to rebuild from sources, tell them how rather than crash later.
-if (!RUN_GEE && !file.exists(here::here("03_datasets/processed/reg_panel_urban.csv"))) {
+if (!RUN_GEE && !panel_committed) {
   cat("! Committed data (03_datasets/processed/) is missing and --gee was not set.\n",
       "  The default mode renders from committed data; it cannot rebuild it.\n",
       "  Run:  Rscript run_pipeline.R --gee     # rebuild raw -> processed -> render\n",
