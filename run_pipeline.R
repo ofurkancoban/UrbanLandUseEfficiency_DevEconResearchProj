@@ -113,6 +113,11 @@ tasks <- list(
        verify = function() ex(file.path("03_datasets/raw",
                  "GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0",
                  "GHS_SMOD_E2020_GLOBE_R2023A_54009_1000_V2_0.tif")), raw = TRUE),
+  list(name = "[download] GHS-BUILT-S raster (JRC, built-up surface)",
+       script = "02_scripts/01_data_preprocessing/08_download_ghs_built.R",
+       verify = function() ex(file.path("03_datasets/raw",
+                 "GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0",
+                 "GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")), raw = TRUE),
 
   # ---- Phase 2: panel construction (the deck's data) ---------------------
   list(name = "Country urban panel (reg_panel_urban.csv)",
@@ -149,9 +154,8 @@ tasks <- list(
        verify = function() ex("04_outputs/figures/metadata_layers_deu.png"), raw = FALSE),
 
   # ---- Phase 3: presentation figures (interactive HTML) ------------------
-  list(name = "Figure: BpCR interactive map",
-       script = "02_scripts/02_analysis/04_fig_bpcr_interactive.R",
-       verify = function() ex("04_outputs/figures/bpcr_interactive.html"), raw = FALSE),
+  # (the BpCR interactive-map appendix figure was dropped from the deck; its
+  # generator script and output were removed with it)
   list(name = "Figure: regional trend contrast",
        script = "02_scripts/02_analysis/05_fig_desc_trend_regional.R",
        verify = function() ex("04_outputs/figures/desc_trend_regional.html"), raw = FALSE),
