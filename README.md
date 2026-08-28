@@ -235,10 +235,15 @@ stale.)*
 ## 9. How to run
 
 ```bash
-# Render from the committed processed data (no GEE needed) - the common case:
+# Interactive (recommended): asks once whether to reuse the committed panel
+# (fast, no downloads) or re-download and rebuild every raw input from source.
 Rscript run_pipeline.R
 
-# Rebuild everything from source, incl. GEE collection (slow; needs EE credentials):
+# Non-interactive, explicit: skip the prompt and reuse the committed panel.
+Rscript run_pipeline.R --no-gee
+
+# Non-interactive, explicit: skip the prompt and rebuild everything from
+# source, incl. GEE collection (slow; needs EE credentials):
 Rscript run_pipeline.R --gee --force
 
 # Build data/figures but skip rendering:
@@ -247,9 +252,12 @@ Rscript run_pipeline.R --no-render
 
 The pipeline is **strictly sequential, auto-skips finished steps, and stops on
 failure**. Because the repo ships the processed panels in `03_datasets/processed/`,
-a fresh checkout goes straight to figures + render. Raw GHSL/GAUL data is not
-committed; `--gee` re-collects it (GEE steps need Earth Engine credentials; the
-web downloads do not).
+a fresh checkout can go straight to figures + render, and running it from a
+terminal will ask you to confirm that's what you want before proceeding. Piped
+or non-interactive runs (cron, CI, `< /dev/null`) can't answer that prompt, so
+they skip it and default to the committed panel automatically. Raw GHSL/GAUL
+data is not committed; `--gee` (or answering "2" at the prompt) re-collects it
+(GEE steps need Earth Engine credentials; the web downloads do not).
 
 ## 10. Requirements
 
