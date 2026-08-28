@@ -407,6 +407,21 @@ ab_coef <- function(row, digits = 4) {
         paste0(val, " (n.s.)")
     }
 }
+# Same formatting, but from the "+ Urban %" fixed-effects column: the full
+# model's Arellano-Bond/Blundell-Bond fail their Hansen test (paper @sec-results),
+# so density and migration headlines are read from fixed effects, not GMM.
+fe_coef <- function(row, digits = 4) {
+    cell <- gmm_res$main_combo[["+ Urban %"]][row]
+    cs <- sub("<br>.*$", "", cell)
+    num <- as.numeric(sub("^([+-]?[0-9.]+).*$", "\\1", cs))
+    star <- sub("^[+-]?[0-9.]+", "", cs)
+    val <- sub("-", "−", sprintf("%+.*f", digits, num))
+    if (nzchar(star)) {
+        paste0(val, gsub("*", "\\*", star, fixed = TRUE))
+    } else {
+        paste0(val, " (n.s.)")
+    }
+}
 gmm_gt <- function(tb, meta = NULL, fontpx = NULL, note = NULL) {
     n_terms <- 5L # coefficient rows before the diagnostics block
     est_cols <- setdiff(names(tb), "Term") # 3 cols (FE/AB/BB), 4 (+OLS) or 7 (FE stepwise + AB/BB)
@@ -1094,7 +1109,7 @@ and H3, richer countries densify rather than sprawl.
 ### One specification, two dependent variables
 
 ::: {style="background:#f89d2b; border:3px solid #b1690f; border-radius:10px; padding:4px 14px; margin:10px auto; max-width:99%;"}
-$$\small \text{Metric}_{i,t} = \rho\,\text{Metric}_{i,t-1} + \beta_1\ln(UrbDens)_{i,t} + \beta_2\,UrbShare_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,NetMigr_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+$$\small \text{Metric}_{i,t} = \rho\,\text{Metric}_{i,t-1} + \beta_1\ln(UrbDens)_{i,t-1} + \beta_2\,UrbShare_{i,t-1} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,NetMigr_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
 :::
 
 ::: {style="text-align:left; font-size:1.1em; background:rgba(248,157,43,0.14); border:2px solid #f89d2b; border-radius:10px; padding:10px 18px; margin:10px auto; max-width:99%;"}
@@ -1157,7 +1172,7 @@ And we do it in two steps. First, statically: does switching the metric change t
 ## Model 1: UN Approach: LCRPGR Regression
 
 ::: {style="border:3px solid #f89d2b; border-radius:10px; padding:2px 16px; margin:8px auto; max-width:83%;"}
-$$\small LCRPGR_{i,t} = \beta_1\ln(UrbDens)_{i,t} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+$$\small LCRPGR_{i,t} = \beta_1\ln(UrbDens)_{i,t-1} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t-1} + \mu_i + \delta_t + \varepsilon_{i,t}$$
 :::
 
 ::: {.eqmatch}
@@ -1200,7 +1215,7 @@ Nothing is significant, and the within-country R² is about 0.003 – so low. Th
 ## Model 2: Our Approach: BpCR Regression
 
 ::: {style="border:3px solid #f89d2b; border-radius:10px; padding:2px 16px; margin:8px auto; max-width:83%;"}
-$$\small BpCR_{i,t} = \beta_1\ln(UrbDens)_{i,t} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+$$\small BpCR_{i,t} = \beta_1\ln(UrbDens)_{i,t-1} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t-1} + \mu_i + \delta_t + \varepsilon_{i,t}$$
 :::
 
 ::: {.eqmatch}
@@ -1243,7 +1258,7 @@ Same data, same model – just a better-built metric. This is the clearest evide
 ## Final Model: BpCR under Dynamic-Panel GMM
 
 ::: {style="border:3px solid #f89d2b; border-radius:10px; padding:2px 16px; margin:6px auto; max-width:100%;"}
-$$\small BpCR_{i,t} = \rho\,BpCR_{i,t-1} + \beta_1\ln(UrbDens)_{i,t} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}$$
+$$\small BpCR_{i,t} = \rho\,BpCR_{i,t-1} + \beta_1\ln(UrbDens)_{i,t-1} + \beta_2\,NetMigr_{i,t} + \beta_3\ln(GDPpc)_{i,t} + \beta_4\,UrbShare_{i,t-1} + \mu_i + \delta_t + \varepsilon_{i,t}$$
 :::
 
 The dynamic FE model is built up control-by-control (first five columns); the last two columns target the lagged-DV **Nickell bias** with **Arellano-Bond** and **Blundell-Bond** GMM (instrumenting the lagged BpCR with its deeper lags).
@@ -1284,17 +1299,17 @@ gmm_gt(
 
 :::: {style="font-size:0.8em; background:rgba(248,157,43,0.13); border-left:4px solid #b1690f; border-radius:8px; padding:5px 11px; margin:0 0 7px 0;"}
 [<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#b1690f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><polyline points="21 3 21 8 16 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><polyline points="3 21 3 16 8 16"/></svg> &nbsp;**BpCR[t−1]**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[INERTIA]{style="background:#b1690f; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
-[ρ = `r ab_coef(1L, 2L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} Here ρ is imprecise (SE 0.10) and its moments are marginal, so we do not read it: it sits *just* below the Bond bracket, within sampling error. Where the moments are clean: **ρ ≈ 0.46 (SE 0.07)**, close to the Nickell-implied 0.45; Blundell-Bond lands nearby too (0.45), but its own Hansen test also fails there, so we read that as coincidence, not corroboration.<br>[**H5** ✓ Supported: ~half of last period's BpCR persists]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+[ρ = `r ab_coef(1L, 2L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} Here ρ is imprecise (SE 0.10) and its moments are marginal, so we do not read it: it sits *just* below the Bond bracket, within sampling error. Where the moments are clean, across specifications, it ranges **0.34–0.46**, close to the Nickell-implied 0.45; Blundell-Bond lands nearby too (0.46), but its own Hansen test also fails there, so we read that as coincidence, not corroboration. We do not report a single point estimate.<br>[**H5** ✓ Supported in direction: persistence is substantial, plausibly a third to a half]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
 ::::
 
 :::: {style="font-size:0.8em; background:rgba(192,57,43,0.10); border-left:4px solid #c0392b; border-radius:8px; padding:5px 11px; margin:7px 0;"}
 [<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><rect x="3" y="9" width="7" height="12" rx="1"/><rect x="13" y="3" width="8" height="18" rx="1"/><path d="M6 13h1M6 17h1M16 7h2M16 11h2M16 15h2"/></svg> &nbsp;**ln(Urban Density)[t−1]**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[SIGN FLIPS]{style="background:#c0392b; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
-[β₁ = `r ab_coef(2L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} BpCR contains **−ln P₍ₜ₎ + ln P₍ₜ₋₁₎**, so density inherits the sign of its own date: **−0.055\*\*\*** at *t*, **positive** at *t−1*. Clean *t−2* timing: **+0.011\*\***.<br>[**H2** ✗ Rejected: the compact-city sign was arithmetic]{style="color:#c0392b; font-weight:700; font-size:0.85em;"}
+[β₁ = `r fe_coef(2L, 3L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} (fixed effects; the full model's AB/BB fail Hansen, so we do not read a GMM magnitude here) BpCR contains **−ln P₍ₜ₎ + ln P₍ₜ₋₁₎**, so density inherits the sign of its own date: **`r sub("<br>.*$", "", gmm_res$timing_fe[gmm_res$timing_fe$Term == "ln(Urban Density)", "Both t"])`** at *t*, **positive** at *t−1*. Clean *t−2* timing: **+0.011\*\***.<br>[**H2** ✗ Not supported (tentative): the reported sign was arithmetic, but the proper built-up mechanism remains untestable here]{style="color:#c0392b; font-weight:700; font-size:0.85em;"}
 ::::
 
 :::: {style="font-size:0.8em; background:rgba(14,124,102,0.10); border-left:4px solid #0e7c66; border-radius:8px; padding:5px 11px; margin:7px 0;"}
 [<svg width="1.3em" height="1.3em" viewBox="0 0 24 24" fill="none" stroke="#0e7c66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.3a3 3 0 0 1 0 5.4"/><path d="M21 20a6 6 0 0 0-4-5.6"/></svg> &nbsp;**Net Migration**]{style="font-size:1.14em; white-space:nowrap;"} &nbsp;[DENSIFICATION]{style="background:#0e7c66; color:#fff; border-radius:9px; padding:1px 8px; font-size:0.82em; font-weight:700;"}<br>
-[β₂ = `r ab_coef(3L, 4L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} **Our strongest result.** Migration moves with urban population **+0.88 pp/yr** but built-up only **+0.24** → the gap is densification. Holds in **all 3** development groups.<br>[**H4** ✓ Supported as an *association*: passes a strict-exogeneity test, but migrants may select into fast-building economies]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
+[β₂ = `r fe_coef(3L, 4L)`]{style="background:rgba(0,0,0,0.07); border-radius:6px; padding:0 6px; font-weight:700;"} (fixed effects; a Hansen-valid GMM specification returns `r sprintf("%.4f", gmm_res$mig_valid$coef)`, closely matching) **Our strongest result.** Migration moves with urban population **+0.88 pp/yr** but built-up only **+0.24** → the gap is densification. Holds in **all 3** development groups.<br>[**H4** ✓ Supported as an *association*: passes a strict-exogeneity test, but migrants may select into fast-building economies]{style="color:#0e7c66; font-weight:700; font-size:0.85em;"}
 ::::
 
 :::: {style="font-size:0.8em; background:rgba(154,160,166,0.12); border-left:4px solid #9aa0a6; border-radius:8px; padding:5px 11px; margin:7px 0;"}
@@ -1318,9 +1333,9 @@ That creates the Nickell bias: once a lagged dependent variable enters a fixed-e
 
 Now, a fair objection: difference GMM is exactly the estimator that is known to have weak instruments on persistent series – that is why Blundell and Bond built the system version. And in the full model my rho is 0.21, which sits just below the within estimate of 0.26, below the Bond bracket. Now, that crossing on its own means nothing – the gap is 0.04 against a standard error of 0.10, so it is well inside sampling error, and I will not hang an argument on it. But it is the classic weak-instrument symptom, so I checked it rather than assumed it away.
 
-It is not weak instruments. Strip the model back to a pure AR(1) and difference GMM gives 0.46, with a standard error of 0.07, against a within estimate of 0.25 – it moves away from within by 0.20, about three times its own standard error, and precisely the correction the Nickell formula predicts for eight periods. Weak instruments could not do that; they would pull it toward within. And the first-stage F is 14, above the usual threshold. Two numbers agree there: Nickell-implied 0.45 and Arellano-Bond 0.46. Blundell-Bond lands nearby too, at 0.45, but its own Hansen test fails here as well, so I treat that as coincidence, not corroboration.
+It is not weak instruments. Strip the model back to a pure AR(1) and difference GMM gives 0.46, with a standard error of 0.07, against a within estimate of 0.25 – it moves away from within by 0.20, about three times its own standard error, and precisely the correction the Nickell formula predicts for eight periods. Weak instruments could not do that; they would pull it toward within. And the first-stage F is 14, above the usual threshold. Two numbers agree there: Nickell-implied 0.45 and Arellano-Bond 0.46. Blundell-Bond lands nearby too, at 0.46, but its own Hansen test fails here as well, so I treat that as coincidence, not corroboration.
 
-So what breaks it? The controls built on that same population count. GDP contributes through its per-capita denominator – it takes about a third of the fall – but the big movers are density and urban share, the same two that killed H2. Differencing ties them to the lagged error, and across the four specifications rho slides from 0.46 to 0.21 while its standard error grows from 0.07 to 0.10 and the Hansen test slides from 0.42 to 0.05, in step. That joint pattern is the evidence – not the single bracket crossing. So I read persistence where the moment conditions hold: about 0.46, roughly half of last period's growth carries over. The same defect explains both H2 and the persistence anomaly, which is why I keep coming back to that one piece of arithmetic.
+So what breaks it? The controls built on that same population count. GDP contributes through its per-capita denominator – it takes about a third of the fall – but the big movers are density and urban share, the same two that killed H2. Differencing ties them to the lagged error, and across the four specifications rho slides from 0.46 to 0.21 while its standard error grows from 0.07 to 0.10 and the Hansen test slides from 0.42 to 0.05, in step. That joint pattern is the evidence – not the single bracket crossing. So I read persistence where the moment conditions hold, across specifications: somewhere between a third and a half of last period's growth carries over, and I decline to collapse that to one number given the full model's own failure. The same defect explains both H2 and the persistence anomaly, which is why I keep coming back to that one piece of arithmetic.
 
 Now the important part, and the part that changed my conclusions. Write BpCR out and you see it contains minus log population at t, plus log population at t minus one. Two of my controls – density and urban share – are built from that same population count. So each one inherits the sign of the date it is measured at: negative if contemporaneous, positive if lagged. I verify this directly: regressing BpCR on the two population terms gives minus 0.10 and plus 0.11, equal and opposite. So lagging by one period does not fix the problem, it just flips the bias. Estimating all four timing combinations confirms it: the negative sign follows whichever control is contemporaneous. The only clean timing is t minus two, which shares no term with BpCR – and there density is plus 0.011, still not negative. So H2, the compact-city hypothesis, is rejected: that famous negative sign is arithmetic, not economics.
 
@@ -1351,7 +1366,7 @@ On diagnostics: AR(2) is comfortably satisfied, which is the condition the lag s
 
 - **The log-based BpCR is the better metric** (Lu & Weng 2026, not ours; the log-alternative case is also made by Nicolau et al. 2019). Symmetric and numerically stable, it is finite for every country-period. **Our part:** showing on **identical data** that it recovers an economic signal the official ratio leaves statistically undetectable.
 
-- **What survives the diagnostics.** Sprawl is **path-dependent** (ρ ≈ 0.46 where the moments are clean); **net migration** is the one robust correlate. Density is *not* a compact-city effect (**H2 rejected**: the sign is arithmetic), and income cannot be distinguished from zero (**H3 not supported**).
+- **What survives the diagnostics.** Sprawl is **path-dependent** (persistence bracketed at **0.34–0.46** where the moments are clean, no single point estimate); **net migration** is the one robust correlate. The compact-city sign conventionally reported for density is arithmetic, not economic (**H2 not supported**, but tentative: the proper built-up-density mechanism remains untestable here), and income cannot be distinguished from zero (**H3 not supported**).
 
 - **We complement the literature, not contradict it.** Between countries, richer ones are more sprawled (the usual finding); within a single country the income sign turns negative, but it is not precisely estimated. What our country fixed effects *do* recover robustly is the **migration** channel: cities absorb in-migrants **more than 3.5× faster than they build for them**, so in-migration means densification, in developed, developing and least-developed economies alike.
 
