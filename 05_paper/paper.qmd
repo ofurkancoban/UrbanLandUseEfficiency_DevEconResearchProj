@@ -545,7 +545,11 @@ fixed labels throughout.
 
 ## Specification
 
-We proceed in two stages, each with its own specification. In the **static** stage
+We proceed in two stages, each with its own specification, and from here on index
+time by the panel's discrete five-year epochs ($t \in \{1985, 1990,\dots,2020\}$),
+so $t-1$ denotes the previous epoch, five calendar years earlier, the panel's period
+length $z$, rather than one calendar year as in the continuous-year notation of
+@sec-measurement. In the **static** stage
 we compare the two metrics on an equal footing. For each metric
 $\text{Metric} \in \{\text{LCRPGR}_{\log}, \text{BpCR}\}$ (we use the conservative
 log form of the ratio, @sec-measurement) we estimate a two-way fixed-effects model
@@ -563,8 +567,8 @@ BpCR:
 $$
 \small \text{BpCR}_{i,t} = \rho\,\text{BpCR}_{i,t-1} + \beta_1\ln(\text{UrbDens})_{i,t-1} + \beta_2\,\text{UrbShare}_{i,t-1} + \beta_3\ln(\text{GDPpc})_{i,t} + \beta_4\,\text{NetMigr}_{i,t} + \mu_i + \delta_t + \varepsilon_{i,t}.
 $$ {#eq-dynamic}
-The coefficient $\rho$ measures how strongly a country's per-capita land use
-persists from one period to the next (H5).
+In @eq-dynamic, the coefficient $\rho$ measures how strongly a country's per-capita
+land use persists from one period to the next (H5).
 
 The country fixed effects $\mu_i$ absorb all time-invariant national
 characteristics, so identification comes from changes *within* a country over time,
@@ -873,7 +877,8 @@ $0.34$ and $0.46$ across the specifications whose Hansen tests clear the thresho
 close to the value the @nickell1981 correction implies
 ($`r sprintf("%.2f", gmm$rho_check$implied_T8)`$); the first-stage $F$ of
 `r sprintf("%.1f", gmm$rho_check$first_stage_F)` does not indicate a weak-instrument
-problem. (The system estimator lands nearby, at $0.45$, but since its own Hansen test
+problem. (The system estimator lands nearby, at
+$`r sprintf("%.2f", gmm$rho_check$bb)`$, but since its own Hansen test
 fails we treat that as coincidence, not corroboration.) We conclude that persistence
 is substantial, plausibly a third to a half of one period's growth, but decline to
 report a single coefficient, since the full-model moment failure is exactly why the
@@ -894,10 +899,15 @@ knitr::kable(rl,
 
 *Net migration (H4).* Of the four drivers, net in-migration is the only one whose
 association is not overturned as an artefact. We read its coefficient primarily from
-**fixed effects** ($-0.0064$), immune to the Hansen concerns above since it needs no
-instruments; Arellano-Bond corroborates closely ($-0.0062$) despite its own marginal
-Hansen test, and Blundell-Bond, whose Hansen test fails outright, lands nearby
-($-0.0052$, @tbl-gmm) but carries no independent weight here. The coefficient is
+**fixed effects** ($-0.0064$), which need no instrument validity. The full model's
+own Arellano-Bond estimate ($-0.0062$, @tbl-gmm) comes from the same Hansen-failing
+specification discussed below and carries no independent weight on its own; a
+moment-valid Arellano-Bond specification, entered alongside the lagged dependent
+variable (Hansen $p=0.17$), returns
+$`r sprintf("%.4f", gmm$mig_valid$coef)`$ instead, closely matching the
+fixed-effects estimate under instruments the data do not reject.
+Blundell-Bond, whose Hansen test fails regardless of specification, lands nearby
+($-0.0052$, @tbl-gmm) but carries no independent weight either. The coefficient is
 negative, highly significant, and stable across development groups (@tbl-hetero) and
 timings (@tbl-timingfe). Its interpretation
 needs care in two directions. The negative *sign* is close to mechanical: net
@@ -940,10 +950,15 @@ the internal rural-to-urban migration that dominates urban growth in developing 
 least-developed countries is unobserved here (@sec-discussion), so even this
 association captures the smaller part of the migration story.
 
-*Urban density (H2).* Entered at $t-1$, density is *positive* under fixed effects
-($+0.014$, significant) and Arellano-Bond ($+0.037$, significant) but essentially zero
-under Blundell-Bond ($-0.001$, insignificant), so the estimators disagree and density
-is not robustly identified in the GMM; we do not rely on its magnitude. (Its $t-1$
+*Urban density (H2).* Entered at $t-1$, density is *positive* and significant under
+fixed effects ($+0.014$). The full model's Arellano-Bond ($+0.037$) and
+Blundell-Bond ($-0.001$) estimates come from the same Hansen-failing specification
+and are not informative either way, not merely because they disagree with each
+other; unlike migration, density enters our GMM ladder only alongside urban share, at
+the rung whose Hansen test fails (@tbl-rholadder), so no moment-valid specification
+was ever available for it, and we rely on fixed
+effects and the clean $t-2$ timing alone, never on a GMM magnitude for density.
+(Its $t-1$
 value is $+0.009$, insignificant, on the smaller common-timing sample of
 @tbl-timingfe, against $+0.014$ on the full 1,499; both small and positive.) The
 *negative* compact-city coefficient appears only under contemporaneous timing, a
@@ -986,9 +1001,7 @@ knitr::kable(tf,
 *Income (H3).* Log GDP per capita carries its expected negative sign in every
 specification but is **not** significant in the preferred column ($-0.006$,
 $p = 0.17$) or elsewhere; the sign is stable, the precision is not. We therefore do
-**not** claim H3 is supported and read the sign as suggestive only, noting that part
-of its apparent significance in earlier single-year-migration versions was migration
-variation, absorbed once the flow is window-matched (@sec-data).
+**not** claim H3 is supported and read the sign as suggestive only.
 
 *Urban population share.* Once lagged, the stage of urbanisation is insignificant, so
 what matters is the urban *form* a country builds, not how far along the transition
@@ -998,18 +1011,13 @@ A word on the over-identification tests is in order, because in the *full* model
 they are not comfortable: with only 15 and 21 instruments (so this is not instrument
 proliferation) neither clears the conventional threshold, the Arellano-Bond Hansen
 $J$ at $p=0.05$ and Blundell-Bond at $p=0.01$. We do not paper over it: a failing
-Hansen
-test leaves the over-identifying restrictions unvalidated, so the *full-model* GMM
-estimates, $\rho$ in particular, cannot be read as consistent, and we do not
-interpret them. Nothing load-bearing rests on those columns. The four control
-coefficients are read from the **fixed-effects columns**, which need no instrument
-validity; Arellano-Bond agrees with them in sign throughout, and in significance for
-the two coefficients that are significant at all, density and migration. Only
-migration, though, also matches closely in magnitude ($-0.0064$ vs $-0.0062$,
-@tbl-gmm); density's magnitude diverges sharply between the two estimators (as
-already noted above), and income's and urban share's estimates, being insignificant
-in both columns, are too imprecise for their (also divergent) magnitudes to carry
-much weight either way. GMM enters only to bound the Nickell bias on
+Hansen test leaves the over-identifying restrictions unvalidated, so *none* of the
+full-model GMM estimates, not $\rho$ alone, can be read as consistent, and we hold
+every coefficient in that column to the same standard, as already applied above to
+migration and density. The four control coefficients are therefore read from the
+**fixed-effects columns**, which need no instrument validity; income's and urban
+share's estimates are insignificant there too and we do not interpret their GMM
+values either way. GMM enters only to bound the Nickell bias on
 $\rho$, which we report as a range (@tbl-rholadder), never from the full model but
 from the moment-valid specifications whose own Hansen tests clear the threshold; even
 there we decline a point estimate, for the reasons given above. AR(2) holds
@@ -1165,16 +1173,10 @@ suggestive only.
 Our results are, above all, a caution about reading behavioural drivers off
 per-capita metrics. @seto2011meta and @oueslati2015sprawl identify income and
 population growth as the leading drivers of urban expansion; on BpCR, once its
-arithmetic is respected, none survives as a clean *sign*-identified behavioural
-driver. Migration, the only association left standing, has a negative sign that is
-close to mechanical, because migration drives urban population, which enters BpCR
-negatively, so a negative coefficient follows almost by construction once the built
-stock lags population. Its magnitude, however, is a genuine behavioural quantity: the
-decomposition shows built-up area grows with migration at only about a quarter the
-rate of population, a real measure of how slowly land tracks people (@sec-results). Income is a null, negative everywhere but
-indistinguishable from zero, in part because measuring migration over the dependent
-variable's five-year window absorbs variation that earlier single-year specifications
-left for income to pick up (@sec-data).
+arithmetic is respected, neither survives as a clean *sign*-identified behavioural
+driver. Migration's mechanically signed but behaviourally meaningful magnitude
+(@sec-results) is the only association left standing; income is a null, negative
+everywhere but indistinguishable from zero.
 
 The urban-form finding is a methodological caution (@sec-results): any per-capita
 regression controlling for density at the dependent variable's own date recovers a
@@ -1193,10 +1195,16 @@ the fixed effects absorb a large class of confounders and the GMM corrects the
 lagged-DV bias, but the controls are treated as strictly exogenous. For migration
 this simplification is bounded (@sec-results): it passes a lead test and is
 invariant to a predetermined treatment, yet selection into fast-building economies
-cannot be fully ruled out, so we read it as a conditional association. For density
-the within/first-difference divergence is consistent with a violation of strict
-exogeneity (though measurement error could also contribute), which is why we read
-its sign from the clean $t-2$ timing rather than interpret its GMM magnitude. Income
+cannot be fully ruled out, so we read it as a conditional association. For density,
+the within estimate
+($+`r sprintf("%.3f", gmm$exog_check$fe[["Estimate"]])`$) and the first-difference
+estimate ($+`r sprintf("%.3f", gmm$exog_check$fd[["Estimate"]])`$, about
+$`r sprintf("%.1f", gmm$exog_check$fd[["Estimate"]]/gmm$exog_check$fe[["Estimate"]])`\times$
+larger) diverge sharply though both should agree under strict exogeneity, a gap
+consistent with its violation (though measurement error could also contribute) and
+a separate concern from the instrument-validity problem discussed in @sec-results;
+together the two are why we read density's sign only from fixed effects and the
+clean $t-2$ timing, never from its GMM magnitude. Income
 we do not interpret in any case, so its exogeneity is moot. Second, the five-year
 epochs capture
 medium-run trajectories rather than short-run adjustment. Third, and more seriously,

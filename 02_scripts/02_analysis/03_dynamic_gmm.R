@@ -426,9 +426,15 @@ rho_ladder <- local({
       m <- pgmm(as.formula(fm), data = pdl, effect = "twoways", model = "twosteps",
                 transformation = tr, collapse = TRUE)
       sm <- summary(m, robust = TRUE)
-      list(rho = unname(sm$coefficients["lag(bpcr, 1)", 1]),
-           se  = unname(sm$coefficients["lag(bpcr, 1)", 2]),
-           h   = unname(sm$sargan$p.value))
+      cf <- sm$coefficients
+      mig <- if ("net_migr_pct" %in% rownames(cf)) {
+        list(coef = unname(cf["net_migr_pct", 1]), se = unname(cf["net_migr_pct", 2]),
+             p = unname(cf["net_migr_pct", 4]))
+      } else NULL
+      list(rho = unname(cf["lag(bpcr, 1)", 1]),
+           se  = unname(cf["lag(bpcr, 1)", 2]),
+           h   = unname(sm$sargan$p.value),
+           mig = mig)
     }
     ab <- gf("d"); bb <- gf("ld")
     # report SEs: the bracket is a comparison of point estimates, and whether a
@@ -440,14 +446,22 @@ rho_ladder <- local({
                `Blundell-Bond` = sprintf("%.3f (%.3f)", bb$rho, bb$se),
                `AB in bracket` = ifelse(ab$rho >= fe && ab$rho <= ols, "Yes", "No"),
                `AB Hansen (p)` = sprintf("%.2f", ab$h),
-               check.names = FALSE, stringsAsFactors = FALSE)
+               check.names = FALSE, stringsAsFactors = FALSE) |>
+      structure(ab_mig = ab$mig)
   }
-  do.call(rbind, list(
+  rows <- list(
     one("", "AR(1) only"),
     one("net_migr_pct", "+ Net migration"),
     one("net_migr_pct + ln_gdp_pc", "+ GDP per capita"),
     one(ctl, "+ Density, urban share (full)")
-  ))
+  )
+  ladder <- do.call(rbind, rows)
+  # Migration's own AB coefficient at the Hansen-passing "+ Net migration" rung
+  # (Hansen clears at this stage; density only enters, and breaks Hansen, at the
+  # final rung), so unlike density its GMM estimate can be read from a
+  # moment-valid specification rather than only from the failing full model.
+  attr(ladder, "mig_valid") <- attr(rows[[2]], "ab_mig")
+  ladder
 })
 
 # ------------------------------------------------------------------------------
@@ -699,6 +713,7 @@ saveRDS(list(main = main_tab, robust = robust_tab, main_full = main_full, main_c
              urt = urt, inc_hansen = inc_hansen, timing = timing_tab, timing_fe = timing_fe,
              mig_robust = mig_robust, inst_robust = inst_robust,
              mig_decomp = mig_decomp, acct_check = acct_check, rho_check = rho_check, rho_ladder = rho_ladder,
+             mig_valid = attr(rho_ladder, "mig_valid"),
              exog_check = exog_check, mig_exog = mig_exog,
              dens_contemp = dens_contemp, share_contemp = share_contemp,
              share_mixed = share_mixed, income_timing = income_timing,
