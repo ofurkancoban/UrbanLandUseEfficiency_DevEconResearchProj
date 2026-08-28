@@ -1,4 +1,4 @@
-# Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1 and Its Economic Drivers
+# Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1, and Why Per-Capita Designs Cannot Cleanly Identify Its Drivers
 
 > ⚠️ **Work in progress: not finalised.** This project is **actively under
 > development** for an ongoing seminar (SoSe 2026). Code, data, results, and the
@@ -22,7 +22,10 @@ This project
   urban land use across a harmonised satellite panel of **193 UN member states,
   1985–2020**, using two-way fixed effects and dynamic-panel GMM, with a
   **heterogeneity analysis** by development group and a **sub-national German
-  case study** (supplementary).
+  case study** (supplementary), and shows that a **per-capita design can
+  manufacture the very drivers it appears to detect**: urban density's
+  celebrated "compact-city" coefficient turns out to be an artefact of the
+  metric's own arithmetic, not a behavioural effect.
 
 ---
 
@@ -146,43 +149,51 @@ meaningful quantity.
 1985–2020: built-up area is growing faster than urban population for most of the
 world.
 
-**Economic drivers (Arellano-Bond GMM; dependent variable BpCR):**
+**Economic drivers (final model; dependent variable BpCR):**
 
-| Driver                       | Coef.          | Reading                                                                                                                       |
+The full model's Arellano-Bond and Blundell-Bond columns **fail their Hansen
+over-identification test** (p = 0.05 and p = 0.01), so no coefficient from that
+specification, not ρ and not the controls, is read as consistent. The control
+coefficients below are therefore read from the **fixed-effects column**, which
+needs no instrument validity; GMM is used only where a moment-valid
+specification exists.
+
+| Driver                       | Coef. (FE)     | Reading                                                                                                                       |
 | ---------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| BpCR (t−1), ρ                | +0.21\*\* (0.10) | Path-dependence. **Do not read ρ from this column**: it is imprecise and its moments are marginal. It sits *just* below the Bond (2002) bracket [FE 0.26, OLS 0.48], but that crossing is meaningless on its own (gap 0.04 vs SE 0.10). The evidence is the *pattern*: as the entangled controls enter, ρ slides 0.46 → 0.21 while its SE grows 0.07 → 0.10 and the Hansen p slides 0.42 → 0.05, in step. In a clean AR(1): AB = 0.46 (0.07) vs within 0.25, a +0.20 correction (≈3 SE), exactly what Nickell (1981) predicts for T=8, with Nickell-implied (0.45), AB (0.46) and BB (0.45) all agreeing. **≈ half of last period's growth persists.** |
-| Int'l net migration (% pop)  | −0.0062\*\*\*   | **The robust correlate.** Consistent with in-migrants being absorbed into the existing stock faster than built-up grows: urban population moves +0.88 pp/yr with migration, built-up only +0.24 pp/yr. Passes a strict-exogeneity test and is invariant to a predetermined treatment, but migrants may select into fast-building economies, so this is a conditional association, not a causal effect. |
-| ln(Urban density) (t−1)      | +0.037\*\*\*    | *Not* a compact-city effect: see the timing artefact below.                                                                  |
-| ln(GDP per capita)           | −0.006 (n.s.)  | Sign negative in every specification and group, but never significant once migration is measured over the right window.       |
-| Urban population share (t−1) | +0.035 (n.s.)  | The *level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use.             |
+| BpCR (t−1), ρ                | — (bracketed) | Path-dependence. **No single point estimate is reported.** The full-model AB ρ (0.21) comes from the Hansen-failing specification above and is not read. Stripping out the arithmetically entangled density/urban-share controls restores moment validity and lifts ρ: across those clean specifications it ranges **0.34–0.46**, close to the Nickell (1981)-implied value (0.45); Blundell-Bond lands nearby (0.46) but its own Hansen test also fails, so that is read as coincidence, not corroboration. First-stage F = 14.4 rules out weak instruments. **Persistence is substantial, plausibly a third to a half of one period's growth.** |
+| Int'l net migration (% pop)  | −0.0064\*\*\*   | **The robust correlate.** A Hansen-valid GMM specification (migration entered alone with the lagged DV, Hansen p = 0.17) returns −0.0063, closely matching. Consistent with in-migrants being absorbed into the existing stock faster than built-up grows: urban population moves +0.88 pp/yr with migration, built-up only +0.24 pp/yr. Passes a Wooldridge lead test and is close to invariant under a predetermined treatment, but migrants may select into fast-building economies, so this is a conditional association, not a causal effect. |
+| ln(Urban density) (t−1)      | +0.014\*\*\*    | *Not* a compact-city effect: see the timing artefact below. The full model's AB (+0.037) and BB (−0.001) estimates come from the same Hansen-failing specification and carry no independent weight; density never enters a moment-valid GMM specification, so its magnitude is read from FE and the clean $t-2$ timing only. |
+| ln(GDP per capita)           | −0.003 (n.s.)  | Sign negative in every specification and group, but never significant once migration is measured over the right window.       |
+| Urban population share (t−1) | +0.011 (n.s.)  | The *level* of urbanisation adds nothing once the rest is controlled: urban **form**, not stage, drives land use.             |
 
-Estimation sample 1,499 country-periods; Arellano-Bond uses 1,351 and Blundell-Bond
-1,544 observations (15 vs 21 collapsed instruments). AR(2) passes comfortably
-(p = 0.76); the AB Hansen test is borderline (p = 0.05), driven by the deepest
-lags, and a shallower instrument set clears it while leaving every conclusion in
-place. Blundell-Bond is rejected (Hansen p = 0.01; the incremental Hansen test on
-its added level moments rejects at 5%), so Arellano-Bond is the preferred column
-**for the controls**. The weak-instrument objection that difference GMM invites is
+Estimation sample 1,499 country-periods; Arellano-Bond uses 1,307 and Blundell-Bond
+1,500 observations (15 vs 21 collapsed instruments). AR(2) passes comfortably
+(p = 0.76) throughout. The weak-instrument objection that difference GMM invites is
 addressed directly rather than assumed away: first-stage F = 14.4, and in the
 clean AR(1) the estimator moves *away* from the within estimate by exactly the
 Nickell-predicted amount, which weak instruments could not do (they would pull it
-toward within). The full model's low ρ is caused by the entangled controls, not by
-the instruments.
+toward within). The full model's low ρ and its failing Hansen test are both
+caused by the entangled density/urban-share controls, not by the instruments.
 `*** p<0.01, ** p<0.05, * p<0.1`.
 
-> **The compact-city coefficient is arithmetic, not economics.** By construction
+> **The compact-city coefficient is arithmetic, not (only) economics.** By
+> construction
 > $\text{BpCR}_t=\frac{1}{z}[\ln V_t-\ln P_t-\ln V_{t-1}+\ln P_{t-1}]$, so urban
 > population enters *negatively* at $t$ and *positively* at $t-1$. Density and
 > urban share are built from that same count, so each inherits the sign of the
 > date it is measured at (verified directly: regressing BpCR on $\ln P_t$ and
 > $\ln P_{t-1}$ gives −0.103 and +0.106, equal and opposite). Lagging by one
 > period does not fix this, it flips the bias. Only a $t-2$ control shares no term
-> with BpCR: there density is **+0.011**, still not negative. **H2 is rejected.**
+> with BpCR: there density is **+0.011** (significant), still not negative. **H2
+> is not supported, but tentatively**: the measure used here is *settlement*
+> density, not the more entangled *built-up* density the compact-city mechanism
+> properly rests on, so the paper stops short of refuting compact cities
+> outright.
 
-**Heterogeneity (by UN development group).** These are **static FE** estimates and
-are reported against a pooled column fitted with the *same* estimator and sample,
-so they are not comparable to the GMM figures in the table above (see
-"Why the density coefficient jumps from FE to GMM" in the paper). Net in-migration
+**Heterogeneity (by UN development group).** These are **static FE** estimates (no
+lagged DV), so they are not directly comparable to the dynamic FE/GMM figures in
+the table above, but the estimator, controls, and sample are held identical
+across the three groups. Net in-migration
 is negative and significant in *all three* groups at nearly identical magnitudes
 (−0.0065, −0.0062, −0.0066, against a pooled −0.0064), which is why we treat it as
 the robust finding. Income is negative everywhere but significant nowhere. The
