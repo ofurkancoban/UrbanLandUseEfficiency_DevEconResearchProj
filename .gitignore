@@ -13,6 +13,7 @@
 **/.quarto/
 **/*_cache/
 **/*_files/
+**/*.rmarkdown
 04_presentation/presentation_files/
 04_presentation/presentation_cache/
 
