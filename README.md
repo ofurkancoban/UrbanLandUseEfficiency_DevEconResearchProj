@@ -1,7 +1,7 @@
 # Urban Land-Use Efficiency: A Stable Metric for SDG 11.3.1, and Why Per-Capita Designs Cannot Cleanly Identify Its Drivers
 
 Development Economics Seminar, University of Oldenburg (SoSe 2026).
-Author: Ömer Furkan Çoban.
+Author: Furkan Çoban.
 Project Date: 13.06.2026.
 
 This project
